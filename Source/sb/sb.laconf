@@ -15,10 +15,54 @@
      
      
      
-     
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXSlim, Serbench"
+          name="NFX.Slim Default" 
+          order=0
+        }
         
-        serializer{ type="Serbench.StockSerializers.NFXSlim, Serbench" name="NFX.Slimt" order=1}
-        serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinFmt" order=2}
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXSlim, Serbench"
+          name="NFX.Slim Batching" 
+          order=1
+          batching=true
+        }
+        
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXSlim, Serbench"
+          name="NFX.Slim Known Types" 
+          order=2
+          //known-type{name="full..type..name"}
+          //known-type{name="full..type..name"}
+        }
+          
+        serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinaryFormatter" order=100}
+        
+        
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXJson, Serbench"
+          name="NFX.Json Default" 
+          order=200
+        }
+        
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXJson, Serbench"
+          name="NFX.Json Pretty Print" 
+          order=210
+          options
+          {
+           IndentWidth = 2
+           ObjectLineBreak = true
+           MemberLineBreak = true
+           SpaceSymbols = true
+           ASCIITarget = false
+          }
+        }
     }
  
  

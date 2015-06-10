@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="BaseTypes.cs" />
     <Compile Include="Serializer.cs" />
+    <Compile Include="StockSerializers\NFXJson.cs" />
     <Compile Include="StockSerializers\MSBinaryFormatter.cs" />
     <Compile Include="StockSerializers\NFXSlim.cs" />
     <Compile Include="StockTests\SimpleDictionaryStringObject.cs" />
