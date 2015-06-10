@@ -1,0 +1,29 @@
+﻿nfx
+{
+ 
+    
+    testing-system
+    {
+    //type="your custom type inject your testing system if you want, by default it will use the one supplied within SerBench  " 
+     
+
+        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,1)"   order=100 key-length=10 count=1}
+        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,10)"  order=101 key-length=10 count=10}
+        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,64)"  order=102 key-length=10 count=64}
+        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,10)" order=103 key-length=300 count=10}
+        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,64)" order=104 key-length=300 count=64}
+     
+     
+     
+     
+        
+        serializer{ type="Serbench.StockSerializers.NFXSlim, Serbench" name="NFX.Slimt" order=1}
+        serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinFmt" order=2}
+    }
+ 
+ 
+    log
+    {
+        destination { type="NFX.Log.Destinations.ConsoleDestination, NFX" colored=true}
+    }
+}
