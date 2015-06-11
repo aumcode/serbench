@@ -18,7 +18,18 @@ namespace sb
        const string CONFIG_TESTING_SYSTEM_SECTION = "testing-system";
        try
        {
-           using(new ServiceBaseApplication(args, null))
+           ConfigSectionNode appConfig = null;
+           if (args.Length>0)
+           {
+             var cname = args[0];
+             Console.WriteLine("Trying to load config file: '{0}'...".Args(cname));
+             appConfig = Configuration.ProviderLoadFromFile(cname).Root;
+             Console.WriteLine("... loaded.");
+           }
+           else
+             Console.WriteLine("Using the default config file");
+           
+           using(new ServiceBaseApplication(args, appConfig))
              using(var testing = FactoryUtils.MakeAndConfigure<Serbench.TestingSystem>(
                                       App.ConfigRoot[CONFIG_TESTING_SYSTEM_SECTION],
                                       typeof(Serbench.TestingSystem) )
