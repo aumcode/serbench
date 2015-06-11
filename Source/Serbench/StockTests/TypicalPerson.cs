@@ -89,6 +89,12 @@ namespace Serbench.StockTests
     public int Count{ get{ return m_Count;}}
 
 
+    /// <summary>
+    /// Determines whether list of objects is serialized isntead of a single object
+    /// </summary>
+    public bool List{ get{ return m_List;}}
+
+
 
     public override void PerformSerializationTest(Serializer serializer, Stream target)
     {
