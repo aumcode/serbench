@@ -163,6 +163,8 @@ namespace Serbench
             log(MessageType.Warning, "threadBody()", "Service stopping but test has not finished yet");
 
            log(MessageType.Info, "threadBody()", "Thread exiting");
+           
+           SignalStop();
         }
 
 

@@ -9,6 +9,7 @@ using NFX;
 using NFX.Environment;
 using NFX.ApplicationModel;
 using NFX.ServiceModel;
+using NFX.DataAccess;
 using NFX.DataAccess.CRUD;
 using NFX.Serialization.JSON;
 
@@ -17,7 +18,7 @@ namespace Serbench.Data
   /// <summary>
   /// Represents a data store that saves data as JSON records on disk
   /// </summary>
-  public class DefaultDataStore : Service, ITestDataStore
+  public class DefaultDataStore : Service, IDataStoreImplementation, ITestDataStore
   {
     
    
@@ -83,12 +84,37 @@ namespace Serbench.Data
       {
         foreach(var kvp in m_Data)
           using(var fs = new FileStream(Path.Combine(m_RootPath, kvp.Key+".json"), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
-           JSONWriter.Write(kvp.Value, JSONWritingOptions.CompactRowsAsMap);
+           JSONWriter.Write(kvp.Value, fs, JSONWritingOptions.PrettyPrintRowsAsMap);
       }
 
     #endregion
 
-    
+
+    #region IDataStoreImplementation 
+      public StoreLogLevel LogLevel { get { return StoreLogLevel.None;} set {}}
+
+      public bool InstrumentationEnabled { get{ return false;} set{}}
+
+      public bool ExternalGetParameter(string name, out object value, params string[] groups)
+      {
+         throw new NotImplementedException();
+      }
+
+      public IEnumerable<KeyValuePair<string, Type>> ExternalParameters
+      {
+        get { throw new NotImplementedException(); }
+      }
+
+      public IEnumerable<KeyValuePair<string, Type>> ExternalParametersForGroups(params string[] groups)
+      {
+        throw new NotImplementedException();
+      }
+
+      public bool ExternalSetParameter(string name, object value, params string[] groups)
+      {
+        throw new NotImplementedException();
+      }
+    #endregion
   }
 
 

@@ -37,7 +37,13 @@ namespace sb
              {
                 testing.Start();
                 Console.WriteLine("Press <ENTER> to abort test execution");
-                Console.ReadLine();
+                while(testing.Running)
+                {
+                  if (Console.KeyAvailable)
+                   if (Console.ReadKey().Key==ConsoleKey.Enter) break;
+
+                  System.Threading.Thread.Sleep(250);
+                }
              }
         }
         catch(Exception error)
