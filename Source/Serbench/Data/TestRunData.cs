@@ -6,7 +6,7 @@ using System.Text;
 using NFX;
 using NFX.DataAccess.CRUD;
 
-namespace Serbench
+namespace Serbench.Data
 {
 
   /// <summary>

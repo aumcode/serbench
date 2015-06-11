@@ -10,6 +10,8 @@ using NFX.Environment;
 using NFX.Log;
 using NFX.DataAccess.CRUD;
 
+using Serbench.Data;
+
 namespace Serbench
 {
     /// <summary>
@@ -58,13 +60,13 @@ namespace Serbench
         /// <summary>
         /// References data store used to store the test run results
         /// </summary>
-        public ICRUDDataStore DataStore
+        public ITestDataStore DataStore
         {
           get
           {
-             var ds = App.DataStore as ICRUDDataStore;
+             var ds = App.DataStore as ITestDataStore;
              if (ds==null)
-               throw new SerbenchException("The configured app data store is not ICRUDDataStore. The tool has no output to save into. Revise data-store config element");
+               throw new SerbenchException("The configured app data store is not ITestDataStore. The tool has no output to save into. Revise data-store config element");
 
              return ds;
           }
@@ -151,7 +153,7 @@ namespace Serbench
                   for(var i=0; Running && i<test.Runs; i++)
                   {
                       var data = doTestRun(serializer, test);
-                      DataStore.Insert( data );
+                      DataStore.SaveTestData( data );
                   }//runs
               }//tests
            }//sers
