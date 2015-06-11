@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTypes.cs" />
+    <Compile Include="Data\DefaultDataStore.cs" />
     <Compile Include="Data\ITestDataStore.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Serializer.cs" />
