@@ -26,7 +26,7 @@ namespace Serbench.StockSerializers
       var known = conf.Children.Where(cn => cn.IsSameName(CONFIG_KNOWN_TYPE_SECTION))
                                .Select( cn => Type.GetType( cn.AttrByName(Configuration.CONFIG_NAME_ATTR).Value ));   
 
-      //we create type registry with well-known types that serializers does not have to emit every time
+      //we create type registry with well-known types that serializer does not have to emit every time
       m_TypeRegistry = new TypeRegistry(TypeRegistry.BoxedCommonTypes,
                                         TypeRegistry.BoxedCommonNullableTypes, 
                                         TypeRegistry.CommonCollectionTypes,
@@ -34,7 +34,7 @@ namespace Serbench.StockSerializers
 
       m_Serializer = new SlimSerializer(m_TypeRegistry);
 
-      //batching allows to rememebr the encountered types and hence it is a "stateful" mode
+      //batching allows to remember the encountered types and hence it is a "stateful" mode
       //where serialization part and deserialization part retain the type registries that 
       //get auto-updated. This mode is not thread safe
       if (m_Batching)
