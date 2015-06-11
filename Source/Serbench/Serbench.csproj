@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTypes.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="StockSerializers\NFXJson.cs" />
     <Compile Include="StockSerializers\MSBinaryFormatter.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Test.cs" />
     <Compile Include="TestingSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestRunData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

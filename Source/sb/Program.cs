@@ -36,7 +36,8 @@ namespace sb
                   )
              {
                 testing.Start();
-                testing.WaitForCompleteStop();
+                Console.WriteLine("Press <ENTER> to abort test execution");
+                Console.ReadLine();
              }
         }
         catch(Exception error)

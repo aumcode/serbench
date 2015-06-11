@@ -15,7 +15,44 @@ namespace Serbench
   /// </summary>
   public abstract class Test : TestArtifact
   {
-    protected Test(TestingSystem context, IConfigSectionNode conf) : base(context, conf) { }
+    protected Test(TestingSystem context, IConfigSectionNode conf) : base(context, conf) 
+    {
+
+    }
+
+
+    [Config(Default=1)]
+    private int m_SerIterations;
+
+    [Config(Default=1)]
+    private int m_DeserIterations;
+
+    [Config(Default=1)]
+    private int m_Runs;
+
+    [Config]
+    private bool m_DoGc;
+
+    /// <summary>
+    /// Returns how many serialization iterations per run the test performs
+    /// </summary>
+    public int SerIterations{ get{ return m_SerIterations;}}
+
+    /// <summary>
+    /// Returns how many deserialization iterations per run the test performs
+    /// </summary>
+    public int DeserIterations{ get{ return m_DeserIterations;}}
+
+    /// <summary>
+    /// Returns how many runs the test executes
+    /// </summary>
+    public int Runs{ get{ return m_Runs;}}
+
+
+    /// <summary>
+    /// True to do a full GC before test run execution
+    /// </summary>
+    public bool DoGc{ get{ return m_DoGc;}}
 
 
     /// <summary>

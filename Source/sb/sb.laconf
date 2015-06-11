@@ -14,7 +14,7 @@
         test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,64)" order=104 key-length=300 count=64}
         
         
-        test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=200 list=false}
+        test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=200 list=false runs=100}
         test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=201 list=true count=10}
         test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=201 list=true count=20}
         
