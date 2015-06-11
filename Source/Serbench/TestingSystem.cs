@@ -175,7 +175,7 @@ namespace Serbench
               DoGc = test.DoGc
            };
 
-           //implement test body invocation under tsy catches and stopwatches
+           //implement test body invocation under try catches and stopwatches
 
            return result;
         }
