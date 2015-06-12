@@ -6,6 +6,7 @@
   {
     type="Serbench.Data.DefaultDataStore, Serbench"
     root-path="c:\\nfx"
+    output=csv
   }
   
    

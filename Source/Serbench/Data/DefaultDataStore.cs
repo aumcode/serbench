@@ -15,6 +15,9 @@ using NFX.Serialization.JSON;
 
 namespace Serbench.Data
 {
+
+  public enum OutputFormat {JSON, CSV}
+
   /// <summary>
   /// Represents a data store that saves data as JSON records on disk
   /// </summary>
@@ -42,6 +45,10 @@ namespace Serbench.Data
           m_RootPath = value;
         }
       }
+
+
+      [Config]
+      public OutputFormat Output{get; set;}
 
 
     #endregion
@@ -82,9 +89,24 @@ namespace Serbench.Data
 
       protected override void DoWaitForCompleteStop()
       {
-        foreach(var kvp in m_Data)
-          using(var fs = new FileStream(Path.Combine(m_RootPath, kvp.Key+".json"), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
-           JSONWriter.Write(kvp.Value, fs, JSONWritingOptions.PrettyPrintRowsAsMap);
+        foreach(var kvp in m_Data.Where(kvp => kvp.Value.Count>0))
+          if (Output== OutputFormat.JSON)
+          {
+             using(var fs = new FileStream(Path.Combine(m_RootPath, kvp.Key+".json"), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
+               JSONWriter.Write(kvp.Value, fs, JSONWritingOptions.PrettyPrintRowsAsMap);
+          }
+          else//CSV
+          {
+             using(var fs = new FileStream(Path.Combine(m_RootPath, kvp.Key+".csv"), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
+               using(var sw = new StreamWriter(fs, Encoding.UTF8))
+               {
+                 var firstRow = kvp.Value[0];
+                 sw.WriteLine( string.Join(",", firstRow.Schema.Select(fd => fd.Name))); 
+
+                 foreach(var row in kvp.Value)
+                   sw.WriteLine( string.Join(",", row.Select(v => "\"{0}\"".Args(v.ToString().Replace("\"",@""""))  ))); 
+               }
+          }
       }
 
     #endregion
