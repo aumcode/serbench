@@ -29,6 +29,27 @@
         test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=201 list=true count=10}
         test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=201 list=true count=20}
         
+        //Integer arrays
+        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10]" order=300 dimensions="10"}
+        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10]" order=301 dimensions="10,10"}
+        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10,2]" order=302 dimensions="10,10,2"}
+        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10] full range" order=303 dimensions="10" min="-2000000000" max="2000000000" }
+        
+        //String Arrays
+        test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10]" order=310 dimensions="10" string-size=50}
+        test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10,10]" order=311 dimensions="10,10" string-size=50}
+        
+        //Decimal Arrays
+        test { type="Serbench.StockTests.ArrayOfDecimal, Serbench" name="decimal[10]" order=320 dimensions="10" }
+        
+        //Double Arrays
+        test { type="Serbench.StockTests.ArrayOfDouble, Serbench" name="double[10]" order=330 dimensions="10,10"}
+     
+        //Nullable Int Arrays    
+        test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10]" order=340 dimensions="10"}
+        test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10] full range" order=3341 dimensions="10" min="-2000000000" max="2000000000" }
+     
+     
      
      
      

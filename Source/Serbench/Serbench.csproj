@@ -51,6 +51,8 @@
     <Compile Include="StockSerializers\NFXJson.cs" />
     <Compile Include="StockSerializers\MSBinaryFormatter.cs" />
     <Compile Include="StockSerializers\NFXSlim.cs" />
+    <Compile Include="StockTests\ArrayTests.cs" />
+    <Compile Include="StockTests\ArrayTestBase.cs" />
     <Compile Include="StockTests\TypicalPerson.cs" />
     <Compile Include="StockTests\SimpleDictionaryStringObject.cs" />
     <Compile Include="Test.cs" />
