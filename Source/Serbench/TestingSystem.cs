@@ -219,14 +219,14 @@ namespace Serbench
 
         private void invokeTests(TestRunData result, Serializer serializer, Test test, MemoryStream targetStream)
         {
-           var nonClosingStreamWrap = new NFX.IO.NonClosingStreamWrap( targetStream );
+           var streamWrap = new NFX.IO.NonClosingStreamWrap( targetStream );
 
            var sw = Stopwatch.StartNew();
 
            for(var i=0; i<test.SerIterations; i++)
            {
              targetStream.Position = 0;
-             test.PerformSerializationTest( serializer, nonClosingStreamWrap );
+             test.PerformSerializationTest( serializer, streamWrap );
            }
 
            sw.Stop();
@@ -235,13 +235,13 @@ namespace Serbench
            if ((result.SerDurationTicks = sw.ElapsedTicks) > 0)
              result.SerOpsSec = (int)( test.SerIterations / ((double)result.SerDurationTicks / (double)TimeSpan.TicksPerSecond) );
 
-
-
+           var readingStreamSegment = new NFX.IO.BufferSegmentReadingStream();
+           readingStreamSegment.BindBuffer(targetStream.GetBuffer(), 0, targetStream.Position);
            sw.Restart();
            for(var i=0; i<test.DeserIterations; i++)
            {
              targetStream.Position = 0;
-             test.PerformDeserializationTest( serializer, nonClosingStreamWrap );
+             test.PerformDeserializationTest( serializer, readingStreamSegment );
            }
 
            sw.Stop();
