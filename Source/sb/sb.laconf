@@ -43,7 +43,7 @@
         test { type="Serbench.StockTests.ArrayOfDecimal, Serbench" name="decimal[10]" order=320 dimensions="10" }
         
         //Double Arrays
-        test { type="Serbench.StockTests.ArrayOfDouble, Serbench" name="double[10]" order=330 dimensions="10,10"}
+        test { type="Serbench.StockTests.ArrayOfDouble, Serbench" name="double[10]" order=330 dimensions="10"}
      
         //Nullable Int Arrays    
         test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10]" order=340 dimensions="10"}
