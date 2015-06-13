@@ -65,6 +65,10 @@ namespace Serbench.WebViewer
 
      protected virtual void DoGeneratePages(string path)
      {
+        var target = new NFX.Templatization.StringRenderingTarget(false);
+        new Index().Render(target, null);
+        File.WriteAllText(Path.Combine(path, "index.htm"), target.Value); 
+       
 
      }
 

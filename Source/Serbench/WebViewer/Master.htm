@@ -1,7 +1,7 @@
 ﻿#<laconf>
   compiler 
   {
-     base-class-name="NFX.Wave.Templatization.WaveTemplate"
+     base-class-name="NFX.Templatization.Template<object, NFX.Templatization.IRenderingTarget, object>"
      namespace="Serbench.WebViewer"
      abstract="true"
      summary="Master page for all pages"
@@ -22,6 +22,8 @@
     protected abstract void renderHeader();
     protected abstract void renderBody();
     protected virtual void renderFooter() { defaultFooter(); }
+
+    public override bool CanReuseInstance { get { return false; } }
 #[render]   
 <!DOCTYPE html>
 <html>
@@ -196,7 +198,7 @@
          <br /> 
          This site is served by the <strong>NFX.Wave</strong> framework
           <br />
-         Generated on ?[DateTime.Now]  for ?[Context.Request.RemoteEndPoint]
+         Generated on ?[DateTime.Now] 
      </div>
  </body>
 </html> 
