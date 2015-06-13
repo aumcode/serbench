@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serbench", "Serbench\Serben
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sb", "sb\sb.csproj", "{691E204E-228B-4F76-B23D-465B4B9FCEEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serbench.Specimens", "Serbench.Specimens\Serbench.Specimens.csproj", "{78D93D3B-2F69-4D1E-B947-C75BA098E627}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{691E204E-228B-4F76-B23D-465B4B9FCEEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{691E204E-228B-4F76-B23D-465B4B9FCEEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{691E204E-228B-4F76-B23D-465B4B9FCEEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78D93D3B-2F69-4D1E-B947-C75BA098E627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78D93D3B-2F69-4D1E-B947-C75BA098E627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78D93D3B-2F69-4D1E-B947-C75BA098E627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78D93D3B-2F69-4D1E-B947-C75BA098E627}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
