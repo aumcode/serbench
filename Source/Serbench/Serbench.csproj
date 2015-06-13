@@ -65,9 +65,16 @@
     <Compile Include="TestingSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\TestRunData.cs" />
+    <Compile Include="WebViewer\DefaultWebPackager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Reporter\" />
+    <EmbeddedResource Include="WebViewer\default.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WebViewer\Master.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WebViewer\Index.htm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

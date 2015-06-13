@@ -92,7 +92,9 @@ namespace Serbench.Data
         foreach(var kvp in m_Data.Where(kvp => kvp.Value.Count>0))
           if (Output== OutputFormat.JSON)
           {
-             using(var fs = new FileStream(Path.Combine(m_RootPath, kvp.Key+".json"), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
+             var packager = new WebViewer.DefaultWebPackager(this, null);
+             var targetDir = packager.Build(m_RootPath);
+             using(var fs = new FileStream(Path.Combine(targetDir, kvp.Key+".json"), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
                JSONWriter.Write(kvp.Value, fs, JSONWritingOptions.PrettyPrintRowsAsMap);
           }
           else//CSV
