@@ -1,5 +1,7 @@
 ﻿nfx
 {
+  application-name="Run All Default" 
+ 
  
   //Configure data store where the results will be saved
   data-store
