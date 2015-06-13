@@ -27,6 +27,17 @@ namespace Serbench.Data
     [Field]
     public string SerializerName {get; set;}
 
+
+    [Field]
+    public int RunNumber{get; set;}
+
+    /// <summary>
+    /// Populated when test run crasehd with exception
+    /// </summary>
+    [Field]
+    public string RunException{get; set;}
+
+
     [Field]
     public bool DoGc{get; set;}
 
@@ -45,10 +56,10 @@ namespace Serbench.Data
     public int SerAborts {get; set;}
 
     [Field]
-    public int SerDurationMs {get; set;}
+    public long SerDurationMs {get; set;}
 
     [Field]
-    public int SerDurationTicks {get; set;}
+    public long SerDurationTicks {get; set;}
 
     [Field]
     public int SerOpsSec {get; set;}
@@ -73,10 +84,10 @@ namespace Serbench.Data
     public int DeserAborts {get; set;}
 
     [Field]
-    public int DeserDurationMs {get; set;}
+    public long DeserDurationMs {get; set;}
 
     [Field]
-    public int DeserDurationTicks {get; set;}
+    public long DeserDurationTicks {get; set;}
 
     [Field]
     public int DeserOpsSec {get; set;}

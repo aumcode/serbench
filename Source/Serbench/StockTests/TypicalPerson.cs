@@ -13,6 +13,7 @@ namespace Serbench.StockTests
 
                   public enum MaritalStatus {Married, Divorced, HatesAll}
 
+                  [Serializable]
                   public class TypicalPersonData
                   {
                     public string FirstName;
@@ -107,8 +108,8 @@ namespace Serbench.StockTests
       if (m_List)
       {
         var got = serializer.Deserialize(target) as List<TypicalPersonData>;
-        if (got==null) Abort("Did not get list back");
-        if (got.Count!=m_Data.Count) Abort("Did not get same count");
+        if (got==null){ Abort("Did not get list back"); return;}
+        if (got.Count!=m_Data.Count){ Abort("Did not get same count"); return; };
       }
       else
       {

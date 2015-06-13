@@ -103,8 +103,8 @@ namespace Serbench.Data
                  var firstRow = kvp.Value[0];
                  sw.WriteLine( string.Join(",", firstRow.Schema.Select(fd => fd.Name))); 
 
-                 foreach(var row in kvp.Value)
-                   sw.WriteLine( string.Join(",", row.Select(v => "\"{0}\"".Args(v.ToString().Replace("\"",@""""))  ))); 
+                 foreach(var row in kvp.Value.Where( lst => lst!=null))
+                   sw.WriteLine( string.Join(",", row.Select(v => (v==null) ? string.Empty : "\"{0}\"".Args(v.ToString().Replace("\"",@""""))  ))); 
                }
           }
       }
