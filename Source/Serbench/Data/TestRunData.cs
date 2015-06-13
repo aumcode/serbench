@@ -32,7 +32,7 @@ namespace Serbench.Data
     public int RunNumber{get; set;}
 
     /// <summary>
-    /// Populated when test run crasehd with exception
+    /// Populated when test run crashed with exception
     /// </summary>
     [Field]
     public string RunException{get; set;}

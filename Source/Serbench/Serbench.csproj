@@ -37,6 +37,12 @@
     <Reference Include="NFX">
       <HintPath>..\lib\NFX.dll</HintPath>
     </Reference>
+    <Reference Include="NFX.Wave">
+      <HintPath>..\lib\NFX.Wave.dll</HintPath>
+    </Reference>
+    <Reference Include="NFX.Web">
+      <HintPath>..\lib\NFX.Web.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -59,6 +65,9 @@
     <Compile Include="TestingSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\TestRunData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Reporter\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

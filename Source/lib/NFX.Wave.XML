@@ -1,0 +1,1750 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NFX.Wave</name>
+    </assembly>
+    <members>
+        <member name="T:NFX.Wave.Client.RecordModelGenerator">
+            <summary>
+            Facilitates tasks of JSON generation for record models/rows as needed by WV.RecordModel client library
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Client.RecordModelGenerator.RowToRecordInitJSON(NFX.DataAccess.CRUD.Row,System.Exception,System.String,System.String,System.String)">
+            <summary>
+            Generates JSON object suitable for passing into WV.RecordModel.Record(...) constructor on the client.
+            Pass target to select attributes targeted to ANY target or to the specified one, for example
+             may get attributes for client data entry screen that sees field metadata differently, in which case target will reflect the name
+              of the screen
+            </summary>
+        </member>
+        <member name="E:NFX.Wave.Client.RecordModelGenerator.Localization">
+            <summary>
+            Allows localization framework to install hook so that values can get translated per user-selected culture.
+            The hook functor has the following signature: (string propertyName, string propValue): string. 
+            Returns translated propValue.
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Client.RecordModelGenerator.LocalizationFunc">
+            <summary>
+            Invoked by generator to obtain localized versions of certain properties
+            </summary>
+            <param name="schema">Name of schema, i.e. Type of row</param>
+            <param name="field">Name of property/field</param>
+            <param name="value">English value</param>
+            <returns>Localized value, i.e. depending on user culture looks-up culture-specific version of value</returns>
+        </member>
+        <member name="T:NFX.Wave.Filters.BeforeAfterFilterBase">
+            <summary>
+            Provides base for filters that have before/after semantics
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WorkFilter">
+            <summary>
+            Represents a base for all work filters. Unlike handlers, filters do not necessarily handle work rather augment the work context
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkFilter.FilterWork(NFX.Wave.WorkContext,System.Collections.Generic.IList{NFX.Wave.WorkFilter},System.Int32)">
+            <summary>
+            Override to filter the work - i.e. extract some security name from cookies and check access, turn exception in error page etc.
+            Note: This method is re-entrant by multiple threads
+            </summary>
+            <param name="work">Work context</param>
+            <param name="filters">
+            The filters that participated in a call.
+            Note the Dipatcher.Filters may yield different results as it may change with time, whereas this parameter captures all filters during the call start
+            </param>
+            <param name="thisFilterIndex">
+            The index of THIS filter in filters
+            </param>
+        </member>
+        <member name="M:NFX.Wave.WorkFilter.InvokeNextWorker(NFX.Wave.WorkContext,System.Collections.Generic.IList{NFX.Wave.WorkFilter},System.Int32)">
+            <summary>
+            Invokes next processing body be it the next filter or handler (when all filters are iterated through).
+            The filter implementors must call this method to pass WorkContext processing along the line.
+            Does nothing if work is Aborted or Handled
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkFilter.DoFilterWork(NFX.Wave.WorkContext,System.Collections.Generic.IList{NFX.Wave.WorkFilter},System.Int32)">
+            <summary>
+            Override to filter the work - i.e. extract some security name from cookies and check access, turn exception in error page etc.
+            Note: This method is re-entrant by multiple threads. Do not forget to call InvokeNextWorker() to continue request processing, otherwise the work will
+             not be handled (which may be a desired behavior)
+            </summary>
+            <param name="work">Work context</param>
+            <param name="filters">
+            The filters that participated in a call.
+            Note the Dipatcher.Filters may yield different results as it may change with time, whereas this parameter captures all filters during the call start
+            </param>
+            <param name="thisFilterIndex">
+            The index of THIS filter in filters
+            </param> 
+        </member>
+        <member name="P:NFX.Wave.WorkFilter.Name">
+            <summary>
+            Returns the filter instance name
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkFilter.Order">
+            <summary>
+            Returns the filter order in filter registry. Order is used for URI pattern matching
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkFilter.Server">
+            <summary>
+            Returns the server that this filter works under
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkFilter.Dispatcher">
+            <summary>
+            Returns the dispatcher that this filter works under
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkFilter.Handler">
+            <summary>
+            Returns the handler that this filter works under. May be null if the filter works under dispatcher
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkFilter.NetGate">
+            <summary>
+            Returns network gate that filter implementation may use to set business variables or null
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.BeforeAfterFilterBase.DoBeforeWork(NFX.Wave.WorkContext,NFX.Serialization.JSON.JSONDataMap)">
+            <summary>
+            Override to do the work when one of the BeforeMatches was matched 
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.BeforeAfterFilterBase.DoAfterWork(NFX.Wave.WorkContext,NFX.Serialization.JSON.JSONDataMap)">
+            <summary>
+            Override to do the work when one of the AfterMatches was matched 
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.BeforeAfterFilterBase.BeforeMatches">
+            <summary>
+            Returns matches used by the handler to determine whether match should be made before the work processing
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.BeforeAfterFilterBase.AfterMatches">
+            <summary>
+            Returns matches used by the handler to determine whether match should be made before the work processing
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Filters.SecurityFilter">
+            <summary>
+            Checks permissions before doing work
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.SecurityFilter.Permissions">
+            <summary>
+            Gets/sets permissions that get checked by this filter instance
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Filters.GeoLookupFilter">
+            <summary>
+            Upon match, looks up user's geo location based on a IP addresses
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.Filters.GeoLookupFilter.VAR_USE_ADDR">
+            <summary>
+            Allows to override user real address with this one
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.GeoLookupFilter.LookupMatches">
+            <summary>
+            Returns matches used by the filter to determine whether user's location should be looked-up
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Filters.SessionFilter">
+            <summary>
+            Manages session state in work context
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.Filters.SessionFilter.NETGATE_NEWSESSION_VAR_NAME">
+            <summary>
+            Use this name in access deny rule in NetGate setup to block user who create too many sessions
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.SessionFilter.FetchExistingOrMakeNewSession(NFX.Wave.WorkContext,System.Boolean)">
+            <summary>
+            Override to get session object using whatever parameters are available in response context (i.e. a cookie),
+            or create a new one if 'onlyExisting'=false(default)
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.SessionFilter.StowSession(NFX.Wave.WorkContext)">
+            <summary>
+            Override to put session object back into whatever storage medium is provided (i.e. DB) and
+            respond with appropriate session identifying token(i.e. a cookie) 
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.SessionFilter.ExtractSessionID(NFX.Wave.WorkContext)">
+            <summary>
+            Extracts session ID from work request. The default implementation uses cookie
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.SessionFilter.EncodeSessionID(System.Guid)">
+            <summary>
+            Override to encode session ID GUID into string representation
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.SessionFilter.DecodeSessionID(System.String)">
+            <summary>
+            Override to decode session ID GUID from string representation. Return null if conversion not possible
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.SessionFilter.MakeNewSession(NFX.Wave.WorkContext)">
+            <summary>
+            Called to create new session
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.SessionFilter.MakeNewSessionInstance(NFX.Wave.WorkContext)">
+            <summary>
+            Override to create new session instance
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.SessionFilter.CookieName">
+            <summary>
+            Specifies session cookie name
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.SessionFilter.SessionTimeoutMs">
+            <summary>
+            Specifies session inactivity timeout in milliseconds. 
+            For default implementation: assign 0 to use App.ObjectStore default object timeout value
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Filters.RedirectFilter">
+            <summary>
+            Upon match, redirects client to the specified URL resource. Specify matches with 'redirect-url' var
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.RedirectFilter.RedirectMatches">
+            <summary>
+            Returns matches used by the filter to determine whether redirect should be issued
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Filters.LoggingFilter">
+            <summary>
+            Logs information extracted from WorkContext
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Filters.ErrorFilter">
+            <summary>
+            Intercepts error that arise during processing and displays an error page for exceptions and error codes
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Filters.ErrorFilter.HandleException(NFX.Wave.WorkContext,System.Exception,NFX.OrderedRegistry{NFX.Wave.WorkMatch},NFX.OrderedRegistry{NFX.Wave.WorkMatch},System.String,System.Type)">
+            <summary>
+            Handles the exception by responding appropriately with error page with conditional level of details and logging
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.ErrorFilter.ShowDumpMatches">
+            <summary>
+            Returns matches used by the filter to determine whether exception details should be shown
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.ErrorFilter.LogMatches">
+            <summary>
+            Returns matches used by the filter to determine whether exception details should be logged
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.ErrorFilter.SecurityRedirectURL">
+            <summary>
+            When set redirects response to the specified URL if security exceptions are thrown
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Filters.ErrorFilter.CustomErrorPageType">
+            <summary>
+            Specifies a type for custom error page. Must be WebTemplate-derived type
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Filters.StopFilter">
+            <summary>
+            Stops the processing of WorkContext by throwing exception upon match
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.CompositeHandler">
+            <summary>
+            Dispatched work to sub-handlers just like dispatcher does
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WorkHandler">
+            <summary>
+            Represents a base for all work handlers. Handlers are final work execution destination
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkHandler.RegisterFilter(NFX.Wave.WorkFilter)">
+            <summary>
+            Registers filter and returns true if the named instance has not been registered yet
+            Note: it is possible to call this method on active server that is - inject filters while serving requests
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkHandler.UnRegisterFilter(NFX.Wave.WorkFilter)">
+            <summary>
+            Unregisters filter and returns true if the named instance has been removed
+            Note: it is possible to call this method on active server that is - remove filters while serving requests
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkHandler.FilterAndHandleWork(NFX.Wave.WorkContext)">
+            <summary>
+            Handles the work -  first involes all filters then calls HandleWork to do actual processing
+            Note: This method is re-entrant by multiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkHandler.HandleWork(NFX.Wave.WorkContext)">
+            <summary>
+            Handles the work - i.e. renders a template page or calls MVC controller method.
+            This method does not pass through handler's filters
+            Note: This method is re-entrant by multiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkHandler.MakeMatch(NFX.Wave.WorkContext)">
+            <summary>
+            Returns true when the particular work request matches the pattern match of this handler.
+            Also sets the WorkHandler's MatchedVars property filled with matched values
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkHandler.DoHandleWork(NFX.Wave.WorkContext)">
+            <summary>
+            Override to handle the work - i.e. render a template page or call MVC controller method.
+            Note: This method is re-entrant by multiple threads
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkHandler.Name">
+            <summary>
+            Returns the handler instance name
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkHandler.Order">
+            <summary>
+            Returns the handler order in handler registry. Order is used for URI pattern matching
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkHandler.Matches">
+            <summary>
+            Returns matches used by this handler. May change the registry at runtime (inject/remove matches)
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkHandler.Filters">
+            <summary>
+            Returns ordered registry of filters
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkHandler.Server">
+            <summary>
+            Returns the server that this handler works under
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkHandler.Dispatcher">
+            <summary>
+            Returns the dispatcher that this handler works under
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkHandler.ParentHandler">
+            <summary>
+            Returns parent handler that this handler is under or null
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkHandler.NetGate">
+            <summary>
+            Returns network gate that handler implementation may use to set business variables or null
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.CompositeHandler.RegisterHandler(NFX.Wave.WorkHandler)">
+            <summary>
+            Registers handler and returns true if the named instance has not been registered yet
+            Note: it is possible to call this method on active server that is - inject handlers while serving requests
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.CompositeHandler.UnRegisterHandler(NFX.Wave.WorkHandler)">
+            <summary>
+            Unregisters handler and returns true if the named instance has been removed
+            Note: it is possible to call this method on active server that is - remove handlers while serving requests
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.CompositeHandler.Handlers">
+            <summary>
+            Returns ordered registry of handlers
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.MVCHandler">
+            <summary>
+            Handles MVC-related requests
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.TypeLookupHandler`1">
+            <summary>
+            Represents a base handler for all handlers that dynamicaly resolve type that performs actual work
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.DoHandleWork(NFX.Wave.WorkContext)">
+            <summary>
+            Sealed. Override DoTargetWork(TTarget, WorkContext) to do actual work
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.DoTargetWork(`0,NFX.Wave.WorkContext)">
+            <summary>
+            Performs work on the target instance
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.GetTargetInstanceID(NFX.Wave.WorkContext,System.Guid@)">
+            <summary>
+            Override to extract instance ID from WorkContext
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.GetTargetType(NFX.Wave.WorkContext)">
+            <summary>
+            Override to resolve route/URL parameters to type
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.GetTargetTypeNameFromWorkContext(NFX.Wave.WorkContext)">
+            <summary>
+            Override to get type name from WorkContext. Default implementation looks for MatchedVars[VAR_TARGET_TYPE]
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.CreateTargetInstance(NFX.Wave.WorkContext,System.Type)">
+            <summary>
+            Factory method - Override to create and init more particular template implementattion (i.e. based on model)
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.GetTargetInstanceByID(NFX.Wave.WorkContext,System.Guid)">
+            <summary>
+            Retrieves target instance from id. Default implementation uses Application.ObjectStore.
+            If this method is called by the framework then complementary matching PutTargetInstanceWithID() is guaranteed to be called as well
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.PutTargetInstanceByID(NFX.Wave.WorkContext,System.Guid,`0,System.Int32)">
+            <summary>
+            Puts target instance with id into store. Default implementation uses Application.ObjectStore.
+            This method is called by the framework to complement GetTargetInstanceFromID()
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.DeleteTargetInstanceByID(NFX.Wave.WorkContext,System.Guid)">
+            <summary>
+            Deletes target instance with id from store. Default implementation uses Application.ObjectStore.
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.Do404(NFX.Wave.WorkContext)">
+            <summary>
+            Override to handle 404 condition, i.e. may write into response instead of generating a exception.
+            The default implementation returns a HttpStatusException with 404 code
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.TypeLookupHandler`1.DoError(NFX.Wave.WorkContext,System.Exception)">
+            <summary>
+            Override to handle error processing, i.e. may elect to write error data into response.
+            The dafault implementation throws the error. It is recommended to handle errors with filters instead
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.TypeLookupHandler`1.SupportsInstanceID">
+            <summary>
+            Indicates whether instance IDs are supported in requests. Default is false.
+            Override to return true for handlers that support target instance state between requests
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.TypeLookupHandler`1.TypeLocations">
+            <summary>
+            Returns a registry of type locations
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.TypeLookupHandler`1.DefaultTypeName">
+            <summary>
+            Provides default type name
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.TypeLookupHandler`1.CloakTypeName">
+            <summary>
+            Provides type name which is used if the prior one was not found. This allows to block 404 errors,
+            i.e. if page with requested name is not found then always return the specified page
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.TypeLookupHandler`1.NotFoundRedirectURL">
+            <summary>
+            Provides redirect URL where the user gets redirected when type name could not be resolved.
+            Note: CloakTypeName is used first when set.
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.MVCHandler.GetActionName(NFX.Wave.MVC.Controller,NFX.Wave.WorkContext)">
+            <summary>
+            Gets name of MVC action from work and controller. Controller may override name of variable 
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.MVCHandler.FindMatchingAction(NFX.Wave.MVC.Controller,NFX.Wave.WorkContext,System.String,System.Object[]@)">
+            <summary>
+            Finds matching method that has the specified action name and best matches the supplied input
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.MVCHandler.BindParameters(NFX.Wave.MVC.Controller,System.String,NFX.Wave.MVC.ActionAttribute,System.Reflection.MethodInfo,NFX.Wave.WorkContext,System.Object[]@)">
+            <summary>
+            Fills method invocation param array with args doing some interpretation for widely used types like JSONDataMaps, Rows etc..
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.MVCHandler.GetRequestAsJSONDataMap(NFX.Wave.WorkContext)">
+            <summary>
+            Converts request into JSONDataMap
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.MVCHandler.ProcessResult(NFX.Wave.MVC.Controller,NFX.Wave.WorkContext,System.Object)">
+            <summary>
+            Turns result object into appropriate response
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.NOPHandler">
+            <summary>
+            Implements handler that does nothing
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.EmbeddedSiteHandler">
+            <summary>
+            Implements handler that serves content from assembly-embedded resources and class actions.
+            Inherit from this class to implement actual handler that serves from particular assembly/namespace root
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.EmbeddedSiteHandler.GetActions">
+            <summary>
+            Override to declare what actions this site can perform
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NFX.Wave.Handlers.EmbeddedSiteHandler.SetResourceCacheHeader(NFX.Wave.WorkContext,System.String,System.String)">
+            <summary>
+            Override to set specific cache header set per resource name
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.EmbeddedSiteHandler.ParseWork(NFX.Wave.WorkContext,System.String@)">
+            <summary>
+            Override to extract action and path form request
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.EmbeddedSiteHandler.DispatchAction(NFX.Wave.WorkContext,System.String,System.String)">
+            <summary>
+            Dispatched appropriate action
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.EmbeddedSiteHandler.DispatchNonSiteAction(NFX.Wave.WorkContext,System.String)">
+            <summary>
+            Dispatches an action which is not a site-serving one
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.EmbeddedSiteHandler.Actions">
+            <summary>
+            Returns actions that this site can perform
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.EmbeddedSiteHandler.SiteAction">
+            <summary>
+            Returns name for action that serves embedded site
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.EmbeddedSiteHandler.DefaultSitePath">
+            <summary>
+            Returns default site path that serves site root
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.EmbeddedSiteHandler.RootResourcePath">
+            <summary>
+            Returns resource path root, i.e. namespace prefixes where resources reside
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.EmbeddedSiteHandler.SupportsEnvironmentBranching">
+            <summary>
+            Override in sites that do not support named environment sub-folders in resource structure.
+            True by default
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.EmbeddedSiteHandler.CacheMaxAgeSec">
+            <summary>
+            Specifies the maximum age in cache in seconds for resource file content. Zero means - do not cache the file
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.EmbeddedSiteHandler.IAction">
+            <summary>
+            Represents an action that can be dispatched by a EmbeddedSiteHandler.
+            The instance of this interface implementor is shared between requests (must be thread-safe)
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Handlers.EmbeddedSiteHandler.IAction.Perform(NFX.Wave.WorkContext)">
+            <summary>
+            Performs the action - by performing action work
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.FileDownloadHandler">
+            <summary>
+            Downloads local files. Be carefull with this handler as the incorrect root setup may allow users to download system-internal files
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.FileDownloadHandler.RootPath">
+            <summary>
+            Specifies local root path
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.FileDownloadHandler.Throw">
+            <summary>
+            Specifies whether the handler generates simple 404 text or throws
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.FileDownloadHandler.CacheMaxAgeSec">
+            <summary>
+            Specifies the maximum age in cache in seconds. Zero means - do not cache the file
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.TypeLocation">
+            <summary>
+            Represents a location used for dynamic type searches
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.Handlers.TypeLocation.AssemblyName">
+            <summary>
+            Name of assembly. When this property is set then Assembly==null
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.Handlers.TypeLocation.Assembly">
+            <summary>
+            Assembly reference. When this property is set then AssemblyName==null
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.Handlers.TypeLocation.Namespaces">
+            <summary>
+            A list of namespaces
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Handlers.TypeLocation.Name">
+            <summary>
+            Location name
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.TypeLocations">
+            <summary>
+            A list of type search locations used for dynamic type searches
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.TypeLookup">
+            <summary>
+            Lookup table string->Type
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.TemplateHandler">
+            <summary>
+            Implements handler that serves WaveTemplates
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.ContextDumpHandler">
+            <summary>
+            Dumps WorkContext status - used for debugging purposes
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WaveLongGauge">
+            <summary>
+            Provides base for Wave long gauges
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WaveDoubleGauge">
+            <summary>
+            Provides base for Wave double gauges
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.ServerRequest">
+            <summary>
+            Provides request count received by server
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.ServerGateDenial">
+            <summary>
+            Provides request count that were denied by the server gate
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.ServerHandleException">
+            <summary>
+            Provides the count of exceptions that server had to handle as no other memebr of processing chain did
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.FilterHandleException">
+            <summary>
+            Provides the count of exceptions that filter handled
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.ServerAcceptSemaphoreCount">
+            <summary>
+            The current level of taken request accept semaphore slots
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.ServerWorkSemaphoreCount">
+            <summary>
+            The current level of taken request work semaphore slots
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextWrittenResponse">
+            <summary>
+            How many response object were written into
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextBufferedResponse">
+            <summary>
+            How many response object were buffered
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextBufferedResponseBytes">
+            <summary>
+            How many response bytes were buffered
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextCtor">
+            <summary>
+            How many work contexts were created
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextDctor">
+            <summary>
+            How many work contexts were destroyed
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextWorkSemaphoreRelease">
+            <summary>
+            How many times work semaphore was released
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextAborted">
+            <summary>
+            How many work contexts got aborted
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextHandled">
+            <summary>
+            How many work contexts got handled
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextNoDefaultClose">
+            <summary>
+            How many work contexts requested not to be closed at the end of the initial request processing cycle
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.WorkContextNeedsSession">
+            <summary>
+            How many work contexts requested session state
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.SessionNew">
+            <summary>
+            How many new sessions created
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.SessionExisting">
+            <summary>
+            How many existing sessions found
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.SessionEnd">
+            <summary>
+            How many sessions ended by request
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.SessionInvalidID">
+            <summary>
+            How many sessions supplied invalid identifier (by client)
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.GeoLookup">
+            <summary>
+            How many geo lookups have been requested
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Instrumentation.GeoLookupHit">
+            <summary>
+            How many geo lookups have resulted in finding the geo location
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.IActionResult">
+            <summary>
+            Decorates entities that get returned by MVC actions and can get executed to generate some result action (command pattern)
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.FileDownload">
+            <summary>
+            Represents MVC action result that downloads a local file
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.MVC.FileDownload.LocalFileName">
+            <summary>
+            Local file name
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.MVC.FileDownload.BufferSize">
+            <summary>
+            Download buffer size. Leave unchanged in most cases
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.MVC.FileDownload.IsAttachment">
+            <summary>
+            When true, asks user to save as attachment
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.Redirect">
+            <summary>
+            Represents MVC action result that redirects user to some URL
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.MVC.Redirect.URL">
+            <summary>
+            Where to redirect user
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.Picture">
+            <summary>
+            Represents MVC action result that returns/downloads an image
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.MVC.Picture.Image">
+            <summary>
+            Picture image
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.MVC.Picture.Format">
+            <summary>
+            Download buffer size. Leave unchanged in most cases
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.MVC.Picture.AttachmentFileName">
+            <summary>
+            When non-null asks user to download picture as a named attached file
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.ClientRecord">
+            <summary>
+            Represents MVC action result that returns ROW as JSON object for WV.RecordModel(...) ctor init
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.JSONResult">
+            <summary>
+            Represents MVC action result that returns JSON object with options.
+            If JSON options are not needed then just return CLR object directly from controller action without this wrapper
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.ActionAttribute">
+            <summary>
+            Decorates MVC Actions
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.MVC.ActionAttribute.#ctor(System.String,System.Int32,System.Boolean)">
+            <summary>
+            Specifies name override
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.MVC.ActionAttribute.#ctor(System.String,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Specifies name override and WorkMatch instances in Laconic format. i.e.:
+             'match{name="A" order=0 is-local=false} match{name="B" order=0 methods="post,put" is-local=true}'
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.MVC.ActionAttribute.Name">
+            <summary>
+            When set, specifies the invocation name override, null by default which means that the name of decorated member should be used
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.MVC.ActionAttribute.Order">
+            <summary>
+            Dictates the match making order of actions within the group
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.MVC.ActionAttribute.MatchScript">
+            <summary>
+            Returns match script in Laconic config format if the one was supplied or empty string
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.MVC.ActionAttribute.StrictParamBinding">
+            <summary>
+            Returns true if default parameter binder should not perform indirect value conversions, i.e. integer tick number as date time.
+            False by default
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.MVC.ActionAttribute.Matches">
+            <summary>
+            Returns ordered matches configured from script or empty enum
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.ActionFilterAttribute">
+            <summary>
+            General ancestor for MVC Action Filters - get invoked before and after actions
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.MVC.ActionFilterAttribute.#ctor(System.String,System.Int32)">
+            <summary>
+            Specifies name override
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.MVC.ActionFilterAttribute.BeforeActionInvocation(NFX.Wave.MVC.Controller,NFX.Wave.WorkContext,System.String,System.Reflection.MethodInfo,System.Object[],System.Object@)">
+            <summary>
+            Override to add logic/filtering right before the invocation of action method.
+            Return TRUE to indicate that request has already been handled and no need to call method body and AfterActionInvocation in which case
+             return result via 'out result' paremeter
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.MVC.ActionFilterAttribute.AfterActionInvocation(NFX.Wave.MVC.Controller,NFX.Wave.WorkContext,System.String,System.Reflection.MethodInfo,System.Object[],System.Object@)">
+            <summary>
+            Override to add logic/filtering right after the invocation of action method. Must return TRUE to stop processing chain
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.MVC.ActionFilterAttribute.Name">
+            <summary>
+            Specifies the name of filter
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.MVC.ActionFilterAttribute.Order">
+            <summary>
+            Dictates the call order
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.Controller">
+            <summary>
+            Represents controller that all MVC controllers must inherit from 
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.MVC.Controller.FindMatchingAction(NFX.Wave.WorkContext,System.String,System.Object[]@)">
+            <summary>
+            Override to perform custom action name + params -> MethodInfo, param array resolution.
+            This method rarely needs to be overridden because the framework does the resolution that suites most cases
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.MVC.Controller.GetActionFilters(System.Reflection.MethodInfo)">
+            <summary>
+            Returns cached (for performance)ordered array of ActionFilterAttributes 
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.MVC.Controller.BeforeActionInvocation(NFX.Wave.WorkContext,System.String,System.Reflection.MethodInfo,System.Object[],System.Object@)">
+            <summary>
+            Override to add logic/filtering right before the invocation of action method.
+            Return TRUE to indicate that request has already been handled and no need to call method body and AfterActionInvocation in which case
+             return result via 'out result' paremeter.
+             The default implementation calls ActionFilters 
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.MVC.Controller.AfterActionInvocation(NFX.Wave.WorkContext,System.String,System.Reflection.MethodInfo,System.Object[],System.Object)">
+            <summary>
+            Override to add logic/filtering right after the invocation of action method. Must return the result (which can be altered/filtered).
+            The default implementation calls ActionFilters
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.MVC.Controller.WorkContext">
+            <summary>
+            Returns current work context
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.ControllerInfo">
+            <summary>
+            Provides reflection information about controller type. 
+            This is a framework internal method which is not intended to be used by business logic developers
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.ActionGroupInfo">
+            <summary>
+            Provides reflection information about a group of action methods which all share the same action name(invocation name) within controller type.
+            Invocation names are mapped to actual method names, as ActionAttribute may override the name of actual method that it decorates.
+            This is a framework internal method which is not intended to be used by business logic developers
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.MVC.ActionGroupInfo.Actions">
+            <summary>
+            Returns the actions in the order suitable for mathch making
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.MVC.ActionGroupInfo.Name">
+            <summary>
+            Action invocation name- may be diffrent from method name
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVC.ActionInfo">
+            <summary>
+            Provides reflection information about a particular action method of a controller type. 
+            This is a framework internal method which is not intended to be used by business logic developers
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Response">
+            <summary>
+            Represents Response object used to generate web responses to client 
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.Write(System.Object)">
+            <summary>
+            Writes an object into response as string
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.WriteLine(System.Object)">
+            <summary>
+            Writes an object into response as string
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.Write(System.String)">
+            <summary>
+            Writes a string into response
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.WriteLine(System.String)">
+            <summary>
+            Writes a string into response
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.WriteJSON(System.Object,NFX.Serialization.JSON.JSONWritingOptions)">
+            <summary>
+            Writes an object as JSON. Does nothing if object is null
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.WriteFile(System.String,System.Int32,System.Boolean)">
+            <summary>
+            Write the file to the client so client can download it. May set Buffered=false to use chunked encoding for big files
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.WriteStream(System.IO.Stream,System.Int32,System.String)">
+            <summary>
+            Write the contents of the stream to the client so client can download it. May set Buffered=false to use chunked encoding for big files
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.GetDirectOutputStreamForWriting">
+            <summary>
+            Returns output stream for direct output and marks response as beeing written into
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.CancelBuffered">
+            <summary>
+            Cancels the buffered content. Throws if the response is not Buffered
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.Flush">
+            <summary>
+            RESERVED FOR FUTURE USE. Flushes the internally buffered content
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.Redirect(System.String)">
+            <summary>
+            Configures response with redirect status and headers. This method DOES NOT ABORT the work pipeline,so
+             the processing of filters and handlers continues unless 'work.Aborted = true' is issued in code.
+             See also 'RedirectAndAbort(url)'
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.RedirectAndAbort(System.String)">
+            <summary>
+            Configures response with redirect status and headers. This method also aborts the work pipeline,so
+             the processing of filters and handlers does not continue. See also 'Redirect(url)'
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.AddHeader(System.String,System.String)">
+            <summary>
+            Adds Http header
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.AppendCookie(System.Net.Cookie)">
+            <summary>
+            Appends cookie to the response
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.SetNoCacheHeaders">
+            <summary>
+            Sets headers so all downstream, layers (browsers, proxies) do not cache response
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.SetPrivateMaxAgeCacheHeader(System.Int32)">
+            <summary>
+            Sets max-age private cache header
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.GetClientVarNames">
+            <summary>
+            Provides access to client state object which gets persisted as a cookie.
+            Client states need to be used instead of cookies because of some HttpListener+Browser limitations
+            that can not parse multiple cookies set into one Set-Cookie header
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.GetClientVar(System.String)">
+            <summary>
+            Provides access to client state object which gets persisted as a cookie.
+            Client states need to be used instead of cookies because of some HttpListener+Browser limitations
+            that can not parse multiple cookies set into one Set-Cookie header
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Response.SetClientVar(System.String,System.String)">
+            <summary>
+            Provides access to client state object which gets persisted as a cookie.
+            Client states need to be used instead of cookies because of some HttpListener+Browser limitations
+            that can not parse multiple cookies set into one Set-Cookie header.
+            Pass null for value to delete the var form the collection. The values are generally expected to be base64 encoded by the caller
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Response.WasWrittenTo">
+            <summary>
+            Returns true if some output has been performed
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Response.Buffered">
+            <summary>
+            Determines whether the content is buffered locally. This property can not be set after
+             the response has been written to
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Response.Encoding">
+            <summary>
+            Gets/sets content encoding
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Response.StatusCode">
+            <summary>
+            Http status code
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Response.StatusDescription">
+            <summary>
+            Http status description
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Response.ContentType">
+            <summary>
+            Http content type
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Response.Headers">
+            <summary>
+            Returns http headers of the response
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Response.ClientVarsChanged">
+            <summary>
+            Returns true if current request processing cycle has changed the client var
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.SysConsts">
+            <summary>
+            Non-localizable constants
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.SysConsts.JSON_RESULT_OK">
+            <summary>
+            Returns object {OK = true}
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.SysConsts.JSON_RESULT_ERROR">
+            <summary>
+            Returns object {OK = false}
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Templatization.ResponseRenderingTarget">
+            <summary>
+            Renders into HttpResponse object
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.Templatization.ResponseRenderingTarget.Context">
+            <summary>
+            Returns HttpContext for current request
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.Templatization.ResponseRenderingTarget.Response">
+            <summary>
+            Returns Response object for WorkContext
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Handlers.StockContentSiteHandler">
+            <summary>
+            This handler serves the embedded content of NFX.Wave library
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Templatization.StockContent.Error">
+            <summary>
+             Displays good-looking 404 page
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Templatization.StockContent.Master">
+            <summary>
+             Master page for all stock pages
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Templatization.WaveTemplate">
+            <summary>
+            Defines a base class for web-related templates
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Templatization.WaveTemplate.Render(NFX.Wave.Templatization.ResponseRenderingTarget,System.Object)">
+            <summary>
+            Renders template by generating content into ResponseRenderingTarget
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Templatization.WaveTemplate.Render(NFX.Wave.WorkContext,System.Object)">
+            <summary>
+            Renders template by generating content into WorkContext
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Templatization.WaveTemplate.CanReuseInstance">
+            <summary>
+            Override to indicate whetner the instance of the template may be reused for processing of other requests
+            (possibly by parallel threads). Override to return false if there is any per-request state shared in instance fields
+            False by default so multiple requests can not reuse the instance
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Templatization.WaveTemplate.ContentType">
+            <summary>
+            Override to provides response content type. Default value is HTML
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.Templatization.WaveTemplate`1">
+            <summary>
+            Wave template that is scoped to a TModel type for Model (Rendering Context) 
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.Templatization.WaveTemplate`1.Render(NFX.Wave.Templatization.ResponseRenderingTarget,`0)">
+            <summary>
+            Renders template by generating content into ResponseRenderingTarget
+            </summary>
+            <param name="target">A ResponseRenderingTarget target to render output into</param>
+            <param name="model">A model object for this rendering call</param>
+        </member>
+        <member name="M:NFX.Wave.Templatization.WaveTemplate`1.Render(NFX.Wave.WorkContext,`0)">
+            <summary>
+            Renders template by generating content into WorkContext
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.Templatization.WaveTemplate`1.Model">
+            <summary>
+            Shortcut to TemplateRenderingContext which is set per call to Render(TModel)
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.URIPattern">
+            <summary>
+            Represents a URI pattern that can get matched against URI requests.
+            The pattern is formed using regular URL grammar and captures segments denoted by "{}".
+            Example: '/profiles/{controller}/{action="dflt value"}/{*params}'
+            The class uses CSharp lexer, so it allows to use string escapes and unicode chars like CSharp 
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.URIPattern.MatchURIPath(System.Uri,System.Boolean)">
+            <summary>
+            Tries to match the pattern against the URI path section and returns a JSONDataMap match object filled with pattern match or NULL if pattern could not be matched.
+            JSONDataMap may be easily converted to dynamic by calling new JSONDynamicObject(map)
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.URIPattern.MakeURI(System.Collections.Generic.IDictionary{System.String,System.Object},System.Uri)">
+            <summary>
+            Creates URI from the supplied values for this pattern
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.URIPattern.Pattern">
+            <summary>
+            Returns the original pattern
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WaveSession">
+            <summary>
+            Represents a session in a WAVE server application
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.WaveSession.GeoEntity">
+            <summary>
+            Stores user Geographical/Location information
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.StringConsts">
+            <summary>
+            A dictionary of framework text messages.
+            Localization may be done in this class in future
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WaveException">
+            <summary>
+            Base exception thrown by the WAVE framework
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.MVCActionException">
+            <summary>
+            Wraps inner exceptions capturing stack trace in inner implementing blocks
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.FilterPipelineException">
+            <summary>
+            Thrown by filter pipeline
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.FilterPipelineException.FilterPath">
+            <summary>
+            Returns a mnemonic filter sequence where the root exception originated from
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.FilterPipelineException.RootException">
+            <summary>
+            Returns unwound root exception - unwrapping it from FilterPipelineException
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.HTTPStatusException">
+            <summary>
+            Thrown to indicate various Http status conditions
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.HTTPStatusException.StatusCode">
+            <summary>
+            Http status code
+            </summary>
+        </member>
+        <member name="F:NFX.Wave.HTTPStatusException.StatusDescription">
+            <summary>
+            Http status description
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.ExceptionExtensions">
+            <summary>
+            Provides various extension methods
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.ExceptionExtensions.ToClientResponseJSONMap(System.Exception,System.Boolean)">
+            <summary>
+            Describes exception for client response transmission as JSONDataMap
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.PlatformUtils.SetRequestQueueLimit(System.Net.HttpListener,System.Int64)">
+            <summary>
+            Must be called after Listener.Start();
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WorkDispatcher">
+            <summary>
+            Represents a default dispatcher that dispatches WorkContext calls on the same thread that calls Dispatch(work).
+            May extend this class to implement custom dispatchers, i.e. the once that maintain their won work queue/worker threads
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkDispatcher.RegisterFilter(NFX.Wave.WorkFilter)">
+            <summary>
+            Registers filter and returns true if the named instance has not been registered yet
+            Note: it is possible to call this method on active server that is - inject filters while serving requests
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkDispatcher.UnRegisterFilter(NFX.Wave.WorkFilter)">
+            <summary>
+            Unregisters filter and returns true if the named instance has been removed
+            Note: it is possible to call this method on active server that is - remove filters while serving requests
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkDispatcher.RegisterHandler(NFX.Wave.WorkHandler)">
+            <summary>
+            Registers handler and returns true if the named instance has not been registered yet
+            Note: it is possible to call this method on active server that is - inject handlers while serving requests
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkDispatcher.UnRegisterHandler(NFX.Wave.WorkHandler)">
+            <summary>
+            Unregisters handler and returns true if the named instance has been removed
+            Note: it is possible to call this method on active server that is - remove handlers while serving requests
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkDispatcher.Dispatch(NFX.Wave.WorkContext)">
+            <summary>
+            Dispatches work into appropriate handler passing through filters.
+            The default implementation processes requests on the calling thread and disposes WorkContext deterministically
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkDispatcher.InvokeHandler(NFX.Wave.WorkContext,NFX.Wave.WorkHandler@)">
+            <summary>
+            Finds appropriate handler and invokes it. Returns the appropriate handler or null if work was aborted or already handled.
+            Throws if appropriate handler was not found
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkDispatcher.GetWorkHandler(NFX.Wave.WorkContext)">
+            <summary>
+            Finds the most appropriate work handler to do the work. 
+            The default implementation finds first handler with matching URI pattern or null
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkDispatcher.HandleException(NFX.Wave.WorkContext,NFX.Wave.WorkFilter,NFX.Wave.WorkHandler,System.Exception)">
+            <summary>
+            Handles processing exception - this implementation uses server-wide behavior.
+            All parameters except ERROR can be null - which indicates error that happened during WorkContext dispose
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkDispatcher.Filters">
+            <summary>
+            Returns ordered registry of filters
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkDispatcher.Handlers">
+            <summary>
+            Returns ordered registry of handlers
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WaveServer">
+            <summary>
+            Represents "(W)eb(A)pp(V)iew(E)nhanced" web server which provides DYNAMIC web site services.
+            This server is not meant to be exposed directly to the public Internet, rather it should be used as an application server
+            behind the reverse proxy, such as NGINX. This server is designed to serve dynamic data-driven requests/APIs and not meant to be used
+            for serving static content files (although it can). 
+            The implementation is based on a lightweight HttpListener that processes incoming Http requests via an injectable WorkDispatcher
+            which governs the threading and WorkContext lifecycle.
+            The server processing pipeline is purposely designed to be synchronous-blocking (thread per call) which does not mean that the
+            server is inefficient, to the contrary - this server design is specifically targeting short-called methods relying on a classical thread call stack.
+            This approach obviates the need to create surrogate message loops/synchro contexts, tasks and other objects that introduce extra GC load.
+            The server easily support "dangling"(left open indefinitely) WorkContext instances that can stream events (i.e. SSE/Server Push) and WebSockets from 
+             specially-purposed asynchronous notification threads.
+            </summary>
+            <remarks>
+            The common belief that asynchronous non-thread-based web servers always work faster (i.e. Node.js) is not true in the data-oriented systems of high scale because
+             eventually multiple web server machines still block on common data access resources, so it is much more important to design the database backend
+            in an asynchronous fashion, as it is the real bottle neck of the system. Even if most of the available threads are not physically paused by IO, 
+             they are paused logically as the logical units of work are waiting for IO and the fact that server can accept more socket requests does not mean that they 
+             will not timeout.  The downsides of asynchronous web layers are: 
+              (a) much increased implementation/maintenance complexity 
+              (b) many additional task/thread context switches and extra objects that facilitate the event loops/messages/tasks etc...
+            </remarks>
+        </member>
+        <member name="M:NFX.Wave.WaveServer.ExternalParametersForGroups(System.String[])">
+            <summary>
+            Returns named parameters that can be used to control this component
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WaveServer.HandleException(NFX.Wave.WorkContext,NFX.Wave.WorkFilter,NFX.Wave.WorkHandler,System.Exception)">
+            <summary>
+            Handles processing exception by calling ErrorFilter.HandleException(work, error).
+            All parameters except ERROR can be null - which indicates error that happened during WorkContext dispose
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WaveServer.Log(NFX.Log.MessageType,System.String,System.String,System.Exception,System.String,System.Nullable{System.Guid})">
+            <summary>
+            Facilitates server logging
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WaveServer.ExternalGetParameter(System.String,System.Object@,System.String[])">
+            <summary>
+            Gets external parameter value returning true if parameter was found
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WaveServer.ExternalSetParameter(System.String,System.Object,System.String[])">
+            <summary>
+            Sets external parameter value returning true if parameter was found and set
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WaveServer.MakeContext(System.Net.HttpListenerContext)">
+            <summary>
+            Factory method that makes new WorkContext instances. Override to make a WorkContext-derivative
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WaveServer.BeforeListenerStart(System.Net.HttpListener)">
+            <summary>
+            Override to set listener options such as TimeoutManager.MinSendBytesPerSecond before listener.Start()
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WaveServer.AfterListenerStart(System.Net.HttpListener)">
+            <summary>
+            Override to set listener options such as TimeoutManager.MinSendBytesPerSecond after listener.Start()
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.Servers">
+            <summary>
+            Returns the global registry of all server instances that are active in this process 
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.EnvironmentName">
+            <summary>
+            Provides the name of environment, i.e. DEV,PROD, TEST i.e. some handlers may depend on environment name to serve DEV vs PROD java script files etc.
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.ClientVarsCookieName">
+            <summary>
+            Provides the name of cookie where server keeps client vars
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.InstrumentationEnabled">
+            <summary>
+            When true, emits instrumentation messages
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.ExternalParameters">
+            <summary>
+            Returns named parameters that can be used to control this component
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.IgnoreClientWriteErrors">
+            <summary>
+            When true does not throw exceptions on client channel write
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.LogHandleExceptionErrors">
+            <summary>
+            When true writes errors that get thrown in server cathc-all HandleException methods
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.KernelHttpQueueLimit">
+            <summary>
+            Establishes HTTP.sys kernel queue limit
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.ParallelAccepts">
+            <summary>
+            Specifies how many requests can get accepted from kernel queue in parallel
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.ParallelWorks">
+            <summary>
+            Specifies how many instances of WorkContext(or derivatives) can be processed at the same time
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.Prefixes">
+            <summary>
+            Returns HttpListener prefixes such as "http://+:8080/"
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.Gate">
+            <summary>
+            Gets/sets network gate 
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.Dispatcher">
+            <summary>
+            Gets/sets work dispatcher
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.ShowDumpMatches">
+            <summary>
+            Returns matches used by the server's default error handler to determine whether exception details should be shown
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WaveServer.LogMatches">
+            <summary>
+            Returns matches used by the server's default error handler to determine whether exception details should be logged
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WorkContext">
+            <summary>
+            Represents a context for request/response server processing in WAVE framework
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkContext.Destructor">
+            <summary>
+            Warning: if overridden, must call base otherwise semaphore will not get released
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkContext.___SetWorkMatch(NFX.Wave.WorkMatch,NFX.Serialization.JSON.JSONDataMap)">
+            <summary>
+            Internal method. Developers do not call
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkContext.ReleaseWorkSemaphore">
+            <summary>
+            Releases work semaphore that throttles the processing of WorkContext instances.
+            The WorkContext is released automatically in destructor, however there are cases when the semaphore release
+            may be needed sooner, i.e. in a HTTP streaming application where work context instances are kept open indefinitely
+            it may not be desirable to consider long-living work context instances as a throtteling factor.
+            Returns true if semaphore was released, false if it was not released during this call as it was already released before
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkContext.NeedsSession(System.Boolean)">
+            <summary>
+            Ensures that session is injected if session filter is present in processing chain.
+            If session is already available (Session!=null) then does nothing, otherwise
+            fills Session poroperty with either NEW session (if onlyExisting=false(default)) if user supplied no session token,
+            OR gets session from session store as defined by the first SessionFilter in the chain
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkContext.Log(NFX.Log.MessageType,System.String,System.String,System.Exception,System.String,System.Nullable{System.Guid})">
+            <summary>
+            Facilitates context-aware logging
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Server">
+            <summary>
+            Returns the server this context is under
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.WorkSemaphoreReleased">
+            <summary>
+            Returns true to indicate that work semaphore has been already released.
+            It is not necessary to use this property or ReleaseWorkSemaphore() method as the framework does it
+             automatically in 99% cases. ReleaseWorkSemaphore() may need to be called from special places like HTTP streaming
+              servers that need to keep WorkContext instances open for a long time
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Request">
+            <summary>
+            Returns HttpListenerRequest object for this context
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Response">
+            <summary>
+            Returns Response object for this context
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Session">
+            <summary>
+            Returns session that this context is linked with or null
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.SessionFilter">
+            <summary>
+            Returns the first session filter which was injected in the processing line.
+            It is the filter that manages the session state for this context
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.SupportsSession">
+            <summary>
+            Returns true when the context was configured to support SessionFilter so Session can be injected
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Match">
+            <summary>
+            Returns the work match instances that was made for this requested work or null if nothing was matched yet
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.MatchedVars">
+            <summary>
+            Returns variables that have been extracted by WorkMatch when dispatcher assigned request to WorkHandler.
+            If variables have not been assigned yet returns empty object
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Matched">
+            <summary>
+            Returns dynamic object that contains variables that have been extracted by WorkMatch when dispatcher assigned request to WorkHandler.
+            If variables have not been assigned yet returns empty object
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Items">
+            <summary>
+            Provides a thread-safe dictionary of items. The underlying collection is lazily allocated
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Handler">
+            <summary>
+            Returns the work handler instance that was matched to perform work on this context or null if the match has not been made yet
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Handled">
+            <summary>
+            Returns true when the work has been executed by the WorkHandler instance
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.Aborted">
+            <summary>
+            Indicates whether the work context is logically finished and its nested processing (i.e. through Filters/Handlers) should stop.
+            For example, when some filter detects a special condition (judging by the request) and generates the response 
+             and needs to abort the work request so it does no get filtered/processed anymore, it can set this property to true.
+            This mechanism performs much better than throwing exceptions  
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.About">
+            <summary>
+            Generates short context description
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.NoDefaultAutoClose">
+            <summary>
+            Indicates whether the default dispatcher should close the WorkContext upon completion of async processing.
+            This property may ONLY be set to TRUE IF Response.Buffered = false (chunked transfer) and Response has already been written to.
+            When this property is set to true the WorkDispatcher will not auto dispose this WorkContext instance.
+            This may be needed for a server that streams chat messages and some other thread manages the lifetime of this WorkContext.
+            Keep in mind that alternative implementations of WorkDispatcher (derived classes that implement alternative threading/lifecycle)
+             may disregard this flag altogether
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.LastError">
+            <summary>
+            Captures last error
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.GeoEntity">
+            <summary>
+            Gets sets geo location information as detected by GeoLookupHandler.
+            If Session context is injected then get/set passes through into session object
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.RequestedJSON">
+            <summary>
+            Returns true if client indicated in response that "application/json" is accepted
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.IsPOST">
+            <summary>
+            Indicates that request method id POST
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.IsGET">
+            <summary>
+            Indicates that request method id GET
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.IsPUT">
+            <summary>
+            Indicates that request method id PUT
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkContext.IsDELETE">
+            <summary>
+            Indicates that request method id DELETE
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WorkMatch">
+            <summary>
+            Decides whether the specifies WorkContext matches the requirements specified in the instance.
+            The match may consider Request and Items properties of work context for match determination.
+            Work matches do not belong to particular handler or filter, so they ARE STATELESS and their instances
+             can be used by multiple different processors (i.e. handlers and filters).
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkMatch.Make(NFX.Wave.WorkContext)">
+            <summary>
+            Decides whether the specified WorkContext makes the match per this instance and if it does, returns the match variables.
+            Returns null if match was not made
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.Name">
+            <summary>
+            Returns the match instance name
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.Order">
+            <summary>
+            Returns the match order in handler registry. Order is used for URI pattern matching.
+            Although Order property can change the match needs to be Unregistered/Registered again with the handler 
+            to change pattern matching order
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.PathPattern">
+            <summary>
+            Returns the URIPattern matcher for URI path segment matching
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.NotPathPattern">
+            <summary>
+            Returns the URIPattern matcher for reverse URI path segment matching
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.Variables">
+            <summary>
+            Returns registry of variables. May register/unregister variables at runtime
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WorkMatch.NameValuePair">
+            <summary>
+            Represents name/value tuple
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkMatch.NameValuePair.ParseList(System.String)">
+            <summary>
+            Converts a string with a list of separated pairs into a list i.e. "a=1;b=2"
+            </summary>
+        </member>
+        <member name="M:NFX.Wave.WorkMatch.NameValuePair.ToStringList(System.Collections.Generic.IEnumerable{NFX.Wave.WorkMatch.NameValuePair})">
+            <summary>
+            Joins NameValuePair sequence into a string list i.e. "a=1;b=2"
+            </summary>
+        </member>
+        <member name="T:NFX.Wave.WorkMatch.Variable">
+            <summary>
+            Represents capture variable
+            </summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.Variable.Name">
+            <summary>Name of variable</summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.Variable.QueryName">
+            <summary>Name of URI query variable to fetch into this variable</summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.Variable.Default">
+            <summary>Default value if no URI match could be made</summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.Variable.MatchEquals">
+            <summary>Optional value that must exactly equal the captured value for the whole match to succeed</summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.Variable.MatchContains">
+            <summary>Optional value that must be contained in the captured value for the whole match to succeed</summary>
+        </member>
+        <member name="P:NFX.Wave.WorkMatch.Variable.MatchCaseSensitive">
+            <summary>Optional value comparison case sensitivity for the whole match to succeed</summary>
+        </member>
+    </members>
+</doc>
