@@ -5,12 +5,15 @@
      namespace="Serbench.WebViewer"
      abstract="true"
      summary="Master page for all pages"
+     
+     
+     using{ns="NFX.Web"}
+     using{ns="NFX.Wave"}
+     using{ns="NFX.Wave.Templatization"}
   }
 #</laconf>
 #[class]
-    public Master(WorkContext work) : base(work)
-    {
-    }
+   
 
     public virtual string Title { get {return "NFX.WAVE Framework"; } }
 
