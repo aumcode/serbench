@@ -23,8 +23,18 @@ namespace Serbench.StockSerializers
 
     public NFXSlim(TestingSystem context, IConfigSectionNode conf) : base(context, conf) 
     {
-      var known = conf.Children.Where(cn => cn.IsSameName(CONFIG_KNOWN_TYPE_SECTION))
-                               .Select( cn => Type.GetType( cn.AttrByName(Configuration.CONFIG_NAME_ATTR).Value ));   
+      Type[] known; 
+      
+      try
+      {
+        known = conf.Children.Where(cn => cn.IsSameName(CONFIG_KNOWN_TYPE_SECTION))
+                             .Select( cn => Type.GetType( cn.AttrByName(Configuration.CONFIG_NAME_ATTR).Value, true ))
+                             .ToArray();   //force execution now
+      }
+      catch(Exception error)
+      {
+        throw new SerbenchException("Slim serializer config error in '{0}' section: {1}".Args(conf.ToLaconicString(), error.ToMessageWithType()), error);
+      }
 
       //we create type registry with well-known types that serializer does not have to emit every time
       m_TypeRegistry = new TypeRegistry(TypeRegistry.BoxedCommonTypes,
