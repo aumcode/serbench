@@ -1,4 +1,8 @@
-# SERBENCH - Serializer Benchmarking Suite
+# SERBENCH 
+**Serializer Benchmarking Suite**
+
+License: Apache 2.0
+
 The purpose of this tool is to test the performance/capabilities of various
 serializers available for the CLR/.NET platform.
 
