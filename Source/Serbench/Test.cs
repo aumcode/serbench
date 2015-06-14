@@ -21,10 +21,10 @@ namespace Serbench
     }
 
 
-    [Config(Default=1)]
+    [Config(Default=100)]
     private int m_SerIterations;
 
-    [Config(Default=1)]
+    [Config(Default=100)]
     private int m_DeserIterations;
 
     [Config(Default=1)]
@@ -72,6 +72,24 @@ namespace Serbench
     {
       //todo add this to aborted/error count in context
     }
+
+
+    /// <summary>
+    /// Override to perform logic right befroe the iterations batch starts
+    /// </summary>
+    public virtual void BeforeSerializationIterationBatch(Serializer serializer)
+    {
+
+    }
+
+     /// <summary>
+    /// Override to perform logic right befroe the iterations batch starts
+    /// </summary>
+    public virtual void BeforeDeserializationIterationBatch(Serializer serializer)
+    {
+
+    }
+
 
   }
 }

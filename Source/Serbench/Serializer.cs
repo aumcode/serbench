@@ -39,5 +39,21 @@ namespace Serbench
     /// </summary>
     public abstract object ParallelDeserialize(Stream stream);
 
+    /// <summary>
+    /// Override to perform logic right befroe the iterations batch starts
+    /// </summary>
+    public virtual void BeforeSerializationIterationBatch(Test test)
+    {
+
+    }
+
+     /// <summary>
+    /// Override to perform logic right befroe the iterations batch starts
+    /// </summary>
+    public virtual void BeforeDeserializationIterationBatch(Test test)
+    {
+
+    }
+
   }
 }

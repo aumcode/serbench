@@ -62,14 +62,15 @@
           order=0
         }
         
-        serializer
+/*      
+      serializer
         {
           type="Serbench.StockSerializers.NFXSlim, Serbench"
           name="NFX.Slim Batching" 
           order=1
           batching=true
         }
-        
+ */       
         serializer
         {
           type="Serbench.StockSerializers.NFXSlim, Serbench"
