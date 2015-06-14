@@ -12,7 +12,7 @@ be injected via a named config into the tool. This approach allows for high degr
 as everything is configurable.
 
 Every test determines what payload kind/type, pattern and size is used against every serializer, so
-the tool permutes all test instances and serializer isnatnces to test different combinations.
+the tool permutes all test instances and serializer instances to test different combinations.
 
 Not all serializers support all features, i.e. ProtoBuf does not support cyclical object graphs. This
  is normal and actually is expected to be discovered by this tool.
