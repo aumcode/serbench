@@ -114,7 +114,7 @@ namespace Serbench.StockTests
       else
       {
         var got = serializer.Deserialize(target) as TypicalPersonData;
-        if (got==null) Abort("Did not get a person back");
+        if (got==null){ Abort("Did not get a person back"); return; }
       }
 
     }
