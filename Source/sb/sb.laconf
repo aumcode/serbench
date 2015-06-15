@@ -1,13 +1,18 @@
 ﻿nfx
 {
   application-name="Run All Default" 
+  
+  //The output of this tool will be directed into the value of SERBENCH_OUTPUT_ROOT
+  //OS environment variable. Please set it up via Windows/ControlPanel/System....
+  output-root-path=$(~SERBENCH_OUTPUT_ROOT)
+  
  
  
   //Configure data store where the results will be saved
   data-store
   {
     type="Serbench.Data.DefaultDataStore, Serbench"
-    root-path="c:\\nfx"
+    root-path=$(/$output-root-path) 
     output=json
   }
   
@@ -111,6 +116,19 @@
  
     log
     {
-        destination { type="NFX.Log.Destinations.ConsoleDestination, NFX" colored=true}
+        destination
+        { 
+           type="NFX.Log.Destinations.ConsoleDestination, NFX"
+           colored=true
+        }
+        
+        destination
+        {  
+           type="NFX.Log.Destinations.CSVFileDestination, NFX"
+           name="SerbenchLog"
+           path=$(/$output-root-path) 
+           name-time-format='yyyyMMdd'
+           generate-failover-msg=false
+        }
     }
 }
