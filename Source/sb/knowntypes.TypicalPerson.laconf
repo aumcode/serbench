@@ -1,0 +1,7 @@
+﻿known-types
+{
+    known-type{name="Serbench.StockTests.TypicalPerson"}
+    known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+    known-type{name="Serbench.StockTests.TypicalPerson[]"}
+          //known-type{name="full..type..name"}
+}

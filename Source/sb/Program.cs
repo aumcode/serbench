@@ -30,6 +30,9 @@ namespace sb
              Console.WriteLine("Using the default config file");
            
            using(new ServiceBaseApplication(args, appConfig))
+           {
+             App.ConfigRoot.ProcessIncludePragmas(true);
+
              using(var testing = FactoryUtils.MakeAndConfigure<Serbench.TestingSystem>(
                                       App.ConfigRoot[CONFIG_TESTING_SYSTEM_SECTION],
                                       typeof(Serbench.TestingSystem) )
@@ -45,6 +48,7 @@ namespace sb
                   System.Threading.Thread.Sleep(250);
                 }
              }
+           }
         }
         catch(Exception error)
         {

@@ -81,10 +81,13 @@
           type="Serbench.StockSerializers.NFXSlim, Serbench"
           name="NFX.Slim Known Types" 
           order=2
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          /*
           known-type{name="Serbench.StockTests.TypicalPerson"}
           known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
           known-type{name="Serbench.StockTests.TypicalPerson[]"}
           //known-type{name="full..type..name"}
+          */
         }
           
         serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinaryFormatter" order=100}
