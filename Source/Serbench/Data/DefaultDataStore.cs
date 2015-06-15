@@ -25,6 +25,7 @@ namespace Serbench.Data
   {
     
    
+      [Config]
       private string m_RootPath;
       private Dictionary<string, List<Row>> m_Data;
    
@@ -81,7 +82,7 @@ namespace Serbench.Data
       protected override void DoStart()
       {
         if (m_RootPath.IsNullOrWhiteSpace() ||  !Directory.Exists(m_RootPath))
-           throw new SerbenchException("Data store directory not found");
+           throw new SerbenchException("Data store directory [{0}] not found".Args(m_RootPath));
 
         m_Data = new Dictionary<string,List<Row>>(StringComparer.OrdinalIgnoreCase);
       }
