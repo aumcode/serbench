@@ -12,7 +12,7 @@
   data-store
   {
     type="Serbench.Data.DefaultDataStore, Serbench"
-    root-path=C:\Projects\Leo\TestData // $(/$output-root-path) 
+    root-path=$(/$output-root-path) 
     output=json
   }
   
@@ -72,23 +72,26 @@
         }
         
 /*      
-      serializer
+        serializer
         {
           type="Serbench.StockSerializers.NFXSlim, Serbench"
           name="NFX.Slim Batching" 
           order=1
           batching=true
         }
- */       
+ */      
         serializer
         {
           type="Serbench.StockSerializers.NFXSlim, Serbench"
           name="NFX.Slim Known Types" 
           order=2
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          /*
           known-type{name="Serbench.StockTests.TypicalPerson"}
           known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
           known-type{name="Serbench.StockTests.TypicalPerson[]"}
           //known-type{name="full..type..name"}
+          */
         }
           
         serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinaryFormatter" order=100}
