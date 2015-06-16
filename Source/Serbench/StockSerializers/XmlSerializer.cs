@@ -8,16 +8,17 @@ using NFX.Environment;
 namespace Serbench.StockSerializers
 {
     /// <summary>
-    ///     Represents Microsoft's DataContract:
-    /// Add: a reference: System.Runtime.Serialization.dll  
-    /// Add: a line: using System.Runtime.Serialization.dll 
+    ///     Represents Microsoft's XmlSerializer:
+    /// Add: a reference: System.Xml.Serialization.dll  
+    /// Add: a line: using System.Xml.Serialization.dll 
     /// </summary>
-    public class MSDataContractSerializer : Serializer
+    public class XmlSerializer : Serializer
     {
         public const string CONFIG_KNOWN_TYPE_SECTION = "known-type";
-        private readonly DataContractSerializer m_Serializer;
+        private readonly System.Xml.Serialization.XmlSerializer m_Serializer;
 
-        public MSDataContractSerializer(TestingSystem context, IConfigSectionNode conf) : base(context, conf)
+        public XmlSerializer(TestingSystem context, IConfigSectionNode conf)
+            : base(context, conf)
         {
             Type[] known;
 
@@ -30,33 +31,45 @@ namespace Serbench.StockSerializers
             catch (Exception error)
             {
                 throw new SerbenchException(
-                    "System.Runtime.Serialization.DataContractSerializer serializer config error in '{0}' section: {1}".Args(conf.ToLaconicString(),
+                    "System.Xml.Serialization.XmlSerializer serializer config error in '{0}' section: {1}".Args(conf.ToLaconicString(),
                         error.ToMessageWithType()), error);
             }
 
             Type[] knownSubtypes = new Type[known.Length - 1];
             if (known.Length > 1) Array.ConstrainedCopy(known, 1, knownSubtypes, 0, known.Length - 1);
-            m_Serializer = new DataContractSerializer(known[0], knownSubtypes);
+            m_Serializer = new System.Xml.Serialization.XmlSerializer(known[0], knownSubtypes);
         }
 
         public override void Serialize(object root, Stream stream)
         {
-            m_Serializer.WriteObject(stream, root);
+            using (var sw = new StreamWriter(stream))
+            {
+                m_Serializer.Serialize(sw, root);
+            }
         }
 
         public override object Deserialize(Stream stream)
         {
-            return m_Serializer.ReadObject(stream);
+            using (var sr = new StreamReader(stream))
+            {
+                return m_Serializer.Deserialize(sr);
+            }
         }
 
         public override void ParallelSerialize(object root, Stream stream)
         {
-            m_Serializer.WriteObject(stream, root);
+            using (var sw = new StreamWriter(stream))
+            {
+                m_Serializer.Serialize(sw, root);
+            }
         }
 
         public override object ParallelDeserialize(Stream stream)
         {
-            return m_Serializer.ReadObject(stream);
+            using (var sr = new StreamReader(stream))
+            {
+                return m_Serializer.Deserialize(sr);
+            }
         }
     }
 }
