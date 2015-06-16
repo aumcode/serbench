@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using System.Runtime.Serialization;
+
 
 using NFX;
 using NFX.Environment;
@@ -13,35 +15,36 @@ namespace Serbench.StockSerializers
     /// Add: a reference: System.Xml.Serialization.dll  
     /// Add: a line: using System.Xml.Serialization.dll 
     /// </summary>
-    public class XmlSerializer : Serializer
+    public class MSXmlSerializer : Serializer
     {
-        private readonly System.Xml.Serialization.XmlSerializer m_Serializer;
+        
 
-        public XmlSerializer(TestingSystem context, IConfigSectionNode conf)
+        public MSXmlSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
-            Type[] known = ReadKnownTypes(conf);
+            m_KnownTypes = ReadKnownTypes(conf);
+        }
 
-            var primaryType = known.FirstOrDefault();
+        private Type[] m_KnownTypes;
+        private XmlSerializer m_Serializer;
 
-            if (primaryType==null)
-              throw new SerbenchException("{0} serializer config error. Must define at least 1 primary known-type".Args(GetType().FullName));
+        public override void BeforeRuns(Test test)
+        {
+            var primaryType = test.GetPayloadRootType();
 
-            var extraTypes = known.Skip(1).ToArray();
-            
             try
             {
-              m_Serializer = extraTypes.Any() ? 
-                              new System.Xml.Serialization.XmlSerializer(primaryType, extraTypes) :
-                              new System.Xml.Serialization.XmlSerializer(primaryType);
+              m_Serializer = m_KnownTypes.Any() ? 
+                              new XmlSerializer(primaryType, m_KnownTypes) :
+                              new XmlSerializer(primaryType);
             }
             catch(Exception error)
             {
-              throw new SerbenchException("Error making XmlSerializer instance in serializer .ctor: {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()),error);
+              test.Abort("Error making XmlSerializer instance in serializer BeforeRun() {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()));
             }
-
         }
 
+        
         public override void Serialize(object root, Stream stream)
         {
             m_Serializer.Serialize(stream, root);

@@ -110,22 +110,27 @@ namespace Serbench.Specimens.Tests
         }
 
         /// <summary>
-        ///     How many records in the list
+        /// How many records in the list
         /// </summary>
-        [DataMember]
         public int Count
         {
             get { return m_Count; }
         }
 
         /// <summary>
-        ///     Determines whether list of objects is serialized isntead of a single object
+        /// Determines whether list of objects is serialized isntead of a single object
         /// </summary>
-        [DataMember]
         public bool List
         {
             get { return m_List; }
         }
+
+        public override Type GetPayloadRootType()
+        {
+            var root = m_List ? (object)m_Data : m_Data[0];
+            return root.GetType();
+        }
+
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
         {

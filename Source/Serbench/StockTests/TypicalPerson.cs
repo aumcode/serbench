@@ -96,6 +96,13 @@ namespace Serbench.StockTests
     public bool List{ get{ return m_List;}}
 
 
+    public override Type GetPayloadRootType()
+    {
+       var root = m_List ? (object)m_Data : m_Data[0];
+       return root.GetType();
+    }
+
+
 
     public override void PerformSerializationTest(Serializer serializer, Stream target)
     {

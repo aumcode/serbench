@@ -14,30 +14,34 @@ namespace Serbench.StockSerializers
     /// </summary>
     public class MSDataContractSerializer : Serializer
     {
-        public const string CONFIG_KNOWN_TYPE_SECTION = "known-type";
-        private readonly DataContractSerializer m_Serializer;
+        
 
         public MSDataContractSerializer(TestingSystem context, IConfigSectionNode conf) : base(context, conf)
         {
-            Type[] known;
+            m_KnownTypes = ReadKnownTypes(conf);
+        }
+
+        private Type[] m_KnownTypes;
+        private DataContractSerializer m_Serializer;
+
+
+
+        public override void BeforeRuns(Test test)
+        {
+            var primaryType = test.GetPayloadRootType();
 
             try
             {
-                known = conf.Children.Where(cn => cn.IsSameName(CONFIG_KNOWN_TYPE_SECTION))
-                    .Select(cn => Type.GetType(cn.AttrByName(Configuration.CONFIG_NAME_ATTR).Value, true))
-                    .ToArray(); //force execution now
+              m_Serializer = m_KnownTypes.Any() ? 
+                              new DataContractSerializer(primaryType, m_KnownTypes) :
+                              new DataContractSerializer(primaryType);
             }
-            catch (Exception error)
+            catch(Exception error)
             {
-                throw new SerbenchException(
-                    "System.Runtime.Serialization.DataContractSerializer serializer config error in '{0}' section: {1}".Args(conf.ToLaconicString(),
-                        error.ToMessageWithType()), error);
+              test.Abort("Error making DataContractSerializer instance in serializer BeforeRun() {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()));
             }
-
-            Type[] knownSubtypes = new Type[known.Length - 1];
-            if (known.Length > 1) Array.ConstrainedCopy(known, 1, knownSubtypes, 0, known.Length - 1);
-            m_Serializer = new DataContractSerializer(known[0], knownSubtypes);
         }
+
 
         public override void Serialize(object root, Stream stream)
         {

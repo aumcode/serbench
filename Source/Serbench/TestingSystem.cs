@@ -157,6 +157,19 @@ namespace Serbench
 
         private void threadBody()
         {
+          try
+          {
+            threadBodyCore();
+          }
+          catch(Exception error)
+          {
+            log(MessageType.CatastrophicError, "threadBody()", "Thread crashed as it leaked exception: "+error.ToMessageWithType(), error);
+          }
+        }
+
+        private void threadBodyCore()
+        {
+           
            using(var targetStream = new MemoryStream( StreamCapacity ))//pre-allocate large space so it is not likely to resize and skew test results
            {
                foreach(var serializer in m_Serializers.OrderedValues)
@@ -169,6 +182,8 @@ namespace Serbench
                       if (!Running) break;
                       log(MessageType.Info, test.Name, "Starting Test with {0} runs".Args(test.Runs));
 
+                      serializer.BeforeRuns(test);
+                      test.BeforeRuns(serializer);
                       for(var i=0; Running && i<test.Runs; i++)
                       {
                           if (test.DoGc) GC.Collect(2);
@@ -180,9 +195,9 @@ namespace Serbench
            }
 
            if (!Running)
-            log(MessageType.Warning, "threadBody()", "Service stopping but test has not finished yet");
+            log(MessageType.Warning, "threadBodyCore()", "Service stopping but test has not finished yet");
 
-           log(MessageType.Info, "threadBody()", "Thread exiting");
+           log(MessageType.Info, "threadBodyCore()", "Thread exiting");
            
            SignalStop();
         }

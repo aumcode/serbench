@@ -38,6 +38,11 @@ namespace Serbench.StockTests
     public int KeyLength{ get{ return m_KeyLength;}}
 
 
+    public override Type GetPayloadRootType()
+    {
+      return m_Dict.GetType();
+    }
+
     public override void PerformSerializationTest(Serializer serializer, Stream target)
     {
       serializer.Serialize(m_Dict, target);

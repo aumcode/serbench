@@ -42,6 +42,16 @@ namespace Serbench
     /// </summary>
     public abstract object ParallelDeserialize(Stream stream);
 
+
+    /// <summary>
+    /// Override to perform logic before initiation of runs of the specified test against this serializer
+    /// </summary>
+    public virtual void BeforeRuns(Test test)
+    {
+
+    }
+
+
     /// <summary>
     /// Override to perform logic right befroe the iterations batch starts
     /// </summary>

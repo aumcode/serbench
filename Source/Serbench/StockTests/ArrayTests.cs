@@ -73,8 +73,6 @@ namespace Serbench.StockTests
        ()=> NFX.ExternalRandomGenerator.Instance.NextRandomDouble
       );
     }
-
-
   }
 
 
@@ -88,8 +86,7 @@ namespace Serbench.StockTests
        ()=> (decimal)NFX.ExternalRandomGenerator.Instance.NextRandomDouble
       );
     }
-
-
+      
   }
 
 

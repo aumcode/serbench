@@ -75,6 +75,14 @@ namespace Serbench
 
 
     /// <summary>
+    /// Override to perform logic before initiation of runs with the specified serializer
+    /// </summary>
+    public virtual void BeforeRuns(Serializer serializer)
+    {
+
+    }
+
+    /// <summary>
     /// Override to perform logic right befroe the iterations batch starts
     /// </summary>
     public virtual void BeforeSerializationIterationBatch(Serializer serializer)
@@ -89,6 +97,12 @@ namespace Serbench
     {
 
     }
+
+
+    /// <summary>
+    /// Override to return the type of payload root. This is needed for some serializers (like XML)
+    /// </summary>
+    public abstract Type GetPayloadRootType();
 
 
   }

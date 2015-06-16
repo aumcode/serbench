@@ -42,6 +42,11 @@ namespace Serbench.StockTests
 
 
 
+    public override Type GetPayloadRootType()
+    {
+      return m_Data.GetType();
+    }
+
 
     public override void PerformSerializationTest(Serializer serializer, Stream target)
     {
