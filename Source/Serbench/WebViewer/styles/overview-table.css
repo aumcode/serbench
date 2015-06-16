@@ -1,0 +1,11 @@
+.supported {
+    background: #A3D119;
+}
+
+.unsupported {
+    background: #FF704D;
+}
+
+.overview-table-cell :hover {
+    background: lightsteelblue;
+}

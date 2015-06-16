@@ -89,26 +89,29 @@ namespace Serbench.Data
 
       protected override void DoWaitForCompleteStop()
       {
+        var packager = new WebViewer.DefaultWebPackager(this, null);
+        var targetDir = packager.Build(m_RootPath);
+
         foreach(var kvp in m_Data.Where(kvp => kvp.Value.Count>0))
+        {
           if (Output== OutputFormat.JSON)
           {
-             var packager = new WebViewer.DefaultWebPackager(this, null);
-             var targetDir = packager.Build(m_RootPath);
              using(var fs = new FileStream(Path.Combine(targetDir, kvp.Key+".json"), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
-               JSONWriter.Write(kvp.Value, fs, JSONWritingOptions.PrettyPrintRowsAsMap);
+                    {  JSONWriter.Write(kvp.Value, fs, JSONWritingOptions.PrettyPrintRowsAsMap);}
           }
           else//CSV
           {
              using(var fs = new FileStream(Path.Combine(m_RootPath, kvp.Key+".csv"), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
-               using(var sw = new StreamWriter(fs, Encoding.UTF8))
-               {
-                 var firstRow = kvp.Value[0];
-                 sw.WriteLine( string.Join(",", firstRow.Schema.Select(fd => fd.Name))); 
+             using(var sw = new StreamWriter(fs, Encoding.UTF8))
+             {
+               var firstRow = kvp.Value[0];
+               sw.WriteLine( string.Join(",", firstRow.Schema.Select(fd => fd.Name))); 
 
-                 foreach(var row in kvp.Value.Where( lst => lst!=null))
-                   sw.WriteLine( string.Join(",", row.Select(v => (v==null) ? string.Empty : "\"{0}\"".Args(v.ToString().Replace("\"",@""""))  ))); 
-               }
+               foreach(var row in kvp.Value.Where( lst => lst!=null))
+                 sw.WriteLine( string.Join(",", row.Select(v => (v==null) ? string.Empty : "\"{0}\"".Args(v.ToString().Replace("\"",@""""))  ))); 
+             }
           }
+        }
       }
 
     #endregion

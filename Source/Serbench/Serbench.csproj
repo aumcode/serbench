@@ -74,13 +74,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WebViewer\default.css" />
+    <EmbeddedResource Include="WebViewer\styles\default.css" />
   </ItemGroup>
   <ItemGroup>
     <None Include="WebViewer\Master.htm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="WebViewer\Index.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WebViewer\styles\chart.css" />
+    <Content Include="WebViewer\styles\overview-table.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebViewer\scripts\chart.js" />
+    <EmbeddedResource Include="WebViewer\scripts\overview-table.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
