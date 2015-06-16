@@ -219,7 +219,7 @@ namespace Serbench
 
         private void invokeTests(TestRunData result, Serializer serializer, Test test, MemoryStream targetStream)
         {
-           const int ERROR_CUTOFF = 5;
+           const int ERROR_CUTOFF = 3;
 
            var streamWrap = new NFX.IO.NonClosingStreamWrap( targetStream );
 
@@ -245,7 +245,7 @@ namespace Serbench
              {
                serExceptions++;
                log(MessageType.Error, "Serilizing '{0}'-'{1}'".Args(serializer.Name, test.Name), error.ToMessageWithType(), error);
-               if (!wasOk && serExceptions>ERROR_CUTOFF)
+               if (!wasOk && serExceptions==ERROR_CUTOFF)
                {
                  result.SerExceptions = serExceptions;
                  result.SerSupported = false;
@@ -293,7 +293,7 @@ namespace Serbench
              {
                deserExceptions++;
                log(MessageType.Error, "Deserilizing '{0}'-'{1}'".Args(serializer.Name, test.Name), error.ToMessageWithType(), error);
-               if (!wasOk && deserExceptions>ERROR_CUTOFF)
+               if (!wasOk && deserExceptions==ERROR_CUTOFF)
                {
                  result.DeserExceptions = deserExceptions;
                  result.DeserSupported = false;
