@@ -30,7 +30,7 @@ namespace Serbench.StockSerializers
             catch (Exception error)
             {
                 throw new SerbenchException(
-                    "Slim serializer config error in '{0}' section: {1}".Args(conf.ToLaconicString(),
+                    "System.Runtime.Serialization.DataContractSerializer serializer config error in '{0}' section: {1}".Args(conf.ToLaconicString(),
                         error.ToMessageWithType()), error);
             }
 

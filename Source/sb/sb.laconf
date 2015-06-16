@@ -131,6 +131,22 @@
           known-type{name="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens"}
 		}
 
+/* TODO: [NFX.Environment.ConfigException] Type could not be created from node path '/tes
+ting-system/[6]'. Error: [System.InvalidOperationException] Serbench.Specimens.T
+ests.TypicalPerson cannot be serialized because it does not have a parameterless
+ constructor.
+       serializer
+        {
+          type="Serbench.StockSerializers.XmlSerializer, Serbench"
+          name="XmlSerializer" 
+ 		  known-type{name="Serbench.StockTests.TypicalPerson"}
+          // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+		  // known-type{name="Serbench.StockTests.MaritalStatus"}
+          known-type{name="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens"}
+         order=310
+        }
+*/
+
         serializer
         {
           type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
