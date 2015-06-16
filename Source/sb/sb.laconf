@@ -146,14 +146,14 @@ ests.TypicalPerson cannot be serialized because it does not have a parameterless
          order=310
         }
 */
-
+/*
         serializer
         {
           type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
           name="Json.Net" 
           order=400
         }
-
+*/
     }
  
  
