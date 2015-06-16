@@ -26,7 +26,7 @@ namespace Serbench.WebViewer
      /// </summary>
      public string Build(string rootPath)
      {
-        var dir = DoCreateFolder(rootPath);
+        var dir = DoCreateTargetDir(rootPath);
 
         DoAddResources(dir);
         DoGeneratePages(dir);
@@ -34,23 +34,14 @@ namespace Serbench.WebViewer
         return dir;
      }
 
-
-     protected virtual string DoCreateFolder(string rootPath)
+     /// <summary>
+     /// Override to package web output into sub-folder
+     /// </summary>
+     protected virtual string DoCreateTargetDir(string rootPath)
      {
-        var appName = App.Name;
-        if (appName.IsNullOrWhiteSpace()) appName = "Serbench";
-
-        //sanitize app name so it can be used for directory name
-        appName = new String( appName.Select( c => !Char.IsLetterOrDigit(c) ? '_' : c).ToArray() ); 
-        
-        var name = Path.Combine(rootPath, "{0}-{1:yyyyMMddHHmm}".Args(appName, App.LocalizedTime));
-        
-        var dname = name;
-        for(var i=0; Directory.Exists(dname); i++) dname = name + i.ToString();
-
-        NFX.IOMiscUtils.EnsureAccessibleDirectory(dname);
-
-        return dname;
+        var targetDir = Path.Combine(rootPath, "web");
+        NFX.IOMiscUtils.EnsureAccessibleDirectory(targetDir);
+        return targetDir;
      }
 
      protected virtual void DoAddResources(string path)

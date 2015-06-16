@@ -30,30 +30,45 @@ namespace sb
              Console.WriteLine("Using the default config file");
            
            using(new ServiceBaseApplication(args, appConfig))
-           {
-             App.ConfigRoot.ProcessIncludePragmas(true);
-
-             using(var testing = FactoryUtils.MakeAndConfigure<Serbench.TestingSystem>(
-                                      App.ConfigRoot[CONFIG_TESTING_SYSTEM_SECTION],
-                                      typeof(Serbench.TestingSystem) )
-                  )
+             try
              {
-                testing.Start();
-                Console.WriteLine("Press <ENTER> to abort test execution");
-                while(testing.Running)
-                {
-                  if (Console.KeyAvailable)
-                   if (Console.ReadKey().Key==ConsoleKey.Enter) break;
+                 App.ConfigRoot.ProcessIncludePragmas(true);
 
-                  System.Threading.Thread.Sleep(250);
-                }
+                 using(var testing = FactoryUtils.MakeAndConfigure<Serbench.TestingSystem>(
+                                          App.ConfigRoot[CONFIG_TESTING_SYSTEM_SECTION],
+                                          typeof(Serbench.TestingSystem) )
+                      )
+                 {
+                    testing.Start();
+                    Console.WriteLine("Press <ENTER> to abort test execution");
+                    while(testing.Running)
+                    {
+                      if (Console.KeyAvailable)
+                       if (Console.ReadKey().Key==ConsoleKey.Enter) break;
+
+                      System.Threading.Thread.Sleep(250);
+                    }
+                 }
              }
-           }
+             catch(Exception loggableError)//the exception under the APP container scope can be logged
+             {
+               App.Log.Write( new Message
+               {
+                 Type = MessageType.CatastrophicError,
+                 Topic = "App",
+                 From = "Program",
+                 Text = loggableError.ToMessageWithType(),
+                 Exception = loggableError 
+               });
+
+               throw;
+             }
         }
         catch(Exception error)
         {
-          Console.WriteLine("Exception leaked");
-          Console.WriteLine("----------------");
+          Console.WriteLine();
+          Console.WriteLine("Exception in main()");
+          Console.WriteLine("-------------------");
           Console.WriteLine(error.ToMessageWithType());
           System.Environment.ExitCode = -1;
         }

@@ -13,7 +13,9 @@
   {
     type="Serbench.Data.DefaultDataStore, Serbench"
     root-path=$(/$output-root-path) 
-    output=json
+    output-web=true
+    output-json=true
+    output-csv=true
   }
   
    
