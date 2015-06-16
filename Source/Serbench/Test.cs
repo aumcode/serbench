@@ -6,6 +6,7 @@ using System.IO;
 
 
 using NFX;
+using NFX.Log;
 using NFX.Environment;
 
 namespace Serbench
@@ -33,6 +34,10 @@ namespace Serbench
     [Config]
     private bool m_DoGc;
 
+
+    private bool m_Aborted;
+    private string m_AbortMessage;
+
     /// <summary>
     /// Returns how many serialization iterations per run the test performs
     /// </summary>
@@ -56,6 +61,16 @@ namespace Serbench
 
 
     /// <summary>
+    /// Indicates whether the test could not proceed due to unrecoverable/impossible/unsupported condition
+    /// </summary>
+    public bool Aborted{ get{ return m_Aborted;}}
+
+    /// <summary>
+    /// Returns abort message (if any) for Aborted tests
+    /// </summary>
+    public string AbortMessage{get{ return m_AbortMessage;}}
+
+    /// <summary>
     /// Override to perform the test logic
     /// </summary>
     public abstract void PerformSerializationTest(Serializer serializer, Stream target);
@@ -68,9 +83,24 @@ namespace Serbench
     /// <summary>
     /// Reports abort of the test due to error. This is MUCH faster than using exceptions
     /// </summary>
-    public void Abort(string msg)
+    public void Abort(Serializer serializer, string msg)
     {
-      //todo add this to aborted/error count in context
+      m_Aborted = true;
+      m_AbortMessage = msg;
+
+      App.Log.Write( new NFX.Log.Message
+      {
+        Type = MessageType.Error,
+        Topic = "Test",
+        From = "{0}('{1}').Abort({2}('{3}'))".Args(GetType().FullName, Name, serializer.GetType().FullName, serializer.Name),
+        Text = msg ?? "Aborted"
+      });
+    }
+
+    internal void ResetAbort()
+    {
+      m_Aborted = false;
+      m_AbortMessage = null;
     }
 
 

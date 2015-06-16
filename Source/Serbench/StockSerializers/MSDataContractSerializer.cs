@@ -38,7 +38,7 @@ namespace Serbench.StockSerializers
             }
             catch(Exception error)
             {
-              test.Abort("Error making DataContractSerializer instance in serializer BeforeRun() {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()));
+              test.Abort(this, "Error making DataContractSerializer instance in serializer BeforeRun() {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()));
             }
         }
 

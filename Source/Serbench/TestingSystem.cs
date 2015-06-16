@@ -180,13 +180,25 @@ namespace Serbench
                   foreach(var test in m_Tests.OrderedValues)
                   {
                       if (!Running) break;
+                      
                       log(MessageType.Info, test.Name, "Starting Test with {0} runs".Args(test.Runs));
 
+                      test.ResetAbort();
                       serializer.BeforeRuns(test);
+                      if (test.Aborted)
+                      {
+                        continue;//todo return result into aborted tests dataset
+                      }
                       test.BeforeRuns(serializer);
+                      if (test.Aborted)
+                      {
+                        continue;//todo return result into aborted tests dataset
+                      }
+
                       for(var i=0; Running && i<test.Runs; i++)
                       {
                           if (test.DoGc) GC.Collect(2);
+                          test.ResetAbort();
                           var data = doTestRun(i, serializer, test, targetStream);
                           DataStore.SaveTestData( data );
                       }//runs
@@ -236,9 +248,10 @@ namespace Serbench
         {
            const int ERROR_CUTOFF = 3;
 
+           const int ABORT_CUTOFF = 16;
+
            var streamWrap = new NFX.IO.NonClosingStreamWrap( targetStream );
 
-           
 
            var serExceptions = 0;
            var wasOk = false;
@@ -254,6 +267,19 @@ namespace Serbench
              try
              {
                test.PerformSerializationTest( serializer, streamWrap );
+               if (test.Aborted)
+               {
+                 result.SerAborts++;
+                 result.FirstSerAbortMsg = test.AbortMessage;
+                 test.ResetAbort();
+                 if (result.SerAborts==ABORT_CUTOFF)
+                 {
+                  i = test.SerIterations;
+                  throw new SerbenchException("Too many aborts {0}. Iterations run interrupted".Args(result.SerAborts));
+                 }
+
+                 continue;
+               }
                wasOk = true;
              }
              catch(Exception error)
@@ -271,13 +297,16 @@ namespace Serbench
            }
 
            sw.Stop();
-           result.SerSupported = true;
+           result.SerSupported = wasOk;
            result.SerExceptions = serExceptions;
            result.PayloadSize = (int)targetStream.Position;
            result.SerIterations = test.SerIterations;
            result.SerDurationMs = sw.ElapsedMilliseconds;
            if ((result.SerDurationTicks = sw.ElapsedTicks) > 0)
              result.SerOpsSec = (int)( test.SerIterations / ((double)result.SerDurationTicks / (double)TimeSpan.TicksPerSecond) );
+
+           if (!result.SerSupported)
+            throw new SerbenchException("Test run failed as serialization not supported");
 
            if (result.SerIterations==0)
             throw new SerbenchException("Test run failed as nothing was serialized. Test must be configured with at least 1 serialization iteration to succeed");
@@ -302,6 +331,18 @@ namespace Serbench
              try
              {
                test.PerformDeserializationTest( serializer, readingStreamSegment );
+               if (test.Aborted)
+               {
+                 result.DeserAborts++;
+                 result.FirstDeserAbortMsg = test.AbortMessage;
+                 test.ResetAbort();
+                 if (result.DeserAborts==ABORT_CUTOFF)
+                 {
+                  i = test.DeserIterations;
+                  throw new SerbenchException("Too many aborts {0}. Iterations run interrupted".Args(result.DeserAborts));
+                 }
+                 continue;
+               }
                wasOk = true;
              }
              catch(Exception error)
@@ -319,7 +360,7 @@ namespace Serbench
            }
                 
            sw.Stop();
-           result.DeserSupported = true;
+           result.DeserSupported = wasOk;
            result.DeserIterations = test.DeserIterations;
            result.DeserDurationMs = sw.ElapsedMilliseconds;
            if ((result.DeserDurationTicks = sw.ElapsedTicks) > 0)

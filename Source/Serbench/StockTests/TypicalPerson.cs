@@ -115,13 +115,13 @@ namespace Serbench.StockTests
       if (m_List)
       {
         var got = serializer.Deserialize(target) as List<TypicalPersonData>;
-        if (got==null){ Abort("Did not get list back"); return;}
-        if (got.Count!=m_Data.Count){ Abort("Did not get same count"); return; };
+        if (got==null){ Abort(serializer, "Did not get list back"); return;}
+        if (got.Count!=m_Data.Count){ Abort(serializer, "Did not get same count"); return; };
       }
       else
       {
         var got = serializer.Deserialize(target) as TypicalPersonData;
-        if (got==null){ Abort("Did not get a person back"); return; }
+        if (got==null){ Abort(serializer, "Did not get a person back"); return; }
       }
 
     }

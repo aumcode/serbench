@@ -56,6 +56,9 @@ namespace Serbench.Data
     public int SerAborts {get; set;}
 
     [Field]
+    public string FirstSerAbortMsg {get; set;}
+
+    [Field]
     public long SerDurationMs {get; set;}
 
     [Field]
@@ -82,6 +85,9 @@ namespace Serbench.Data
 
     [Field]
     public int DeserAborts {get; set;}
+
+    [Field]
+    public string FirstDeserAbortMsg {get; set;}
 
     [Field]
     public long DeserDurationMs {get; set;}

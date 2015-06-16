@@ -145,12 +145,12 @@ namespace Serbench.Specimens.Tests
                 var got = serializer.Deserialize(target) as List<TypicalPersonData>;
                 if (got == null)
                 {
-                    Abort("Did not get list back");
+                    Abort(serializer, "Did not get list back");
                     return;
                 }
                 if (got.Count != m_Data.Count)
                 {
-                    Abort("Did not get same count");
+                    Abort(serializer, "Did not get same count");
                 }
                 ;
             }
@@ -159,7 +159,7 @@ namespace Serbench.Specimens.Tests
                 var got = serializer.Deserialize(target) as TypicalPersonData;
                 if (got == null)
                 {
-                    Abort("Did not get a person back");
+                    Abort(serializer, "Did not get a person back");
                 }
             }
         }
