@@ -14,13 +14,12 @@ namespace Serbench.StockSerializers
     /// </summary>
     public class XmlSerializer : Serializer
     {
-        public const string CONFIG_KNOWN_TYPE_SECTION = "known-type";
         private readonly System.Xml.Serialization.XmlSerializer m_Serializer;
 
         public XmlSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
-            Type[] known = GetKnownTypes;
+            Type[] known = ReadKnownTypes(conf);
 
 
             Type[] knownSubtypes = new Type[known.Length - 1];
