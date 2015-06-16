@@ -21,6 +21,12 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class TypicalPersonData
     {
+        /// <summary>
+        /// Required by some serilizers (i.e. XML)
+        /// </summary>
+        public TypicalPersonData() {}
+
+
         [DataMember]
         public string Address1;
         [DataMember]

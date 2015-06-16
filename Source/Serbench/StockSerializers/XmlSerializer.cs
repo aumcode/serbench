@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+
 using NFX;
 using NFX.Environment;
 
@@ -21,42 +22,44 @@ namespace Serbench.StockSerializers
         {
             Type[] known = ReadKnownTypes(conf);
 
+            var primaryType = known.FirstOrDefault();
 
-            Type[] knownSubtypes = new Type[known.Length - 1];
-            if (known.Length > 1) Array.ConstrainedCopy(known, 1, knownSubtypes, 0, known.Length - 1);
-            m_Serializer = new System.Xml.Serialization.XmlSerializer(known[0], knownSubtypes);
+            if (primaryType==null)
+              throw new SerbenchException("{0} serializer config error. Must define at least 1 primary known-type".Args(GetType().FullName));
+
+            var extraTypes = known.Skip(1).ToArray();
+            
+            try
+            {
+              m_Serializer = extraTypes.Any() ? 
+                              new System.Xml.Serialization.XmlSerializer(primaryType, extraTypes) :
+                              new System.Xml.Serialization.XmlSerializer(primaryType);
+            }
+            catch(Exception error)
+            {
+              throw new SerbenchException("Error making XmlSerializer instance in serializer .ctor: {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()),error);
+            }
+
         }
 
         public override void Serialize(object root, Stream stream)
         {
-            using (var sw = new StreamWriter(stream))
-            {
-                m_Serializer.Serialize(sw, root);
-            }
+            m_Serializer.Serialize(stream, root);
         }
 
         public override object Deserialize(Stream stream)
         {
-            using (var sr = new StreamReader(stream))
-            {
-                return m_Serializer.Deserialize(sr);
-            }
+            return m_Serializer.Deserialize(stream);
         }
 
         public override void ParallelSerialize(object root, Stream stream)
         {
-            using (var sw = new StreamWriter(stream))
-            {
-                m_Serializer.Serialize(sw, root);
-            }
+            m_Serializer.Serialize(stream, root);
         }
 
         public override object ParallelDeserialize(Stream stream)
         {
-            using (var sr = new StreamReader(stream))
-            {
-                return m_Serializer.Deserialize(sr);
-            }
+            return m_Serializer.Deserialize(stream);
         }
     }
 }
