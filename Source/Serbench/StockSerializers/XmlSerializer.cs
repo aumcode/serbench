@@ -20,20 +20,8 @@ namespace Serbench.StockSerializers
         public XmlSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
-            Type[] known;
+            Type[] known = GetKnownTypes;
 
-            try
-            {
-                known = conf.Children.Where(cn => cn.IsSameName(CONFIG_KNOWN_TYPE_SECTION))
-                    .Select(cn => Type.GetType(cn.AttrByName(Configuration.CONFIG_NAME_ATTR).Value, true))
-                    .ToArray(); //force execution now
-            }
-            catch (Exception error)
-            {
-                throw new SerbenchException(
-                    "System.Xml.Serialization.XmlSerializer serializer config error in '{0}' section: {1}".Args(conf.ToLaconicString(),
-                        error.ToMessageWithType()), error);
-            }
 
             Type[] knownSubtypes = new Type[known.Length - 1];
             if (known.Length > 1) Array.ConstrainedCopy(known, 1, knownSubtypes, 0, known.Length - 1);
