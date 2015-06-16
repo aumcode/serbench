@@ -12,7 +12,7 @@
   data-store
   {
     type="Serbench.Data.DefaultDataStore, Serbench"
-    root-path=C:\Projects\Leo\TestData // $(/$output-root-path) 
+    root-path=$(/$output-root-path) 
     output=json
   }
   
