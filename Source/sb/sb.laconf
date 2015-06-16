@@ -12,7 +12,7 @@
   data-store
   {
     type="Serbench.Data.DefaultDataStore, Serbench"
-    root-path=$(/$output-root-path) 
+    root-path=C:\Projects\Leo\TestData // $(/$output-root-path) 
     output=json
   }
   
@@ -35,6 +35,10 @@
         test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=200 list=false runs=100}
         test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=201 list=true count=10}
         test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=201 list=true count=20}
+
+        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(single)" order=200 list=false runs=100}
+        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 10)" order=201 list=true count=10}
+        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 20)" order=201 list=true count=20}
         
         //Integer arrays
         test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10]" order=300 dimensions="10"}
@@ -112,12 +116,23 @@
           }
         }			
 		
-		serializer{ type="Serbench.StockSerializers.MSDataContractSerializer, Serbench" name="MS.DataContractSerializer" order=100
+		serializer {
+		 type="Serbench.StockSerializers.MSDataContractSerializer, Serbench"
+		 name="MS.DataContractSerializer"
+		  order=300
 		  known-type{name="Serbench.StockTests.TypicalPerson"}
           // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
 		  // known-type{name="Serbench.StockTests.MaritalStatus"}
-          known-type{name="Serbench.Specimens.Tests.TypicalPerson"}
+          known-type{name="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens"}
 		}
+
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
+          name="Json.Net" 
+          order=400
+        }
+
     }
  
  

@@ -16,26 +16,44 @@ namespace Serbench.Specimens.Tests
         HatesAll
     }
 
+    [CollectionDataContract]
     [DataContract]
     [Serializable]
     public class TypicalPersonData
     {
+        [DataMember]
         public string Address1;
+        [DataMember]
         public string Address2;
+        [DataMember]
         public string AddressCity;
+        [DataMember]
         public string AddressState;
+        [DataMember]
         public string AddressZip;
+        [DataMember]
         public double CreditScore;
+        [DataMember]
         public DateTime DOB;
+        [DataMember]
         public string EMail;
+        [DataMember]
         public string FirstName;
+        [DataMember]
         public string HomePhone;
+        [DataMember]
         public string LastName;
+        [DataMember]
         public MaritalStatus MaritalStatus;
+        [DataMember]
         public string MiddleName;
+        [DataMember]
         public string MobilePhone;
+        [DataMember]
         public bool RegisteredToVote;
+        [DataMember]
         public decimal Salary;
+        [DataMember]
         public int YearsOfService;
 
         public static TypicalPersonData MakeRandom()
@@ -66,13 +84,16 @@ namespace Serbench.Specimens.Tests
     }
 
 
+    [DataContract]
     public class TypicalPerson : Test
     {
-        [Config] private readonly int m_Count;
+        [Config] 
+        private  int m_Count;
 
-        private readonly List<TypicalPersonData> m_Data = new List<TypicalPersonData>();
+        private  List<TypicalPersonData> m_Data = new List<TypicalPersonData>();
 
-        [Config] private bool m_List;
+        [Config] 
+        private bool m_List;
 
         public TypicalPerson(TestingSystem context, IConfigSectionNode conf) : base(context, conf)
         {
@@ -85,6 +106,7 @@ namespace Serbench.Specimens.Tests
         /// <summary>
         ///     How many records in the list
         /// </summary>
+        [DataMember]
         public int Count
         {
             get { return m_Count; }
@@ -93,6 +115,7 @@ namespace Serbench.Specimens.Tests
         /// <summary>
         ///     Determines whether list of objects is serialized isntead of a single object
         /// </summary>
+        [DataMember]
         public bool List
         {
             get { return m_List; }
