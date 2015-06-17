@@ -9,6 +9,7 @@ using NFX.Parsing;
 namespace Serbench.Specimens.Tests
 {
     [DataContract]
+    [Serializable]
     public enum MaritalStatus
     {
         Married,
@@ -89,8 +90,8 @@ namespace Serbench.Specimens.Tests
         }
     }
 
-
     [DataContract]
+    [Serializable]
     public class TypicalPerson : Test
     {
         [Config] 

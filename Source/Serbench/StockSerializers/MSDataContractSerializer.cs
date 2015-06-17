@@ -10,7 +10,7 @@ namespace Serbench.StockSerializers
     /// <summary>
     ///     Represents Microsoft's DataContract:
     /// Add: a reference: System.Runtime.Serialization.dll  
-    /// Add: a line: using System.Runtime.Serialization.dll 
+    /// Add: a line: using System.Runtime.Serialization
     /// </summary>
     public class MSDataContractSerializer : Serializer
     {
