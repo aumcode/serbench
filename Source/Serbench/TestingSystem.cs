@@ -109,12 +109,19 @@ namespace Serbench
             log(MessageType.Info, "conf tests", "Added test {0}.'{1}'[{2}]".Args(item.GetType().FullName, item.Name, item.Order));
           }
 
+          if (m_Tests.Count==0)
+           throw new SerbenchException("No test specified in config. Nothing to do");
+
+
           foreach(var snode in node[CONFIG_SERIALIZERS_SECTION].Children.Where(cn => cn.IsSameName(CONFIG_SERIALIZER_SECTION)))
           {
             var item = FactoryUtils.Make<Serializer>(snode, args: new object[]{this, snode});
             m_Serializers.Register( item  );
             log(MessageType.Info, "conf sers", "Added serializer {0}.'{1}'[{2}]".Args(item.GetType().FullName, item.Name, item.Order));
           }
+
+          if (m_Serializers.Count==0)
+           throw new SerbenchException("No serializers specified in config. Nothing to do");
         }
 
         protected override void DoStart()
