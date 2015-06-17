@@ -23,8 +23,10 @@ namespace Serbench
     {
       #region CONSTS
 
+        public const string CONFIG_TESTS_SECTION = "tests";
+        public const string CONFIG_SERIALIZERS_SECTION = "serializers";
         public const string CONFIG_TEST_SECTION = "test";
-        public const string CONFIG_SER_SECTION = "serializer";
+        public const string CONFIG_SERIALIZER_SECTION = "serializer";
 
         public const int DEFAULT_STREAM_CAPACITY = 64 * 1024 * 1024;
         public const int MIN_STREAM_CAPACITY = 32 * 1024;
@@ -100,14 +102,14 @@ namespace Serbench
         {
           base.DoConfigure(node);
 
-          foreach(var tnode in node.Children.Where(cn => cn.IsSameName(CONFIG_TEST_SECTION)))
+          foreach(var tnode in node[CONFIG_TESTS_SECTION].Children.Where(cn => cn.IsSameName(CONFIG_TEST_SECTION)))
           {
             var item = FactoryUtils.Make<Test>(tnode, args: new object[]{this, tnode});
             m_Tests.Register( item );
             log(MessageType.Info, "conf tests", "Added test {0}.'{1}'[{2}]".Args(item.GetType().FullName, item.Name, item.Order));
           }
 
-          foreach(var snode in node.Children.Where(cn => cn.IsSameName(CONFIG_SER_SECTION)))
+          foreach(var snode in node[CONFIG_SERIALIZERS_SECTION].Children.Where(cn => cn.IsSameName(CONFIG_SERIALIZER_SECTION)))
           {
             var item = FactoryUtils.Make<Serializer>(snode, args: new object[]{this, snode});
             m_Serializers.Register( item  );
