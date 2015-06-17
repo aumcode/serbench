@@ -832,7 +832,7 @@
         </member>
         <member name="T:NFX.ServiceModel.IService">
             <summary>
-            Defines abstraction for an entoty that is controlled by Start/Stop commands and has a status
+            Defines abstraction for an entity that is controlled by Start/Stop commands and has a status
             </summary>
         </member>
         <member name="M:NFX.ServiceModel.IService.Start">
