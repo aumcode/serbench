@@ -68,6 +68,7 @@
      
      
      
+	 //// Stock serializers: they use only Microsoft .NET libraries
         serializer
         {
           type="Serbench.StockSerializers.NFXSlim, Serbench"
@@ -147,6 +148,17 @@
 
         serializer
         {
+          type="Serbench.StockSerializers.MSJavaScriptSerializer, Serbench"
+          name="MSJavaScriptSerializer" 
+ 		  //known-type{name="Serbench.StockTests.TypicalPerson"}
+          // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+		  // known-type{name="Serbench.StockTests.MaritalStatus"}
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+         order=307
+        }
+
+        serializer
+        {
           type="Serbench.StockSerializers.MSXmlSerializer, Serbench"
           name="MSXmlSerializer" 
  		  //known-type{name="Serbench.StockTests.TypicalPerson"}
@@ -156,6 +168,7 @@
          order=310
         }
 
+	 //// Specimens serializers: they require additional libraries
 /*
         serializer
         {
@@ -170,6 +183,14 @@
           type="Serbench.Specimens.Serializers.FastJsonSerializer, Serbench.Specimens"
           name="FastJson" 
           order=500
+        }
+
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.HaveBoxJSON, Serbench.Specimens"
+          name="HaveBoxJSON" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=600
         }
 
     }
