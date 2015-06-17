@@ -1,63 +1,65 @@
-﻿//using System;
-//using System.IO;
-//using System.Linq;
-//using Jil;
-//using NFX;
-//using NFX.Environment;
+﻿using System;
+using System.IO;
+using System.Linq;
+using NFX;
+using NFX.Environment;
 
-//namespace Serbench.Specimens.Serializers
-//{
-//    /// <summary>
-//    ///     Represents Newtonsoft's JsonSerializer:
-//    /// See here https://github.com/kevin-montrose/Jil
-//    /// >PM Install-Package Jil 
-//    /// </summary>
-//    public class JilSerializer : Serializer
-//    {
-//        private readonly JilSerializer m_Serializer;
+using Jil;
 
-//        public JilSerializer(TestingSystem context, IConfigSectionNode conf)
-//            : base(context, conf)
-//        {
-//        }
+namespace Serbench.Specimens.Serializers
+{
+    /// <summary>
+    ///     Represents Jil serializer:
+    /// See here https://github.com/kevin-montrose/Jil
+    /// >PM Install-Package  
+    /// </summary>
+    public class JilSerializer : Serializer
+    {
+        //private readonly JilSerializer m_Serializer;
+        private Type[] m_KnownTypes;
+        private Type m_primaryType;
 
-//        public override void Serialize(object root, Stream stream)
-//        {
-//            using (var sw = new StreamWriter(stream))
-//            {
-//                JSON.Serialize(root, sw,
-//                    new Options(
-//                        unspecifiedDateTimeKindBehavior: UnspecifiedDateTimeKindBehavior.IsUTC));
-//            }
+        public JilSerializer(TestingSystem context, IConfigSectionNode conf)
+            : base(context, conf)
+        {
+            m_KnownTypes = ReadKnownTypes(conf);
+        }
 
-//        }
+        public override void BeforeRuns(Test test)
+        {
+            var m_primaryType = test.GetPayloadRootType();
+        }
 
-//        public override object Deserialize(Stream stream)
-//        {
-//            using (var sr = new StreamReader(stream))
-//            {
-//                return JSON.Deserialize(sr,
-//                    new Options(
-//                        unspecifiedDateTimeKindBehavior: UnspecifiedDateTimeKindBehavior.IsUTC));
-//            }
-//        }
+        public override void Serialize(object root, Stream stream)
+        {
+            using (var sw = new StreamWriter(stream))
+            {
+                JSON.Serialize(root, sw);
+            }
+        }
 
-//        public override void ParallelSerialize(object root, Stream stream)
-//        {
-//            using (var sw = new StreamWriter(stream))
-//            using (var jw = new JsonTextWriter(sw))
-//            {
-//                m_Serializer.Serialize(jw, root);
-//            }
-//        }
+        public override object Deserialize(Stream stream)
+        {
+            using (var sr = new StreamReader(stream))
+            {
+                return JSON.Deserialize(sr.ReadToEnd(), m_primaryType);
+            }
+        }
 
-//        public override object ParallelDeserialize(Stream stream)
-//        {
-//            using (var sr = new StreamReader(stream))
-//            using (var jr = new JsonTextReader(sr))
-//            {
-//                return m_Serializer.Deserialize(jr);
-//            }
-//        }
-//    }
-//}
+        public override void ParallelSerialize(object root, Stream stream)
+        {
+            using (var sw = new StreamWriter(stream))
+            {
+                JSON.Serialize(root, sw);
+            }
+        }
+
+        public override object ParallelDeserialize(Stream stream)
+        {
+            using (var sr = new StreamReader(stream))
+            {
+                return JSON.Deserialize(sr.ReadToEnd(), m_primaryType);
+            }
+        }
+    }
+}

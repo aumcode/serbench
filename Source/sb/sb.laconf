@@ -193,6 +193,14 @@
           order=600
         }
 
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.JilSerializer, Serbench.Specimens"
+          name="JilSerializer" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=700
+        }
+
     }
  
  
