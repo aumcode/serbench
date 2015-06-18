@@ -71,6 +71,7 @@
     <Compile Include="Serializers\HaveBoxJSON.cs" />
     <Compile Include="Serializers\FastJsonSerializer.cs" />
     <Compile Include="Serializers\JilSerializer.cs" />
+    <Compile Include="Serializers\JsonNet.cs" />
     <Compile Include="Serializers\ProtoBuf.cs" />
     <Compile Include="Tests\SimplePerson.cs" />
     <Compile Include="Tests\TypicalPerson.cs" />

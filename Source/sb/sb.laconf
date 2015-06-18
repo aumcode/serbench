@@ -195,20 +195,27 @@
 
         serializer
         {
-          type="Serbench.Specimens.Serializers.JsonFxSerializer, Serbench.Specimens"
-          name="JsonFx" 
-          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=650
-        }
-
-        serializer
-        {
           type="Serbench.Specimens.Serializers.JilSerializer, Serbench.Specimens"
           name="Jil" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=700
         }
 
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.JsonFxSerializer, Serbench.Specimens"
+          name="JsonFx" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=800
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
+          name="Json.Net" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=900
+        }
     }
  
  

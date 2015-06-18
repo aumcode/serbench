@@ -1,25 +1,33 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using NFX;
 using NFX.Environment;
+
+using Newtonsoft.Json;
 
 namespace Serbench.Specimens.Serializers
 {
     /// <summary>
-    ///     Represents Newtonsoft's JsonSerializer:
+    ///     Represents Newtonsoft's Json.Net xerializer:
     /// See here http://www.newtonsoft.com/json
-    /// >PM Install-Package NetJSON 
+    /// >PM Install-Package Newtonsoft.Json 
     /// </summary>
     public class JsonNet : Serializer
     {
-        private readonly JsonSerializer m_Serializer;
+        private readonly JsonSerializer m_Serializer  = new JsonSerializer();
+        private Type[] m_KnownTypes;
+        private Type m_primaryType;
 
         public JsonNet(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
-             m_Serializer = new JsonSerializer();
+            m_KnownTypes = ReadKnownTypes(conf);
+        }
+
+        public override void BeforeRuns(Test test)
+        {
+            var m_primaryType = test.GetPayloadRootType();
         }
 
         public override void Serialize(object root, Stream stream)
@@ -36,7 +44,7 @@ namespace Serbench.Specimens.Serializers
             using (var sr = new StreamReader(stream))
             using (var jr = new JsonTextReader(sr))
             {
-                return m_Serializer.Deserialize(jr);
+                return m_Serializer.Deserialize(jr, m_primaryType);
             }
         }
 
@@ -54,7 +62,7 @@ namespace Serbench.Specimens.Serializers
             using (var sr = new StreamReader(stream))
             using (var jr = new JsonTextReader(sr))
             {
-                return m_Serializer.Deserialize(jr);
+                return m_Serializer.Deserialize(jr, m_primaryType);
             }
         }
     }
