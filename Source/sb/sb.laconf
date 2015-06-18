@@ -69,13 +69,87 @@
      
     serializers
     {
-     
 	 //// Stock serializers: they use only Microsoft .NET libraries
+          
+        serializer
+		{ 
+			type="Serbench.StockSerializers.MSBinaryFormatter, Serbench"
+			name="MS.BinaryFormatter"
+			order=10
+		}        
+        
+		/* TODO: cannot configure it ???
+		serializer
+		{
+			type="Serbench.StockSerializers.DataContractJsonSerializer, Serbench"
+			name="MS.DataContractJsonSerializer"
+			order=20
+			known-type{name="Serbench.StockTests.TypicalPerson"}
+			// known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+			// known-type{name="Serbench.StockTests.MaritalStatus"}
+			known-type{name="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens"}
+		}
+		*/
+
+		serializer {
+			type="Serbench.StockSerializers.MSDataContractSerializer, Serbench"
+			name="MS.DataContractSerializer"
+			order=30
+			known-type{name="Serbench.StockTests.TypicalPerson"}
+			// known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+			// known-type{name="Serbench.StockTests.MaritalStatus"}
+			known-type{name="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens"}
+		}
+
+         serializer
+        {
+          type="Serbench.StockSerializers.MSJavaScriptSerializer, Serbench"
+          name="MSJavaScriptSerializer" 
+ 		  //known-type{name="Serbench.StockTests.TypicalPerson"}
+          // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+		  // known-type{name="Serbench.StockTests.MaritalStatus"}
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+         order=40
+        }
+
+       serializer
+        {
+          type="Serbench.StockSerializers.MSXmlSerializer, Serbench"
+          name="MSXmlSerializer" 
+ 		  //known-type{name="Serbench.StockTests.TypicalPerson"}
+          // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+		  // known-type{name="Serbench.StockTests.MaritalStatus"}
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+         order=50
+        }
+
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXJson, Serbench"
+          name="NFX.Json Default" 
+          order=60
+        }
+        
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXJson, Serbench"
+          name="NFX.Json Pretty Print" 
+          order=65
+          options
+          {
+           IndentWidth = 2
+           ObjectLineBreak = true
+           MemberLineBreak = true
+           SpaceSymbols = true
+           ASCIITarget = false
+          }
+        }
+
         serializer
         {
           type="Serbench.StockSerializers.NFXSlim, Serbench"
           name="NFX.Slim Default" 
-          order=0
+          order=70
         }
         
 /*      
@@ -83,7 +157,7 @@
         {
           type="Serbench.StockSerializers.NFXSlim, Serbench"
           name="NFX.Slim Batching" 
-          order=1
+          order=75
           batching=true
         }
  */      
@@ -91,7 +165,7 @@
         {
           type="Serbench.StockSerializers.NFXSlim, Serbench"
           name="NFX.Slim Known Types" 
-          order=2
+          order=78
           _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
           /*
           known-type{name="Serbench.StockTests.TypicalPerson"}
@@ -100,135 +174,22 @@
           //known-type{name="full..type..name"}
           */
         }
-          
-        serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinaryFormatter" order=100}        
-        
-        serializer
-        {
-          type="Serbench.StockSerializers.NFXJson, Serbench"
-          name="NFX.Json Default" 
-          order=200
-        }
-        
-        {
-            serializer
-            {
-              type="Serbench.StockSerializers.NFXSlim, Serbench"
-              name="NFX.Slim Default" 
-              order=0
-            }
-            
-    /*      
-            serializer
-            {
-              type="Serbench.StockSerializers.NFXSlim, Serbench"
-              name="NFX.Slim Batching" 
-              order=1
-              batching=true
-            }
-     */      
-            serializer
-            {
-              type="Serbench.StockSerializers.NFXSlim, Serbench"
-              name="NFX.Slim Known Types" 
-              order=2
-              _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
-              /*
-              known-type{name="Serbench.StockTests.TypicalPerson"}
-              known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
-              known-type{name="Serbench.StockTests.TypicalPerson[]"}
-              //known-type{name="full..type..name"}
-              */
-            }
-              
-            serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinaryFormatter" order=100}
-            
-            
-            serializer
-            {
-              type="Serbench.StockSerializers.NFXJson, Serbench"
-              name="NFX.Json Default" 
-              order=200
-            }
-            
-            serializer
-            {
-              type="Serbench.StockSerializers.NFXJson, Serbench"
-              name="NFX.Json Pretty Print" 
-              order=210
-              options
-              {
-               IndentWidth = 2
-               ObjectLineBreak = true
-               MemberLineBreak = true
-               SpaceSymbols = true
-               ASCIITarget = false
-              }
-            }			
-            
-            serializer {
-             type="Serbench.StockSerializers.MSDataContractSerializer, Serbench"
-             name="MS.DataContractSerializer"
-              order=300
-              known-type{name="Serbench.StockTests.TypicalPerson"}
-              // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
-              // known-type{name="Serbench.StockTests.MaritalStatus"}
-              known-type{name="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens"}
-            }
-
-		/* TODO: cannot configure it ???
-		serializer {
-		 type="Serbench.StockSerializers.DataContractJsonSerializer, Serbench"
-		 name="MS.DataContractJsonSerializer"
-		  order=305
-		  known-type{name="Serbench.StockTests.TypicalPerson"}
-          // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
-		  // known-type{name="Serbench.StockTests.MaritalStatus"}
-          known-type{name="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens"}
-		}
-		*/
-
-        serializer
-        {
-          type="Serbench.StockSerializers.MSJavaScriptSerializer, Serbench"
-          name="MSJavaScriptSerializer" 
- 		  //known-type{name="Serbench.StockTests.TypicalPerson"}
-          // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
-		  // known-type{name="Serbench.StockTests.MaritalStatus"}
-          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-         order=307
-        }
-
-            serializer
-            {
-              type="Serbench.StockSerializers.MSXmlSerializer, Serbench"
-              name="MSXmlSerializer" 
-              //known-type{name="Serbench.StockTests.TypicalPerson"}
-              // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
-              // known-type{name="Serbench.StockTests.MaritalStatus"}
-              known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-             order=310
-            }
-
-
-    /*
-            serializer
-            {
-              type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
-              name="Json.Net" 
-              order=400
-            }
-    */  
-    
- 
 
 	 //// Specimens serializers: they require additional libraries
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ApJsonSerializer, Serbench.Specimens"
+          name="Apolyton.FastJson" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=110
+        }
 
         serializer
         {
           type="Serbench.Specimens.Serializers.FastJsonSerializer, Serbench.Specimens"
           name="FastJson" 
-          order=500
+          order=130
         }
 
 /* TODO: For some reason the tests hung up the application. Ctrl-C works badly ???
@@ -237,7 +198,7 @@
           type="Serbench.Specimens.Serializers.HaveBoxJSON, Serbench.Specimens"
           name="HaveBoxJSON" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=600
+          order=140
         }
 	*/
 
@@ -246,7 +207,7 @@
           type="Serbench.Specimens.Serializers.JilSerializer, Serbench.Specimens"
           name="Jil" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=700
+          order=150
         }
 
         serializer
@@ -254,7 +215,7 @@
           type="Serbench.Specimens.Serializers.JsonFxSerializer, Serbench.Specimens"
           name="JsonFx" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=800
+          order=160
         }
 
 		serializer
@@ -262,7 +223,7 @@
           type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
           name="Json.Net" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=900
+          order=170
         }
 
 		serializer
@@ -270,7 +231,7 @@
           type="Serbench.Specimens.Serializers.MessageSharkSerializer, Serbench.Specimens"
           name="MessageShark" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=1000
+          order=180
         }
 
 	/*
@@ -280,7 +241,7 @@
           type="Serbench.Specimens.Serializers.MsgPackSerializer, Serbench.Specimens"
           name="MsgPack" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=1100
+          order=190
         }
 		*/
 
@@ -289,7 +250,7 @@
           type="Serbench.Specimens.Serializers.NetJSONSerializer, Serbench.Specimens"
           name="NetJSONS" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=1200
+          order=200
         }
 
 /* TODO: Strange Error on the configuration stage. 
@@ -299,7 +260,7 @@
           name="NetSerializer" 
           _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=1300
+          order=210
         }
 */
  
@@ -309,7 +270,7 @@
           name="ProtoBuf" 
           _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=1400
+          order=220
         }
 
 		serializer
@@ -317,7 +278,7 @@
           type="Serbench.Specimens.Serializers.ServiceStackJsonSerializer, Serbench.Specimens"
           name="ServiceStack.JsonSerializer" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=1500
+          order=230
         }
 
 		serializer
@@ -325,7 +286,7 @@
           type="Serbench.Specimens.Serializers.ServiceStackTypeSerializer, Serbench.Specimens"
           name="ServiceStack.TypeSerializer" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=1600
+          order=235
         }
 
 /* TODO: Strange Error on the configuration stage. 
@@ -333,19 +294,11 @@
         {
           type="Serbench.Specimens.Serializers.SharpSerializer, Serbench.Specimens"
           name="SharpSerializer" 
-          order=1700
+          order=240
         }
 */
-		serializer
-        {
-          type="Serbench.Specimens.Serializers.ApJsonSerializer, Serbench.Specimens"
-          name="Apolyton.FastJson" 
-          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
-          order=1800
-        }
-     }   
         
-   }
+   } //serializers
 
  
  
@@ -366,4 +319,5 @@
            generate-failover-msg=false
         }
     }
+  }
 }
