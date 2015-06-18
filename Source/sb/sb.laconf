@@ -16,9 +16,7 @@
     output-web=true
     output-json=true
     output-csv=true
-  }
-  
-   
+  } 
  
  
     
@@ -98,8 +96,7 @@
           */
         }
           
-        serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinaryFormatter" order=100}
-        
+        serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinaryFormatter" order=100}        
         
         serializer
         {
@@ -255,6 +252,22 @@
           _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=1400
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ServiceStackJsonSerializer, Serbench.Specimens"
+          name="ServiceStack.JsonSerializer" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1500
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ServiceStackTypeSerializer, Serbench.Specimens"
+          name="ServiceStack.TypeSerializer" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1600
         }
    }
  
