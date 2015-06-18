@@ -32,8 +32,6 @@ namespace Serbench.StockSerializers
       else
         m_Options = JSONWritingOptions.Compact;
     }
-
-
     
     private JSONWritingOptions m_Options;
 

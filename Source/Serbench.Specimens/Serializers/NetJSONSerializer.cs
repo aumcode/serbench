@@ -26,7 +26,7 @@ namespace Serbench.Specimens.Serializers
 
         public override void BeforeRuns(Test test)
         {
-            var m_primaryType = test.GetPayloadRootType();
+            m_primaryType = test.GetPayloadRootType();
         }
 
         public override void Serialize(object root, Stream stream)

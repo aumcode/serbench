@@ -14,7 +14,8 @@ namespace Serbench.StockSerializers
     /// </summary>
     public class MSDataContractJsonSerializer : Serializer
     {
-
+        private DataContractJsonSerializer m_Serializer;
+        private Type[] m_KnownTypes;
 
         public MSDataContractJsonSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
@@ -22,8 +23,6 @@ namespace Serbench.StockSerializers
             m_KnownTypes = ReadKnownTypes(conf);
         }
 
-        private Type[] m_KnownTypes;
-        private DataContractJsonSerializer m_Serializer;
 
 
 
@@ -33,11 +32,11 @@ namespace Serbench.StockSerializers
 
             try
             {
-              m_Serializer = m_KnownTypes.Any() ?
-                              new DataContractJsonSerializer(primaryType, m_KnownTypes) :
-                              new DataContractJsonSerializer(primaryType);
+                m_Serializer = m_KnownTypes.Any() ?
+                                new DataContractJsonSerializer(primaryType, m_KnownTypes) :
+                                new DataContractJsonSerializer(primaryType);
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 test.Abort(this, "Error making DataContractJsonSerializer instance in serializer BeforeRun() {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()));
             }

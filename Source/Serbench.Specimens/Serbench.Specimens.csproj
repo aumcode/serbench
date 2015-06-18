@@ -65,6 +65,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\NFX.dll</HintPath>
     </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="Sigil">
       <HintPath>..\packages\Sigil.4.4.0\lib\net45\Sigil.dll</HintPath>
     </Reference>
@@ -88,7 +91,7 @@
     <Compile Include="Serializers\JilSerializer.cs" />
     <Compile Include="Serializers\JsonNet.cs" />
     <Compile Include="Serializers\MsgPackSerializer.cs" />
-    <Compile Include="Serializers\ProtoBuf.cs" />
+    <Compile Include="Serializers\ProtoBufSerializer.cs" />
     <Compile Include="Tests\SimplePerson.cs" />
     <Compile Include="Tests\TypicalPerson.cs" />
   </ItemGroup>

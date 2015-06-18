@@ -17,7 +17,8 @@ namespace Serbench.StockSerializers
     /// </summary>
     public class MSXmlSerializer : Serializer
     {
-        
+        private Type[] m_KnownTypes;
+        private XmlSerializer m_Serializer;
 
         public MSXmlSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
@@ -25,26 +26,23 @@ namespace Serbench.StockSerializers
             m_KnownTypes = ReadKnownTypes(conf);
         }
 
-        private Type[] m_KnownTypes;
-        private XmlSerializer m_Serializer;
-
         public override void BeforeRuns(Test test)
         {
             var primaryType = test.GetPayloadRootType();
 
             try
             {
-              m_Serializer = m_KnownTypes.Any() ? 
-                              new XmlSerializer(primaryType, m_KnownTypes) :
-                              new XmlSerializer(primaryType);
+                m_Serializer = m_KnownTypes.Any() ?
+                                new XmlSerializer(primaryType, m_KnownTypes) :
+                                new XmlSerializer(primaryType);
             }
-            catch(Exception error)
+            catch (Exception error)
             {
-              test.Abort(this, "Error making XmlSerializer instance in serializer BeforeRun() {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()));
+                test.Abort(this, "Error making XmlSerializer instance in serializer BeforeRun() {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()));
             }
         }
 
-        
+
         public override void Serialize(object root, Stream stream)
         {
             m_Serializer.Serialize(stream, root);
