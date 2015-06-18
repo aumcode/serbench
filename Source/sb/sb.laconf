@@ -218,6 +218,7 @@
           order=1000
         }
 
+	/*
 		// TODO: hungs up the application. Ctrl-C works.
 		serializer
         {
@@ -225,6 +226,15 @@
           name="MsgPack" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=1100
+        }
+		*/
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.NetJSONSerializer, Serbench.Specimens"
+          name="NetJSONS" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1200
         }
     }
  
