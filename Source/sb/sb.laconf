@@ -236,6 +236,17 @@
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=1200
         }
+
+/* TODO: Strange Error on the configuration stage. 
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.NetSerializerSer, Serbench.Specimens"
+          name="NetSerializer" 
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1300
+        }
+*/
     }
  
  
