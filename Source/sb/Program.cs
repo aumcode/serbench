@@ -40,6 +40,7 @@ namespace sb
                       )
                  {
                     testing.Start();
+                    
                     Console.WriteLine("Press <ENTER> to abort test execution");
                     while(testing.Running)
                     {

@@ -191,26 +191,39 @@ namespace Serbench
                       if (!Running) break;
                       
                       log(MessageType.Info, test.Name, "Starting Test with {0} runs".Args(test.Runs));
-
-                      test.ResetAbort();
-                      serializer.BeforeRuns(test);
-                      if (test.Aborted)
+                      try
                       {
-                        continue;//todo return result into aborted tests dataset
-                      }
-                      test.BeforeRuns(serializer);
-                      if (test.Aborted)
-                      {
-                        continue;//todo return result into aborted tests dataset
-                      }
-
-                      for(var i=0; Running && i<test.Runs; i++)
-                      {
-                          if (test.DoGc) GC.Collect(2);
                           test.ResetAbort();
-                          var data = doTestRun(i, serializer, test, targetStream);
-                          DataStore.SaveTestData( data );
-                      }//runs
+                          serializer.BeforeRuns(test);
+                          if (test.Aborted)
+                          {
+                            continue;//todo return result into aborted tests dataset
+                          }
+                          test.BeforeRuns(serializer);
+                          if (test.Aborted)
+                          {
+                            continue;//todo return result into aborted tests dataset
+                          }
+
+                          for(var i=0; Running && i<test.Runs; i++)
+                          {
+                              if (test.DoGc) GC.Collect(2);
+                              test.ResetAbort();
+                              var data = doTestRun(i, serializer, test, targetStream);
+                              DataStore.SaveTestData( data );
+                          }//runs
+                      }
+                      catch(Exception error)
+                      {
+                        log(MessageType.Error, test.Name, "Serializer {0}('{1}'), test {2}('{3}') execution loop crashed with exception: {4}"
+                                                          .Args(
+                                                            serializer.GetType().Name,
+                                                            serializer.Name,
+                                                            test.GetType().Name,
+                                                            test.Name,
+                                                            error.ToMessageWithType()
+                                                          ), error);
+                      }
                   }//tests
                }//sers
            }
@@ -220,7 +233,8 @@ namespace Serbench
 
            log(MessageType.Info, "threadBodyCore()", "Thread exiting");
            
-           SignalStop();
+           if (Running)
+            SignalStop();
         }
 
 
