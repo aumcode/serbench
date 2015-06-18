@@ -4,22 +4,21 @@ using System.Linq;
 using NFX;
 using NFX.Environment;
 
-using Jil;
+using NetJSON;
 
 namespace Serbench.Specimens.Serializers
 {
     /// <summary>
-    ///     Represents Jil serializer:
-    /// See here https://github.com/kevin-montrose/Jil
-    /// >PM Install-Package  
+    ///     Represents NetJSON:
+    /// See here https://github.com/rpgmaker/NetJSON
+    /// >PM Install-Package NetJSON 
     /// </summary>
-    public class JilSerializer : Serializer
+    public class NetJSONSerializer : Serializer
     {
-        //private readonly JilSerializer m_Serializer;
         private Type[] m_KnownTypes;
         private Type m_primaryType;
 
-        public JilSerializer(TestingSystem context, IConfigSectionNode conf)
+        public NetJSONSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
             m_KnownTypes = ReadKnownTypes(conf);
@@ -34,7 +33,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sw = new StreamWriter(stream))
             {
-                JSON.Serialize(root, sw);
+                sw.Write(NetJSON.NetJSON.Serialize(m_primaryType, root));
             }
         }
 
@@ -42,15 +41,15 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return JSON.Deserialize(sr.ReadToEnd(), m_primaryType);
+                return NetJSON.NetJSON.Deserialize(m_primaryType, sr.ReadToEnd());
             }
         }
 
         public override void ParallelSerialize(object root, Stream stream)
         {
-            using (var sw = new StreamWriter(stream))
+             using (var sw = new StreamWriter(stream))
             {
-                JSON.Serialize(root, sw);
+                sw.Write(NetJSON.NetJSON.Serialize(m_primaryType, root));
             }
         }
 
@@ -58,7 +57,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return JSON.Deserialize(sr.ReadToEnd(), m_primaryType);
+                return NetJSON.NetJSON.Deserialize(m_primaryType, sr.ReadToEnd());
             }
         }
     }

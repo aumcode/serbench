@@ -4,25 +4,24 @@ using System.Linq;
 using NFX;
 using NFX.Environment;
 
-using Jil;
+using JsonFx.Json;
 
 namespace Serbench.Specimens.Serializers
 {
     /// <summary>
-    ///     Represents Jil serializer:
-    /// See here https://github.com/kevin-montrose/Jil
-    /// >PM Install-Package  
+    ///     Represents JsonFx by Stephen McKamey:
+    /// See here https://github.com/jsonfx/jsonfx
+    /// >PM Install-Package JsonFx 
     /// </summary>
-    public class JilSerializer : Serializer
+    public class JsonFxSerializer : Serializer
     {
-        //private readonly JilSerializer m_Serializer;
-        private Type[] m_KnownTypes;
+        static readonly JsonWriter m_jw = new JsonWriter();
+        static readonly JsonReader m_jr = new JsonReader();
         private Type m_primaryType;
 
-        public JilSerializer(TestingSystem context, IConfigSectionNode conf)
+        public JsonFxSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
-            m_KnownTypes = ReadKnownTypes(conf);
         }
 
         public override void BeforeRuns(Test test)
@@ -34,7 +33,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sw = new StreamWriter(stream))
             {
-                JSON.Serialize(root, sw);
+                sw.Write(m_jw.Write(root));
             }
         }
 
@@ -42,7 +41,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return JSON.Deserialize(sr.ReadToEnd(), m_primaryType);
+                return m_jr.Read(sr.ReadToEnd(), m_primaryType);
             }
         }
 
@@ -50,7 +49,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sw = new StreamWriter(stream))
             {
-                JSON.Serialize(root, sw);
+                sw.Write(m_jw.Write(root));
             }
         }
 
@@ -58,7 +57,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return JSON.Deserialize(sr.ReadToEnd(), m_primaryType);
+                return m_jr.Read(sr.ReadToEnd(), m_primaryType);
             }
         }
     }

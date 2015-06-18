@@ -4,22 +4,23 @@ using System.Linq;
 using NFX;
 using NFX.Environment;
 
-using Jil;
+using System.Web.Script.Serialization;
 
-namespace Serbench.Specimens.Serializers
+namespace Serbench.StockSerializers
 {
     /// <summary>
-    ///     Represents Jil serializer:
-    /// See here https://github.com/kevin-montrose/Jil
-    /// >PM Install-Package  
+    ///     Represents fastJSON:
+    /// See here https://msdn.microsoft.com/en-us/library/system.web.script.serialization.javascriptserializer%28v=vs.110%29.aspx
+    /// Add: reference to System.Web.Extensions.dll
+    /// Add: using System.Web.Script.Serialization;
     /// </summary>
-    public class JilSerializer : Serializer
+    public class MSJavaScriptSerializer : Serializer
     {
-        //private readonly JilSerializer m_Serializer;
+        private readonly JavaScriptSerializer m_Serializer = new JavaScriptSerializer();
         private Type[] m_KnownTypes;
         private Type m_primaryType;
 
-        public JilSerializer(TestingSystem context, IConfigSectionNode conf)
+        public MSJavaScriptSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
             m_KnownTypes = ReadKnownTypes(conf);
@@ -27,14 +28,14 @@ namespace Serbench.Specimens.Serializers
 
         public override void BeforeRuns(Test test)
         {
-            m_primaryType = test.GetPayloadRootType();
+            m_primaryType = test.GetPayloadRootType(); 
         }
 
         public override void Serialize(object root, Stream stream)
         {
             using (var sw = new StreamWriter(stream))
             {
-                JSON.Serialize(root, sw);
+                sw.Write(m_Serializer.Serialize(root));
             }
         }
 
@@ -42,7 +43,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return JSON.Deserialize(sr.ReadToEnd(), m_primaryType);
+                return m_Serializer.Deserialize(sr.ReadToEnd(), m_primaryType);
             }
         }
 
@@ -50,7 +51,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sw = new StreamWriter(stream))
             {
-                JSON.Serialize(root, sw);
+                sw.Write(m_Serializer.Serialize(root));
             }
         }
 
@@ -58,7 +59,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return JSON.Deserialize(sr.ReadToEnd(), m_primaryType);
+                return m_Serializer.Deserialize(sr.ReadToEnd(), m_primaryType);
             }
         }
     }

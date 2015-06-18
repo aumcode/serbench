@@ -16,15 +16,14 @@
     output-web=true
     output-json=true
     output-csv=true
-  }
-  
-   
+  } 
  
  
     
     testing-system
     {
     //type="your custom type inject your testing system if you want, by default it will use the one supplied within SerBench  " 
+<<<<<<< HEAD
       
         tests
         {
@@ -66,6 +65,91 @@
      
      
         serializers
+=======
+     
+
+        // DICTIONARIES:
+		test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,1)"   order=100 key-length=10 count=1}
+        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,10)"  order=101 key-length=10 count=10}
+        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,64)"  order=102 key-length=10 count=64}
+        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,10)" order=103 key-length=300 count=10}
+        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,64)" order=104 key-length=300 count=64}   
+        
+        
+        //// ARRAYS:
+		//Integer arrays
+        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10]" order=300 dimensions="10"}
+        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10]" order=301 dimensions="10,10"}
+        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10,2]" order=302 dimensions="10,10,2"}
+        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10] full range" order=303 dimensions="10" min="-2000000000" max="2000000000" }
+        
+        //String Arrays
+        test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10]" order=310 dimensions="10" string-size=50}
+        test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10,10]" order=311 dimensions="10,10" string-size=50}
+        
+        //Decimal Arrays
+        test { type="Serbench.StockTests.ArrayOfDecimal, Serbench" name="decimal[10]" order=320 dimensions="10" }
+        
+        //Double Arrays
+        test { type="Serbench.StockTests.ArrayOfDouble, Serbench" name="double[10]" order=330 dimensions="10"}
+     
+        //Nullable Int Arrays    
+        test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10]" order=340 dimensions="10"}
+        test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10] full range" order=341 dimensions="10" min="-2000000000" max="2000000000" }
+     
+        // Classes:
+		test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=400 list=false runs=30}
+        test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=401 list=true count=10}
+        test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=401 list=true count=20}
+
+        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(single)" order=410 list=false runs=30}
+        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 10)" order=411 list=true count=10}
+        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 20)" order=411 list=true count=20}
+     
+     
+     
+	 //// Stock serializers: they use only Microsoft .NET libraries
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXSlim, Serbench"
+          name="NFX.Slim Default" 
+          order=0
+        }
+        
+/*      
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXSlim, Serbench"
+          name="NFX.Slim Batching" 
+          order=1
+          batching=true
+        }
+ */      
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXSlim, Serbench"
+          name="NFX.Slim Known Types" 
+          order=2
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          /*
+          known-type{name="Serbench.StockTests.TypicalPerson"}
+          known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+          known-type{name="Serbench.StockTests.TypicalPerson[]"}
+          //known-type{name="full..type..name"}
+          */
+        }
+          
+        serializer{ type="Serbench.StockSerializers.MSBinaryFormatter, Serbench" name="MS.BinaryFormatter" order=100}        
+        
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXJson, Serbench"
+          name="NFX.Json Default" 
+          order=200
+        }
+        
+        serializer
+>>>>>>> a3dc3718c5e21afab1ccf9b6968eaf5f3acabf3f
         {
             serializer
             {
@@ -132,6 +216,28 @@
               known-type{name="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens"}
             }
 
+		/* TODO: cannot configure it ???
+		serializer {
+		 type="Serbench.StockSerializers.DataContractJsonSerializer, Serbench"
+		 name="MS.DataContractJsonSerializer"
+		  order=305
+		  known-type{name="Serbench.StockTests.TypicalPerson"}
+          // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+		  // known-type{name="Serbench.StockTests.MaritalStatus"}
+          known-type{name="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens"}
+		}
+		*/
+
+        serializer
+        {
+          type="Serbench.StockSerializers.MSJavaScriptSerializer, Serbench"
+          name="MSJavaScriptSerializer" 
+ 		  //known-type{name="Serbench.StockTests.TypicalPerson"}
+          // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
+		  // known-type{name="Serbench.StockTests.MaritalStatus"}
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+         order=307
+        }
 
             serializer
             {
@@ -144,6 +250,7 @@
              order=310
             }
 
+<<<<<<< HEAD
     /*
             serializer
             {
@@ -155,6 +262,130 @@
     
         }//serializers
     }//testing-system
+=======
+	 //// Specimens serializers: they require additional libraries
+
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.FastJsonSerializer, Serbench.Specimens"
+          name="FastJson" 
+          order=500
+        }
+
+/* TODO: For some reason the tests hung up the application. Ctrl-C works badly ???
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.HaveBoxJSON, Serbench.Specimens"
+          name="HaveBoxJSON" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=600
+        }
+	*/
+
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.JilSerializer, Serbench.Specimens"
+          name="Jil" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=700
+        }
+
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.JsonFxSerializer, Serbench.Specimens"
+          name="JsonFx" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=800
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
+          name="Json.Net" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=900
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.MessageSharkSerializer, Serbench.Specimens"
+          name="MessageShark" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1000
+        }
+
+	/*
+		// TODO: hungs up the application. Ctrl-C works.
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.MsgPackSerializer, Serbench.Specimens"
+          name="MsgPack" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1100
+        }
+		*/
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.NetJSONSerializer, Serbench.Specimens"
+          name="NetJSONS" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1200
+        }
+
+/* TODO: Strange Error on the configuration stage. 
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.NetSerializerSer, Serbench.Specimens"
+          name="NetSerializer" 
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1300
+        }
+*/
+ 
+ 		serializer
+        {
+          type="Serbench.Specimens.Serializers.ProtoBufSerializer, Serbench.Specimens"
+          name="ProtoBuf" 
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1400
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ServiceStackJsonSerializer, Serbench.Specimens"
+          name="ServiceStack.JsonSerializer" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1500
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ServiceStackTypeSerializer, Serbench.Specimens"
+          name="ServiceStack.TypeSerializer" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1600
+        }
+
+/* TODO: Strange Error on the configuration stage. 
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.SharpSerializer, Serbench.Specimens"
+          name="SharpSerializer" 
+          order=1700
+        }
+*/
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ApJsonSerializer, Serbench.Specimens"
+          name="Apolyton.FastJson" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1800
+        }
+   }
+>>>>>>> a3dc3718c5e21afab1ccf9b6968eaf5f3acabf3f
  
  
     log

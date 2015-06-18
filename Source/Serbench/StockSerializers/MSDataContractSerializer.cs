@@ -10,21 +10,18 @@ namespace Serbench.StockSerializers
     /// <summary>
     ///     Represents Microsoft's DataContract:
     /// Add: a reference: System.Runtime.Serialization.dll  
-    /// Add: a line: using System.Runtime.Serialization.dll 
+    /// Add: a line: using System.Runtime.Serialization
     /// </summary>
     public class MSDataContractSerializer : Serializer
     {
-        
-
-        public MSDataContractSerializer(TestingSystem context, IConfigSectionNode conf) : base(context, conf)
-        {
-            m_KnownTypes = ReadKnownTypes(conf);
-        }
-
         private Type[] m_KnownTypes;
         private DataContractSerializer m_Serializer;
 
-
+        public MSDataContractSerializer(TestingSystem context, IConfigSectionNode conf)
+            : base(context, conf)
+        {
+            m_KnownTypes = ReadKnownTypes(conf);
+        }
 
         public override void BeforeRuns(Test test)
         {
@@ -32,13 +29,13 @@ namespace Serbench.StockSerializers
 
             try
             {
-              m_Serializer = m_KnownTypes.Any() ? 
-                              new DataContractSerializer(primaryType, m_KnownTypes) :
-                              new DataContractSerializer(primaryType);
+                m_Serializer = m_KnownTypes.Any() ?
+                                new DataContractSerializer(primaryType, m_KnownTypes) :
+                                new DataContractSerializer(primaryType);
             }
-            catch(Exception error)
+            catch (Exception error)
             {
-              test.Abort(this, "Error making DataContractSerializer instance in serializer BeforeRun() {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()));
+                test.Abort(this, "Error making DataContractSerializer instance in serializer BeforeRun() {0}. \n Did you decorate the primary known type correctly?".Args(error.ToMessageWithType()));
             }
         }
 

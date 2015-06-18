@@ -5,10 +5,12 @@ using System.Runtime.Serialization;
 using NFX;
 using NFX.Environment;
 using NFX.Parsing;
+using ProtoBuf;
 
 namespace Serbench.Specimens.Tests
 {
     [DataContract]
+    [Serializable]
     public enum MaritalStatus
     {
         Married,
@@ -16,6 +18,7 @@ namespace Serbench.Specimens.Tests
         HatesAll
     }
 
+    [ProtoContract]
     [CollectionDataContract]
     [DataContract]
     [Serializable]
@@ -24,41 +27,58 @@ namespace Serbench.Specimens.Tests
         /// <summary>
         /// Required by some serilizers (i.e. XML)
         /// </summary>
-        public TypicalPersonData() {}
+        public TypicalPersonData() { }
 
 
+        [ProtoMember(1)]
         [DataMember]
         public string Address1;
+        [ProtoMember(2)]
         [DataMember]
         public string Address2;
+        [ProtoMember(3)]
         [DataMember]
         public string AddressCity;
+        [ProtoMember(4)]
         [DataMember]
         public string AddressState;
+        [ProtoMember(5)]
         [DataMember]
         public string AddressZip;
+        [ProtoMember(6)]
         [DataMember]
         public double CreditScore;
+        [ProtoMember(7)]
         [DataMember]
         public DateTime DOB;
+        [ProtoMember(8)]
         [DataMember]
         public string EMail;
+        [ProtoMember(9)]
         [DataMember]
         public string FirstName;
+        [ProtoMember(10)]
         [DataMember]
         public string HomePhone;
+        [ProtoMember(11)]
         [DataMember]
         public string LastName;
+        [ProtoMember(12)]
         [DataMember]
         public MaritalStatus MaritalStatus;
+        [ProtoMember(13)]
         [DataMember]
         public string MiddleName;
+        [ProtoMember(14)]
         [DataMember]
         public string MobilePhone;
+        [ProtoMember(15)]
         [DataMember]
         public bool RegisteredToVote;
+        [ProtoMember(16)]
         [DataMember]
         public decimal Salary;
+        [ProtoMember(17)]
         [DataMember]
         public int YearsOfService;
 
@@ -73,7 +93,7 @@ namespace Serbench.Specimens.Tests
                         : null,
                 LastName = NaturalTextGenerator.GenerateLastName(),
                 DOB = DateTime.Now.AddYears(ExternalRandomGenerator.Instance.NextScaledRandomInteger(-90, -1)),
-                Salary = ExternalRandomGenerator.Instance.NextScaledRandomInteger(30, 250)*1000m,
+                Salary = ExternalRandomGenerator.Instance.NextScaledRandomInteger(30, 250) * 1000m,
                 YearsOfService = 25,
                 CreditScore = 0.7562,
                 RegisteredToVote = (DateTime.UtcNow.Ticks & 1) == 0,
@@ -89,19 +109,21 @@ namespace Serbench.Specimens.Tests
         }
     }
 
-
+    [ProtoContract]
     [DataContract]
+    [Serializable]
     public class TypicalPerson : Test
     {
-        [Config] 
-        private  int m_Count;
+        [Config]
+        private int m_Count;
 
-        private  List<TypicalPersonData> m_Data = new List<TypicalPersonData>();
+        private List<TypicalPersonData> m_Data = new List<TypicalPersonData>();
 
-        [Config] 
+        [Config]
         private bool m_List;
 
-        public TypicalPerson(TestingSystem context, IConfigSectionNode conf) : base(context, conf)
+        public TypicalPerson(TestingSystem context, IConfigSectionNode conf)
+            : base(context, conf)
         {
             if (m_Count < 1) m_Count = 1;
 
@@ -112,6 +134,8 @@ namespace Serbench.Specimens.Tests
         /// <summary>
         /// How many records in the list
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember]
         public int Count
         {
             get { return m_Count; }
@@ -120,6 +144,8 @@ namespace Serbench.Specimens.Tests
         /// <summary>
         /// Determines whether list of objects is serialized isntead of a single object
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember]
         public bool List
         {
             get { return m_List; }
@@ -134,7 +160,7 @@ namespace Serbench.Specimens.Tests
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
         {
-            var root = m_List ? (object) m_Data : m_Data[0];
+            var root = m_List ? (object)m_Data : m_Data[0];
             serializer.Serialize(root, target);
         }
 
