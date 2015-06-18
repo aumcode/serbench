@@ -300,10 +300,11 @@
         
    } //serializers
 
+ }//testing-system
  
  
     log
-    {
+    { 
         destination
         { 
            type="NFX.Log.Destinations.ConsoleDestination, NFX"
@@ -319,5 +320,5 @@
            generate-failover-msg=false
         }
     }
-  }
+  
 }
