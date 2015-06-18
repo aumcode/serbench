@@ -8,7 +8,7 @@ using NFX.Environment;
 using Polenter.Serialization;
 
 
-namespace Serbench.StockSerializers
+namespace Serbench.Specimens.Serializers
 {
     /// <summary>
     ///     Represents SharpSerializer:
@@ -17,9 +17,6 @@ namespace Serbench.StockSerializers
     /// </summary>
     public class SharpSerializer : Serializer
     {
-
-        private Polenter.Serialization.SharpSerializer m_Serializer;
-
         public SharpSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
@@ -29,6 +26,9 @@ namespace Serbench.StockSerializers
               };
             m_Serializer = new Polenter.Serialization.SharpSerializer(settings);   
         }
+
+        private Polenter.Serialization.SharpSerializer m_Serializer;
+
 
         public override void Serialize(object root, Stream stream)
         {

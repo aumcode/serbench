@@ -8,7 +8,7 @@ using NFX.Environment;
 using NetSerializer;
 
 
-namespace Serbench.StockSerializers
+namespace Serbench.Specimens.Serializers
 {
     /// <summary>
     ///     Represents NetSerializer:
@@ -17,23 +17,22 @@ namespace Serbench.StockSerializers
     /// </summary>
     public class NetSerializerSer : Serializer
     {
-
-        private NetSerializer.Serializer m_Serializer;
-        private Type[] m_KnownTypes;
-
         public NetSerializerSer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
             m_KnownTypes = ReadKnownTypes(conf);
         }
 
+        private NetSerializer.Serializer m_Serializer;
+        private Type[] m_KnownTypes;
+
+
         public override void BeforeRuns(Test test)
         {
-            //var primaryType = test.GetPayloadRootType();
-
             try
             {
-                m_Serializer = new NetSerializer.Serializer(m_KnownTypes);
+                m_Serializer = m_KnownTypes==null ? new NetSerializer.Serializer( new Type[]{test.GetPayloadRootType() }) 
+                                                  : new NetSerializer.Serializer( new Type[]{test.GetPayloadRootType() }.Concat(m_KnownTypes));
             }
             catch (Exception error)
             {

@@ -250,7 +250,7 @@
           order=200
         }
 
-/* TODO: Strange Error on the configuration stage. 
+
 		serializer
         {
           type="Serbench.Specimens.Serializers.NetSerializerSer, Serbench.Specimens"
@@ -259,7 +259,7 @@
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=210
         }
-*/
+
  
  		serializer
         {
@@ -286,14 +286,14 @@
           order=235
         }
 
-/* TODO: Strange Error on the configuration stage. 
+
 		serializer
         {
           type="Serbench.Specimens.Serializers.SharpSerializer, Serbench.Specimens"
           name="SharpSerializer" 
           order=240
         }
-*/
+
         
    } //serializers
 
