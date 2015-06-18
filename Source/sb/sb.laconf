@@ -278,6 +278,13 @@
           order=1700
         }
 */
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ApJsonSerializer, Serbench.Specimens"
+          name="Apolyton.FastJson" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1800
+        }
    }
  
  
