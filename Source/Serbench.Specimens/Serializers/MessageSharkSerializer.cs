@@ -36,11 +36,12 @@ namespace Serbench.Specimens.Serializers
 
         public override object Deserialize(Stream stream)
         {
-            //using (BinaryReader br = new BinaryReader(stream))
-            //{
-            //    return MessageShark.MessageSharkSerializer.Deserialize<T>(br);
-            //}
-            return null;   // TODO: How to call  Deserialize<T>(br) with  m_primaryType ?
+            using (MemoryStream ms = new MemoryStream())
+            {
+                 stream.CopyTo(ms);
+                return MessageShark.MessageSharkSerializer.Deserialize<object>(ms.ToArray());
+            }
+           // return null;   // TODO: How to call  Deserialize<T>(ms.ToArray()) with  m_primaryType ?
         }
 
         public override void ParallelSerialize(object root, Stream stream)
@@ -51,11 +52,12 @@ namespace Serbench.Specimens.Serializers
 
         public override object ParallelDeserialize(Stream stream)
         {
-            //using (BinaryReader br = new BinaryReader(stream))
-            //{
-            //    return MessageShark.MessageSharkSerializer.Deserialize<T>(br);
-            //}
-             return null;      // TODO: How to call  Deserialize<T>(br) with  m_primaryType ?
+          using (MemoryStream ms = new MemoryStream())
+            {
+                 stream.CopyTo(ms);
+                return MessageShark.MessageSharkSerializer.Deserialize<object>(ms.ToArray());
+            }
+           // return null;   // TODO: How to call  Deserialize<T>(ms.ToArray()) with  m_primaryType ?
        }
     }
 }

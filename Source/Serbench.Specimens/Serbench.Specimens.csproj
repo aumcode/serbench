@@ -49,6 +49,9 @@
     <Reference Include="MessageShark">
       <HintPath>..\packages\MessageShark.1.0.1\lib\net40\MessageShark.dll</HintPath>
     </Reference>
+    <Reference Include="MsgPack">
+      <HintPath>..\packages\MsgPack.Cli.0.5.11\lib\net45\MsgPack.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -76,6 +79,7 @@
     <Compile Include="Serializers\FastJsonSerializer.cs" />
     <Compile Include="Serializers\JilSerializer.cs" />
     <Compile Include="Serializers\JsonNet.cs" />
+    <Compile Include="Serializers\MsgPackSerializer.cs" />
     <Compile Include="Serializers\ProtoBuf.cs" />
     <Compile Include="Tests\SimplePerson.cs" />
     <Compile Include="Tests\TypicalPerson.cs" />

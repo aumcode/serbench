@@ -168,14 +168,6 @@
         }
 
 	 //// Specimens serializers: they require additional libraries
-/*
-        serializer
-        {
-          type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
-          name="Json.Net" 
-          order=400
-        }
-*/
 
         serializer
         {
@@ -184,7 +176,7 @@
           order=500
         }
 
-/*
+/* TODO: For some reason the tests hung up the application. Ctrl-C works badly ???
         serializer
         {
           type="Serbench.Specimens.Serializers.HaveBoxJSON, Serbench.Specimens"
@@ -216,6 +208,23 @@
           name="Json.Net" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=900
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.MessageSharkSerializer, Serbench.Specimens"
+          name="MessageShark" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1000
+        }
+
+		// TODO: hungs up the application. Ctrl-C works.
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.MsgPackSerializer, Serbench.Specimens"
+          name="MsgPack" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=1100
         }
     }
  
