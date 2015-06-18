@@ -56,6 +56,7 @@
     <Compile Include="Data\ITestDataStore.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Serializer.cs" />
+    <Compile Include="SerializerInfo.cs" />
     <Compile Include="StockSerializers\MSXmlSerializer.cs" />
     <Compile Include="StockSerializers\MSDataContractSerializer.cs" />
     <Compile Include="StockSerializers\NFXJson.cs" />

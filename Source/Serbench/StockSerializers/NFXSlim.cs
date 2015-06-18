@@ -16,6 +16,20 @@ namespace Serbench.StockSerializers
   /// <summary>
   /// Represents NFX.Serialization.Slim technology
   /// </summary>
+  [SerializerInfo( 
+     Family = SerializerFamily.Binary,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "IT Adapter LLC",
+     VendorLicense = "Apache 2.0 + Commercial",
+     VendorURL = "http://itadapter.com",
+     VendorPackageURL = "http://github.com/aumcode/nfx",
+     FormatName = "Slim",
+     LinesOfCodeK = 7,    
+     DataTypes = 32,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 1500
+  )]
   public class NFXSlim : Serializer
   {
 
