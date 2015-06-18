@@ -57,12 +57,12 @@
     <Compile Include="Data\ITestDataStore.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Serializer.cs" />
-<<<<<<< HEAD
+
     <Compile Include="SerializerInfo.cs" />
-=======
+
     <Compile Include="StockSerializers\MSJavaScriptSerializer.cs" />
     <Compile Include="StockSerializers\MSDataContractJsonSerializer.cs" />
->>>>>>> a3dc3718c5e21afab1ccf9b6968eaf5f3acabf3f
+
     <Compile Include="StockSerializers\MSXmlSerializer.cs" />
     <Compile Include="StockSerializers\MSDataContractSerializer.cs" />
     <Compile Include="StockSerializers\NFXJson.cs" />

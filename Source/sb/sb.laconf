@@ -23,90 +23,53 @@
     testing-system
     {
     //type="your custom type inject your testing system if you want, by default it will use the one supplied within SerBench  " 
-<<<<<<< HEAD
+
       
         tests
         {
-            test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,1)"   order=100 key-length=10 count=1}
-            test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,10)"  order=101 key-length=10 count=10}
-            test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,64)"  order=102 key-length=10 count=64}
-            test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,10)" order=103 key-length=300 count=10}
-            test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,64)" order=104 key-length=300 count=64}
-            
-            
-            test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=200 list=false runs=100}
-            test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=201 list=true count=10}
-            test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=201 list=true count=20}
+                    // DICTIONARIES:
+                    test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,1)"   order=100 key-length=10 count=1}
+                    test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,10)"  order=101 key-length=10 count=10}
+                    test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,64)"  order=102 key-length=10 count=64}
+                    test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,10)" order=103 key-length=300 count=10}
+                    test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,64)" order=104 key-length=300 count=64}   
+                    
+                    
+                    //// ARRAYS:
+                    //Integer arrays
+                    test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10]" order=300 dimensions="10"}
+                    test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10]" order=301 dimensions="10,10"}
+                    test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10,2]" order=302 dimensions="10,10,2"}
+                    test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10] full range" order=303 dimensions="10" min="-2000000000" max="2000000000" }
+                    
+                    //String Arrays
+                    test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10]" order=310 dimensions="10" string-size=50}
+                    test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10,10]" order=311 dimensions="10,10" string-size=50}
+                    
+                    //Decimal Arrays
+                    test { type="Serbench.StockTests.ArrayOfDecimal, Serbench" name="decimal[10]" order=320 dimensions="10" }
+                    
+                    //Double Arrays
+                    test { type="Serbench.StockTests.ArrayOfDouble, Serbench" name="double[10]" order=330 dimensions="10"}
+                 
+                    //Nullable Int Arrays    
+                    test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10]" order=340 dimensions="10"}
+                    test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10] full range" order=341 dimensions="10" min="-2000000000" max="2000000000" }
+                 
+                    // Classes:
+                    test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=400 list=false runs=30}
+                    test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=401 list=true count=10}
+                    test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=401 list=true count=20}
 
-            test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(single)" order=200 list=false runs=100}
-            test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 10)" order=201 list=true count=10}
-            test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 20)" order=201 list=true count=20}
-            
-            //Integer arrays
-            test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10]" order=300 dimensions="10"}
-            test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10]" order=301 dimensions="10,10"}
-            test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10,2]" order=302 dimensions="10,10,2"}
-            test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10] full range" order=303 dimensions="10" min="-2000000000" max="2000000000" }
-            
-            //String Arrays
-            test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10]" order=310 dimensions="10" string-size=50}
-            test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10,10]" order=311 dimensions="10,10" string-size=50}
-            
-            //Decimal Arrays
-            test { type="Serbench.StockTests.ArrayOfDecimal, Serbench" name="decimal[10]" order=320 dimensions="10" }
-            
-            //Double Arrays
-            test { type="Serbench.StockTests.ArrayOfDouble, Serbench" name="double[10]" order=330 dimensions="10"}
-         
-            //Nullable Int Arrays    
-            test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10]" order=340 dimensions="10"}
-            test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10] full range" order=3341 dimensions="10" min="-2000000000" max="2000000000" }
-        }
+                    test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(single)" order=410 list=false runs=30}
+                    test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 10)" order=411 list=true count=10}
+                    test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 20)" order=411 list=true count=20}
+     
+        }//tests     
      
      
-        serializers
-=======
-     
-
-        // DICTIONARIES:
-		test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,1)"   order=100 key-length=10 count=1}
-        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,10)"  order=101 key-length=10 count=10}
-        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(10,64)"  order=102 key-length=10 count=64}
-        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,10)" order=103 key-length=300 count=10}
-        test { type="Serbench.StockTests.SimpleDictionaryStringObject, Serbench" name="SimpleDict(300,64)" order=104 key-length=300 count=64}   
-        
-        
-        //// ARRAYS:
-		//Integer arrays
-        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10]" order=300 dimensions="10"}
-        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10]" order=301 dimensions="10,10"}
-        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10,10,2]" order=302 dimensions="10,10,2"}
-        test { type="Serbench.StockTests.ArrayOfInt, Serbench" name="int[10] full range" order=303 dimensions="10" min="-2000000000" max="2000000000" }
-        
-        //String Arrays
-        test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10]" order=310 dimensions="10" string-size=50}
-        test { type="Serbench.StockTests.ArrayOfString, Serbench" name="string[10,10]" order=311 dimensions="10,10" string-size=50}
-        
-        //Decimal Arrays
-        test { type="Serbench.StockTests.ArrayOfDecimal, Serbench" name="decimal[10]" order=320 dimensions="10" }
-        
-        //Double Arrays
-        test { type="Serbench.StockTests.ArrayOfDouble, Serbench" name="double[10]" order=330 dimensions="10"}
-     
-        //Nullable Int Arrays    
-        test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10]" order=340 dimensions="10"}
-        test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10] full range" order=341 dimensions="10" min="-2000000000" max="2000000000" }
-     
-        // Classes:
-		test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=400 list=false runs=30}
-        test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=401 list=true count=10}
-        test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=401 list=true count=20}
-
-        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(single)" order=410 list=false runs=30}
-        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 10)" order=411 list=true count=10}
-        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 20)" order=411 list=true count=20}
-     
-     
+    serializers
+    {
      
 	 //// Stock serializers: they use only Microsoft .NET libraries
         serializer
@@ -148,8 +111,6 @@
           order=200
         }
         
-        serializer
->>>>>>> a3dc3718c5e21afab1ccf9b6968eaf5f3acabf3f
         {
             serializer
             {
@@ -250,7 +211,7 @@
              order=310
             }
 
-<<<<<<< HEAD
+
     /*
             serializer
             {
@@ -260,9 +221,8 @@
             }
     */  
     
-        }//serializers
-    }//testing-system
-=======
+ 
+
 	 //// Specimens serializers: they require additional libraries
 
         serializer
@@ -384,8 +344,10 @@
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=1800
         }
+     }   
+        
    }
->>>>>>> a3dc3718c5e21afab1ccf9b6968eaf5f3acabf3f
+
  
  
     log
