@@ -57,14 +57,13 @@
         test { type="Serbench.StockTests.ArrayOfNullableInt, Serbench" name="int?[10] full range" order=341 dimensions="10" min="-2000000000" max="2000000000" }
      
         // Classes:
-		test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=400 list=false runs=100}
+		test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=400 list=false runs=30}
         test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=401 list=true count=10}
         test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=401 list=true count=20}
 
-        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(single)" order=410 list=false runs=100}
+        test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(single)" order=410 list=false runs=30}
         test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 10)" order=411 list=true count=10}
         test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 20)" order=411 list=true count=20}
-     
      
      
      
@@ -185,6 +184,7 @@
           order=500
         }
 
+/*
         serializer
         {
           type="Serbench.Specimens.Serializers.HaveBoxJSON, Serbench.Specimens"
@@ -192,6 +192,7 @@
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=600
         }
+	*/
 
         serializer
         {
