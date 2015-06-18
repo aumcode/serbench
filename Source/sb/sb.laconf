@@ -269,6 +269,15 @@
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=1600
         }
+
+/* TODO: Strange Error on the configuration stage. 
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.SharpSerializer, Serbench.Specimens"
+          name="SharpSerializer" 
+          order=1700
+        }
+*/
    }
  
  
