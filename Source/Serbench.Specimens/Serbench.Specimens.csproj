@@ -43,6 +43,9 @@
     <Reference Include="Jil">
       <HintPath>..\packages\Jil.2.10.0\lib\net45\Jil.dll</HintPath>
     </Reference>
+    <Reference Include="JsonFx">
+      <HintPath>..\packages\JsonFx.2.0.1209.2802\lib\net40\JsonFx.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -64,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serializers\JsonFxSerializer.cs" />
     <Compile Include="Serializers\HaveBoxJSON.cs" />
     <Compile Include="Serializers\FastJsonSerializer.cs" />
     <Compile Include="Serializers\JilSerializer.cs" />

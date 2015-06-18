@@ -3,29 +3,37 @@ using System.IO;
 using System.Linq;
 using NFX;
 using NFX.Environment;
-using fastJSON;
+
+using JsonFx.Json;
 
 namespace Serbench.Specimens.Serializers
 {
     /// <summary>
-    ///     Represents fastJSON:
-    /// See here https://github.com/mgholam/fastJSON
-    /// >PM Install-Package fastJSON 
+    ///     Represents JsonFx by Stephen McKamey:
+    /// See here https://github.com/jsonfx/jsonfx
+    /// >PM Install-Package JsonFx 
     /// </summary>
-    public class FastJsonSerializer : Serializer
+    public class JsonFxSerializer : Serializer
     {
-        private readonly FastJsonSerializer m_Serializer;
+        static readonly JsonWriter m_jw = new JsonWriter();
+        static readonly JsonReader m_jr = new JsonReader();
+        private Type m_primaryType;
 
-        public FastJsonSerializer(TestingSystem context, IConfigSectionNode conf)
+        public JsonFxSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
+        }
+
+        public override void BeforeRuns(Test test)
+        {
+            m_primaryType = test.GetPayloadRootType();
         }
 
         public override void Serialize(object root, Stream stream)
         {
             using (var sw = new StreamWriter(stream))
             {
-                sw.Write(JSON.ToJSON(root));
+                sw.Write(m_jw.Write(root));
             }
         }
 
@@ -33,7 +41,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return fastJSON.JSON.ToObject(sr.ReadToEnd());
+                return m_jr.Read(sr.ReadToEnd(), m_primaryType);
             }
         }
 
@@ -41,7 +49,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sw = new StreamWriter(stream))
             {
-                sw.Write(JSON.ToJSON(root));
+                sw.Write(m_jw.Write(root));
             }
         }
 
@@ -49,7 +57,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return fastJSON.JSON.ToObject(sr.ReadToEnd());
+                return m_jr.Read(sr.ReadToEnd(), m_primaryType);
             }
         }
     }

@@ -195,8 +195,16 @@
 
         serializer
         {
+          type="Serbench.Specimens.Serializers.JsonFxSerializer, Serbench.Specimens"
+          name="JsonFx" 
+          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+          order=650
+        }
+
+        serializer
+        {
           type="Serbench.Specimens.Serializers.JilSerializer, Serbench.Specimens"
-          name="JilSerializer" 
+          name="Jil" 
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=700
         }
