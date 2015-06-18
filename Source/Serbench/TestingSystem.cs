@@ -269,7 +269,7 @@ namespace Serbench
          
            var sw = Stopwatch.StartNew();
 
-           for(var i=0; i<test.SerIterations; i++)
+           for(var i=0; Running && i<test.SerIterations; i++)
            {
              targetStream.Position = 0;
 
@@ -333,7 +333,7 @@ namespace Serbench
            
            sw.Restart();
 
-           for(var i=0; i<test.DeserIterations; i++)
+           for(var i=0; Running && i<test.DeserIterations; i++)
            {
              targetStream.Position = 0;
              readingStreamSegment.BindBuffer(targetStream.GetBuffer(), 0, result.PayloadSize);
