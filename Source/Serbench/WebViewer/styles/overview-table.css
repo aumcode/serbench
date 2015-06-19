@@ -1,0 +1,32 @@
+.main-table {
+    border-collapse: collapse;
+    font-family: verdana;
+}
+
+.main-table td, .main-table th {
+    border: 1px solid black;
+}
+
+.main-table-row-header {
+    background-color: aliceblue;
+}
+
+.inner-table td, .inner-table th {
+    border: 0;
+}
+
+.supported {
+    background: #A3D119;
+}
+
+.unsupported {
+    background: #FF704D;
+}
+
+.overview-table-cell :hover {
+    background: lightsteelblue;
+}
+
+.absent-test {
+    background-color: lightgray;
+}

@@ -141,7 +141,7 @@ namespace Serbench.Data
         var dname = name;
         for(var i=0; Directory.Exists(dname); i++) dname = name + i.ToString();
 
-        NFX.IOMiscUtils.EnsureAccessibleDirectory(dname);
+        Directory.CreateDirectory(dname);
 
         return dname;
      }

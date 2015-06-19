@@ -1,0 +1,216 @@
+#<laconf>
+  compiler
+  {
+    base-class-name="Serbench.WebViewer.Master"
+    namespace="Serbench.WebViewer"
+    abstract="false"
+    summary="Index navigation of test results"
+
+    using{ns="NFX.Web"}
+    using{ns="NFX.Wave"}
+    using{ns="NFX.Wave.Templatization"}
+  }
+#</laconf>
+#[class]
+
+#[override renderHeader()]
+
+<link rel="stylesheet" type="text/css" href="overview-table.css">
+
+#[override renderBody()]
+
+<div id="overview-table"></div>
+
+
+
+
+
+
+<script>
+    $(function () {
+
+        var data = WAVE.arrayWalkable(window.data_TestRunData);
+        var table = createOverviewTable(data);
+        var container = $("#overview-table")[0];
+        container.appendChild(table);
+    });
+
+    function createOverviewTable(data) {
+
+        var table = document.createElement('table');
+        var headerInfo = createTableHeader(data, table);
+        createTableRows(data, table, headerInfo);
+        table.className = 'main-table';
+
+        return table;
+    };
+
+    function createTableHeader(data, table) {
+
+        // create header row, append 1st empty cell
+        var thead = document.createElement('thead');
+        var tr = document.createElement('tr');
+        tr.appendChild(document.createElement('th'));
+        thead.appendChild(tr);
+
+        var headerInfo = [];
+
+        // create other header cells
+        data.wSelect(function (e) { return getColumnHeaderData(e); })
+            .wDistinct(function (a, b) { return a.serializerType == b.serializerType && a.serializerName == b.serializerName; })
+            .wEach(function (h) {
+                // insert column header cell
+                var th = document.createElement("th");
+                th.className = 'main-table-row-header';
+                var htmlTemplate = "<th><b>@serializerType@<br>@serializerName@</b></th>";
+                th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: h.serializerType, serializerName: h.serializerName });
+                tr.appendChild(th);
+
+                // populate header info
+                headerInfo.push(h);
+            });
+
+        table.appendChild(thead);
+
+        return headerInfo;
+    }
+
+    function createTableRows(data, table, headerInfo) {
+
+        var tbody = document.createElement('tbody');
+
+        data.wSelect(function (e) { return getRowHeaderData(e); })
+            .wDistinct(function (a, b) { return a.testType == b.testType && a.testName == b.testName; })
+            .wEach(function (r) {
+                // create row, insert first cell (row header)
+                var tr = document.createElement('tr');
+                var th = document.createElement('th');
+                th.className = 'main-table-row-header';
+                var htmlTemplate = "<b>@testType@<br>@testName@</b>";
+                th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { testType: r.testType, testName: r.testName });
+                tr.appendChild(th);
+
+                // fill table cells
+                WAVE.arrayWalkable(headerInfo).wEach(function (h) { createTableCell(data, tr, r, h); });
+
+                tbody.appendChild(tr);
+            });
+
+        table.appendChild(tbody);
+    }
+
+    function createTableCell(data, tr, rowInfo, headerInfo) {
+
+        // seek for all tests with the same column's and row's header data
+        var benchTests = data.wWhere(function (t) {
+            return t.TestType == rowInfo.testType &&
+                    t.TestName == rowInfo.testName &&
+                    t.SerializerType == headerInfo.serializerType &&
+                    t.SerializerName == headerInfo.serializerName;
+        });
+
+        var td = document.createElement('td');
+
+        // if there is no test - fill cell with empty (gray) space
+        if (!benchTests.wAny()) {
+            td.className = 'absent-test';
+            tr.appendChild(td);
+            return;
+        }
+
+        var benchTest = benchTests.wFirst();
+
+        // if there are many tests, calculate avarage data
+        var count = benchTests.wCount();
+        if (count > 1) {
+            benchTests.wSkip(1).wEach(function (t) {
+                benchTest.RunNumber += t.RunNumber;
+                benchTest.PayloadSize += t.PayloadSize;
+                benchTest.SerIterations += t.SerIterations;
+                benchTest.SerExceptions += t.SerExceptions;
+                benchTest.SerAborts += t.SerAborts;
+                benchTest.SerDurationMs += t.SerDurationMs;
+                benchTest.SerDurationTicks += t.SerDurationTicks;
+                benchTest.SerOpsSec += t.SerOpsSec;
+                benchTest.DeserIterations += t.DeserIterations;
+                benchTest.DeserExceptions += t.DeserExceptions;
+                benchTest.DeserAborts += t.DeserAborts;
+                benchTest.DeserDurationMs += t.DeserDurationMs;
+                benchTest.DeserDurationTicks += t.DeserDurationTicks;
+                benchTest.DeserOpsSec += t.DeserOpsSec;
+            });
+            benchTest.SerDurationTicks /= count;
+            benchTest.SerDurationMs = benchTest.SerDurationTicks / 1000;
+            benchTest.SerOpsSec /= count;
+            benchTest.DeserDurationTicks /= count;
+            benchTest.DeserDurationMs = benchTest.DeserDurationTicks / 1000;
+            benchTest.DeserOpsSec /= count;
+        }
+
+        // populate cell with data
+
+        var serClass;
+        if (JSON.parse(benchTest.SerSupported)) serClass = "supported";
+        else serClass = "unsupported";
+        var deserClass;
+        if (JSON.parse(benchTest.DeserSupported)) deserClass = "supported";
+        else deserClass = "unsupported";
+
+        var htmlTemplate =
+            "<div class=\"overview-table-cell\">" +
+                "<div>" +
+                    "Run <b>@runNumber@</b> time(s)<br>" +
+                    "Payload: <b>@payloadSize@</b> byte(s)<br>" +
+                    "GC: <b>@doGc@</b>" +
+                "</div>" +
+                "<div class=\"@serClass@\"><table class='inner-table'>" +
+                    "<tr><td align=\"center\"><b>Serialization</b></td></tr>" +
+                    "<tr><td>iterations:</td><td><b>@serIterations@</b></td></tr>" +
+                    "<tr><td>exceptions:</td><td><b>@serExceptions@</b></td></tr>" +
+                    "<tr><td>aborts:</td><td><b>@serAborts@</b></td></tr>" +
+                    "<tr><td>duration (ms):</td><td><b>@serDurationMs@</b></td></tr>" +
+                    "<tr><td>duration (ticks):</td><td><b>@serDurationTick@</b></td></tr>" +
+                    "<tr><td>ops/sec:</td><td><b>@serOpsSec@</b></td></tr>" +
+                "</table></div>" +
+                "<div class=\"@deserClass@\"><table class='inner-table'>" +
+                    "<tr><td align=\"center\"><b>Deserialization</b></td></tr>" +
+                    "<tr><td>iterations:</td><td><b>@deserIterations@</b></td></tr>" +
+                    "<tr><td>exceptions:</td><td><b>@deserExceptions@</b></td></tr>" +
+                    "<tr><td>aborts:</td><td><b>@deserAborts@</td></tr>" +
+                    "<tr><td>duration (ms):</td><td><b>@deserDurationMs@</b></td></tr>" +
+                    "<tr><td>duration (ticks):</td><td><b>@deserDurationTick@</b></td></tr>" +
+                    "<tr><td>ops/sec:</td><td><b>@deserOpsSec@</b></td></tr>" +
+                "</table></div>" +
+            "</div>";
+
+        td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
+                                          {
+                                              runNumber: numberWithCommas(benchTest.RunNumber),
+                                              payloadSize: numberWithCommas(benchTest.PayloadSize),
+                                              doGc: benchTest.DoGc,
+                                              serClass: serClass,
+                                              serIterations: numberWithCommas(benchTest.SerIterations),
+                                              serExceptions: numberWithCommas(benchTest.SerExceptions),
+                                              serAborts: numberWithCommas(benchTest.SerAborts),
+                                              serDurationMs: numberWithCommas(benchTest.SerDurationMs),
+                                              serDurationTick: numberWithCommas(benchTest.SerDurationTicks),
+                                              serOpsSec: numberWithCommas(benchTest.SerOpsSec),
+                                              deserClass: deserClass,
+                                              deserIterations: numberWithCommas(benchTest.DeserIterations),
+                                              deserExceptions: numberWithCommas(benchTest.DeserExceptions),
+                                              deserAborts: numberWithCommas(benchTest.DeserAborts),
+                                              deserDurationMs: numberWithCommas(benchTest.DeserDurationMs),
+                                              deserDurationTick: numberWithCommas(benchTest.DeserDurationTicks),
+                                              deserOpsSec: numberWithCommas(benchTest.DeserOpsSec),
+                                          });
+        tr.appendChild(td);
+    };
+
+    function getColumnHeaderData(benchTest) {
+        return { serializerType: benchTest.SerializerType, serializerName: benchTest.SerializerName };
+    }
+
+    function getRowHeaderData(benchTest) {
+        return { testType: benchTest.TestType, testName: benchTest.TestName };
+    };
+</script>

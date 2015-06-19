@@ -1,0 +1,74 @@
+﻿#<laconf>
+  compiler
+  {
+    base-class-name="NFX.Templatization.Template<object, NFX.Templatization.IRenderingTarget, object>"
+    namespace="Serbench.WebViewer"
+    abstract="true"
+    summary="Master page for all pages"
+
+
+    using{ns="NFX"}
+    using{ns="NFX.Web"}
+    using{ns="NFX.Wave"}
+    using{ns="NFX.Wave.Templatization"}
+  }
+#</laconf>
+#[class]
+
+
+    public virtual string Title { get {return "{0} - {1}".Args(App.Name, App.LocalizedTime); } }
+
+    protected abstract void renderHeader();
+    protected abstract void renderBody();
+    protected virtual void renderFooter() { defaultFooter(); }
+
+    public override bool CanReuseInstance { get { return false; } }
+#[render]
+<!DOCTYPE html>
+<html>
+<head>
+    <title>?[Title]</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <script src="jquery-1.11.0.min.js"></script>
+    <script src="wv.js"></script>
+    <script src="wv.gui.js"></script>
+    <script src="wv.chart.svg.js"></script>
+    <script src="serbench.js"></script>
+    <script src="data-TestRunData.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="default.css">
+
+</head>
+<body>
+    <div id="divTopPanel">
+        <div id="divHeader">@[renderHeader();]</div>
+    </div>
+
+    <div id="divContentPanel">
+        <div id="divContent">@[renderBody();]</div>
+    </div>
+
+    <div id="divBottomPanel">
+        <div id="divBottomContent">
+            @[renderFooter();]
+        </div>
+    </div>
+    <div class="orangeStripe" />
+    <br />
+    <div class="tail">
+        &copy; 2003-2014&nbsp;&nbsp;IT Adapter Corporation / Aum Code
+        <br />
+        This site is served by the <strong>NFX.Wave</strong> framework
+        <br />
+        Generated on ?[DateTime.Now]
+    </div>
+</body>
+</html>
+
+#[defaultFooter()]
+<a href="http://blog.aumcode.com" target="_blank">Aum Code Blog</a> |
+<a href="http://itadapter.com" target="_blank">IT Adapter Site</a> |
+<a href="http://itadapter.com/nfxHelp" target="_blank">NFX Help</a>
+ &nbsp;
