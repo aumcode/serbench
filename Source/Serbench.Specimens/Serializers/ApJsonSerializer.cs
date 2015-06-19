@@ -15,20 +15,20 @@ namespace Serbench.Specimens.Serializers
     /// </summary>
     public class ApJsonSerializer : Serializer
     {
-        private Type[] m_KnownTypes;
-        private Type m_primaryType;
+        //private Type[] m_KnownTypes;
+        private Type m_PrimaryType;
 
         public ApJsonSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
-            m_KnownTypes = ReadKnownTypes(conf);
+            //m_KnownTypes = ReadKnownTypes(conf);
         }
 
         public override void BeforeRuns(Test test)
         {
             try
             {
-                m_primaryType = test.GetPayloadRootType();
+                m_PrimaryType = test.GetPayloadRootType();
             }
             catch (Exception error)
             {
@@ -36,6 +36,7 @@ namespace Serbench.Specimens.Serializers
             }
         }
 
+  
         public override void Serialize(object root, Stream stream)
         {
             var buf = Json.Current.ToJsonBytes(root);
@@ -46,7 +47,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return Json.Current.ReadObject(sr.ReadToEnd(), m_primaryType);
+                return Json.Current.ReadObject(sr.ReadToEnd(), m_PrimaryType);
             }
         }
 
@@ -60,7 +61,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return Json.Current.ReadObject(sr.ReadToEnd(), m_primaryType);
+                return Json.Current.ReadObject(sr.ReadToEnd(), m_PrimaryType);
             }
         }
     }

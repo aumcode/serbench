@@ -15,10 +15,16 @@ namespace Serbench.Specimens.Serializers
     public class FastJsonSerializer : Serializer
     {
         private readonly FastJsonSerializer m_Serializer;
+        private Type m_PrimaryType;
 
         public FastJsonSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
+        }
+
+       public override void BeforeRuns(Test test)
+        {
+            m_PrimaryType = test.GetPayloadRootType();           
         }
 
         public override void Serialize(object root, Stream stream)
@@ -33,7 +39,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return fastJSON.JSON.ToObject(sr.ReadToEnd());
+                return fastJSON.JSON.ToObject(sr.ReadToEnd(), m_PrimaryType);
             }
         }
 
@@ -49,7 +55,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return fastJSON.JSON.ToObject(sr.ReadToEnd());
+                return fastJSON.JSON.ToObject(sr.ReadToEnd(), m_PrimaryType);
             }
         }
     }

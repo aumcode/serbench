@@ -204,7 +204,6 @@
         {
           type="Serbench.Specimens.Serializers.ApJsonSerializer, Serbench.Specimens"
           name="Apolyton.FastJson" 
-          known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=110
         }
 
@@ -218,7 +217,6 @@
    /*     
       //WARNING!  This serializer HANGS! And consumes 64Gb RAM than crashes while trying to serialize STRING[10]
       // aY-YA-YAY!      
-      // TODO: For some reason the tests hung up the application. Ctrl-C works badly ???
         serializer
         {
           type="Serbench.Specimens.Serializers.HaveBoxJSON, Serbench.Specimens"
