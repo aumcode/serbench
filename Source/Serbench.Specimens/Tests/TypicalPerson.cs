@@ -10,11 +10,13 @@ using ProtoBuf;
 namespace Serbench.Specimens.Tests
 {
     [DataContract]
-    [Serializable]
     public enum MaritalStatus
     {
+        [EnumMember]
         Married,
+        [EnumMember]
         Divorced,
+        [EnumMember]
         HatesAll
     }
 

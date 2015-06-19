@@ -61,6 +61,9 @@
     <None Include="knowntypes.TypicalPerson.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="highPrformanceTests.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="sb.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
