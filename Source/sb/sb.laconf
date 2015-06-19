@@ -58,7 +58,35 @@
                     // Classes:
                     test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=400 list=false runs=30}
                     test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=401 list=true count=10}
-                    test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=401 list=true count=20}
+                    test
+                    { 
+                       type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 20)" order=401 list=true count=20
+                       serializer-setup
+                       {
+                         avro
+                         {
+                           schema=$"sdfs
+                           ddf
+                           gd
+                           fg
+                           df
+                           gd
+                           fg
+                           d
+                           fg
+                           df
+                           g
+                           df
+                           g
+                           df
+                           g
+                           df
+                           g
+                           lfjlkslfjlfk"
+                         } 
+                         another{}
+                       }
+                    }
 
                     test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(single)" order=410 list=false runs=30}
                     test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 10)" order=411 list=true count=10}

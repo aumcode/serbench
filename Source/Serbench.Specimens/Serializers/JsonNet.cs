@@ -17,7 +17,7 @@ namespace Serbench.Specimens.Serializers
     {
         private readonly JsonSerializer m_Serializer  = new JsonSerializer();
         private Type[] m_KnownTypes;
-        private Type m_primaryType;
+        private Type m_PrimaryType;
 
         public JsonNet(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
@@ -26,8 +26,8 @@ namespace Serbench.Specimens.Serializers
         }
 
         public override void BeforeRuns(Test test)
-        {
-            m_primaryType = test.GetPayloadRootType();
+        {                                   
+            m_PrimaryType = test.GetPayloadRootType();
         }
 
         public override void Serialize(object root, Stream stream)
@@ -44,7 +44,7 @@ namespace Serbench.Specimens.Serializers
             using (var sr = new StreamReader(stream))
             using (var jr = new JsonTextReader(sr))
             {
-                return m_Serializer.Deserialize(jr, m_primaryType);
+                return m_Serializer.Deserialize(jr, m_PrimaryType);
             }
         }
 
@@ -62,7 +62,7 @@ namespace Serbench.Specimens.Serializers
             using (var sr = new StreamReader(stream))
             using (var jr = new JsonTextReader(sr))
             {
-                return m_Serializer.Deserialize(jr, m_primaryType);
+                return m_Serializer.Deserialize(jr, m_PrimaryType);
             }
         }
     }

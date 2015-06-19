@@ -16,11 +16,16 @@ namespace Serbench
   /// </summary>
   public abstract class Test : TestArtifact
   {
+    
+    public const string CONFIG_SERIALIZER_SETUP_SECTION = "serializer-setup";
+    
     protected Test(TestingSystem context, IConfigSectionNode conf) : base(context, conf) 
     {
-
+      m_SerializerSetupConfig = conf[CONFIG_SERIALIZER_SETUP_SECTION];
     }
 
+
+    private IConfigSectionNode m_SerializerSetupConfig;
 
     [Config(Default=100)]
     private int m_SerIterations;
@@ -37,6 +42,14 @@ namespace Serbench
 
     private bool m_Aborted;
     private string m_AbortMessage;
+
+
+
+    /// <summary>
+    /// Returns section which is declared under TEST for serializer setup.
+    /// Particular serializers may elect to read some relevant values that are needed for execution of THIS test
+    /// </summary>
+    public IConfigSectionNode SerializerSetupConfig { get{ return m_SerializerSetupConfig;} }
 
     /// <summary>
     /// Returns how many serialization iterations per run the test performs
