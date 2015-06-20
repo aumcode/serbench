@@ -36,7 +36,7 @@ namespace Serbench
     [Config(Default=1)]
     private int m_Runs;
 
-    [Config]
+    [Config(Default=true)]
     private bool m_DoGc;
 
 

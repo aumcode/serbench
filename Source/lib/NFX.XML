@@ -11502,11 +11502,6 @@
             Appends JSON representation of an IEnumerable
             </summary>
         </member>
-        <member name="M:NFX.Serialization.JSON.JSONWriter.Indent(System.Int32,NFX.Serialization.JSON.JSONWritingOptions)">
-            <summary>
-            Returns a padding string for specified level per set options
-            </summary>
-        </member>
         <member name="M:NFX.Serialization.JSON.JSONWriter.EncodeString(System.IO.TextWriter,System.String,NFX.Serialization.JSON.JSONWritingOptions)">
             <summary>
             Writes a string in JSON format (a la "JSON encode string") - using quotes and escaping charecters that need it
