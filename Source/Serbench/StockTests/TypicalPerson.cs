@@ -11,9 +11,8 @@ using NFX.Parsing;
 namespace Serbench.StockTests
 {
 
-                  public enum MaritalStatus {Married, Divorced, HatesAll}
+    public enum MaritalStatus { Married, Divorced, HatesAll }
 
-                  [Serializable]
                   public class TypicalPersonData
                   {
                     public string FirstName;
@@ -65,11 +64,11 @@ namespace Serbench.StockTests
                       var data =  new TypicalPersonData
                       {
                         FirstName = NaturalTextGenerator.GenerateFirstName(),
-                        MiddleName = ExternalRandomGenerator.Instance.NextRandomInteger>500000000 ? NaturalTextGenerator.GenerateFirstName() : null,
+                MiddleName = ExternalRandomGenerator.Instance.NextRandomInteger > 500000000 ? NaturalTextGenerator.GenerateFirstName() : null,
                         LastName = NaturalTextGenerator.GenerateLastName(),
                         DOB = DateTime.Now.AddYears(ExternalRandomGenerator.Instance.NextScaledRandomInteger(-90, -1)),
                         Salary = ExternalRandomGenerator.Instance.NextScaledRandomInteger(30,250)*1000m,
-                        YearsOfService = Math.Abs(rnd % 25),
+                        YearsOfService = 25,
                         CreditScore = 0.7562,
                         RegisteredToVote = (DateTime.UtcNow.Ticks & 1) == 0,
                         MaritalStatus = MaritalStatus.HatesAll,
@@ -79,7 +78,7 @@ namespace Serbench.StockTests
                         AddressState = "CA",
                         AddressZip = "91606",
                         HomePhone = (DateTime.UtcNow.Ticks & 1) == 0 ? "(555) 123-4567" : null,
-                        EMail = NaturalTextGenerator.GenerateEMail()
+                        EMail = NaturalTextGenerator.GenerateEMail()                      
                       };
 
                       //if (extraData)
@@ -121,16 +120,15 @@ namespace Serbench.StockTests
                   }
 
 
-
-  
   public class TypicalPerson : Test
   {
-    public TypicalPerson(TestingSystem context, IConfigSectionNode conf) : base(context, conf) 
+        public TypicalPerson(TestingSystem context, IConfigSectionNode conf)
+            : base(context, conf)
     { 
-      if (m_Count<1) m_Count = 1;
+            if (m_Count < 1) m_Count = 1;
 
-      for(var i=0; i<m_Count; i++)
-       m_Data.Add( TypicalPersonData.MakeRandom());
+            for (var i = 0; i < m_Count; i++)
+                m_Data.Add(TypicalPersonData.MakeRandom());
     }
     
 
@@ -145,13 +143,13 @@ namespace Serbench.StockTests
     /// <summary>
     /// How many records in the list
     /// </summary>
-    public int Count{ get{ return m_Count;}}
+        public int Count { get { return m_Count; } }
 
 
     /// <summary>
     /// Determines whether list of objects is serialized isntead of a single object
     /// </summary>
-    public bool List{ get{ return m_List;}}
+        public bool List { get { return m_List; } }
 
 
     public override Type GetPayloadRootType()
@@ -159,7 +157,6 @@ namespace Serbench.StockTests
        var root = m_List ? (object)m_Data : m_Data[0];
        return root.GetType();
     }
-
 
 
     public override void PerformSerializationTest(Serializer serializer, Stream target)
