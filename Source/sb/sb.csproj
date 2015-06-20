@@ -58,6 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="typicalperson.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="knowntypes.TypicalPerson.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,0 +1,258 @@
+﻿nfx
+{
+  application-name="Typical Person" 
+  
+  //The output of this tool will be directed into the value of SERBENCH_OUTPUT_ROOT
+  //OS environment variable. Please set it up via Windows/ControlPanel/System....
+  output-root-path=$(~SERBENCH_OUTPUT_ROOT) 
+  
+ 
+ 
+  //Configure data store where the results will be saved
+  data-store
+  {
+    type="Serbench.Data.DefaultDataStore, Serbench"
+    root-path=$(/$output-root-path) 
+    output-web=true
+    output-json=true
+    output-csv=true
+  } 
+ 
+    
+    testing-system
+    {
+    //type="your custom type inject your testing system if you want, by default it will use the one supplied within SerBench  " 
+
+      
+        tests
+        {
+            test { type="Serbench.StockTests.TypicalPerson, Serbench" name="Warmup TypicalPerson(single)" order=000 list=false runs=1 ser-iterations=1 deser-iterations=1}
+            test { type="Serbench.StockTests.TypicalPerson, Serbench" name="Warmup TypicalPerson(list)" order=001 list=true count=1 runs=1 ser-iterations=1 deser-iterations=1}
+          
+            test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(single)" order=100 list=false runs=1 ser-iterations=50000 deser-iterations=50000}
+            test { type="Serbench.StockTests.TypicalPerson, Serbench" name="TypicalPerson(list, 10)" order=200 list=true count=10 runs=1 ser-iterations=10000 deser-iterations=10000}
+        }//tests     
+     
+     
+    serializers
+    {
+        // Stock serializers: they use only Microsoft .NET libraries
+          
+        serializer
+		{ 
+			type="Serbench.StockSerializers.MSBinaryFormatter, Serbench"
+			name="MS.BinaryFormatter"
+			order=10
+		}        
+        
+		serializer
+		{
+			type="Serbench.StockSerializers.MSDataContractJsonSerializer, Serbench"
+			name="MS.DataContractJsonSerializer"
+			order=20
+			 _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+		}
+		
+
+		serializer 
+        {
+			type="Serbench.StockSerializers.MSDataContractSerializer, Serbench"
+			name="MS.DataContractSerializer"
+			order=30
+			 _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+		}
+
+        serializer
+        {
+          type="Serbench.StockSerializers.MSJavaScriptSerializer, Serbench"
+          name="MSJavaScriptSerializer" 
+ 		  order=40
+        }
+
+       serializer
+        {
+          type="Serbench.StockSerializers.MSXmlSerializer, Serbench"
+          name="MSXmlSerializer" 
+ 		   _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+         order=50
+        }
+
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXJson, Serbench"
+          name="NFX.Json Default" 
+          order=60
+        }
+        
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXJson, Serbench"
+          name="NFX.Json Pretty Print" 
+          order=65
+          options
+          {
+           IndentWidth = 2
+           ObjectLineBreak = true
+           MemberLineBreak = true
+           SpaceSymbols = true
+           ASCIITarget = false
+          }
+        }
+
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXSlim, Serbench"
+          name="NFX.Slim Default" 
+          order=70
+        }
+        
+/*      
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXSlim, Serbench"
+          name="NFX.Slim Batching" 
+          order=75
+          batching=true
+        }
+ */      
+        serializer
+        {
+          type="Serbench.StockSerializers.NFXSlim, Serbench"
+          name="NFX.Slim Known Types" 
+          order=78
+           _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+        }
+
+	    
+        // Specimens serializers: they require additional libraries
+        //------------------------------------------------------------------------------------------
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ApJsonSerializer, Serbench.Specimens"
+          name="Apolyton.FastJson" 
+          order=110
+        }
+
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.FastJsonSerializer, Serbench.Specimens"
+          name="FastJson" 
+          order=130
+        }
+
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.JilSerializer, Serbench.Specimens"
+          name="Jil" 
+          order=150
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+        }
+
+        serializer
+        {
+          type="Serbench.Specimens.Serializers.JsonFxSerializer, Serbench.Specimens"
+          name="JsonFx" 
+          order=160
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents          
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
+          name="Json.Net" 
+          order=170
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents         
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.MessageSharkSerializer, Serbench.Specimens"
+          name="MessageShark" 
+          order=180
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents      
+        }
+
+	
+		// TODO: hungs up the application. Ctrl-C works.
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.MsgPackSerializer, Serbench.Specimens"
+          name="MsgPack" 
+          order=190
+        }
+	
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.NetJSONSerializer, Serbench.Specimens"
+          name="NetJSONS" 
+          order=200
+        }
+
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.NetSerializerSer, Serbench.Specimens"
+          name="NetSerializer" 
+          order=210
+     //     _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+        }
+
+ 
+ 		serializer
+        {
+          type="Serbench.Specimens.Serializers.ProtoBufSerializer, Serbench.Specimens"
+          name="ProtoBuf" 
+          order=220
+         // _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ServiceStackJsonSerializer, Serbench.Specimens"
+          name="ServiceStack.JsonSerializer" 
+          order=230
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.ServiceStackTypeSerializer, Serbench.Specimens"
+          name="ServiceStack.TypeSerializer" 
+          order=235
+          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents          
+        }
+
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.SharpSerializer, Serbench.Specimens"
+          name="SharpSerializer" 
+          order=240
+        }
+
+        
+   } //serializers
+
+ }//testing-system
+ 
+ 
+    log
+    { 
+        destination
+        { 
+           type="NFX.Log.Destinations.ConsoleDestination, NFX"
+           colored=true
+        }
+        
+        destination
+        {  
+           type="NFX.Log.Destinations.CSVFileDestination, NFX"
+           name="SerbenchLog"
+           path=$(/$output-root-path) 
+           name-time-format='yyyyMMdd'
+           generate-failover-msg=false
+        }
+    }
+  
+}
