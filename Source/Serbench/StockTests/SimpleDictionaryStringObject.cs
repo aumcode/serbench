@@ -50,10 +50,8 @@ namespace Serbench.StockTests
 
     public override void PerformDeserializationTest(Serializer serializer, Stream target)
     {
-      var got = serializer.Deserialize(target) as Dictionary<string, object>;
-      if (got==null){ Abort(serializer, "Did not get dict back"); return; }
-      if (got.Count!=m_Dict.Count){ Abort(serializer, "Did not get same count"); return;}
-
+      var got = serializer.Deserialize(target);
+      serializer.AssertPayloadEquality(this, m_Dict, got);
     }
 
   }

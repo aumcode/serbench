@@ -55,9 +55,8 @@ namespace Serbench.StockTests
 
     public override void PerformDeserializationTest(Serializer serializer, Stream target)
     {
-       var got = serializer.Deserialize(target) as Array;
-       if (got==null){ Abort(serializer, "Did not get an array back"); return;}
-       if (got.Length!=m_Data.Length){ Abort(serializer, "Length is different"); return; }
+       var got = serializer.Deserialize(target);
+       serializer.AssertPayloadEquality(this, m_Data, got);
     }
 
   }

@@ -70,6 +70,51 @@ namespace Serbench
 
 
     /// <summary>
+    /// QUICKLY asserts the equality of what has deserialized with the original payload.
+    /// Warning! This test is done as a part of time measurement, it must be very fast.
+    /// DO NOT perform very detailed tests, just test that you have received logcally equal object back.
+    /// No need for detailed comparison, as this is not a unit-testing framework
+    /// </summary>
+    /// <param name="test">Test that the assertion is made for</param>
+    /// <param name="original">Original serialization data root</param>
+    /// <param name="deserialized">Deserialized data root object</param>
+    /// <param name="abort">If true then the method should abort the test befoe returning</param>
+    /// <returns>
+    /// True when both payloads are LOGICALLY equal, i.e. you can serialize TypedPerson but get Dictionary(string, object) of the same data
+    /// which may be considered correct response for some serializers (that's why this method is in the serializer class)
+    /// </returns>
+    public virtual bool AssertPayloadEquality(Test test, object original, object deserialized, bool abort = true)
+    {
+      if (deserialized==null)
+      {
+        if (original==null) return true;
+        if (abort) test.Abort(this, "Deserialized null from non-null original");
+        return false;
+      }
+
+      if (original==null)
+      {
+        if (abort) test.Abort(this, "Original was null but deserialized into non-null");
+        return false;
+      }
+
+      if (original is System.Collections.ICollection)
+      {
+        var orgCol = original as System.Collections.ICollection;
+        var gotCol = deserialized as System.Collections.ICollection;
+
+        if (gotCol==null || gotCol.Count!=orgCol.Count)
+        {
+          if (abort) test.Abort(this, "Original and deserized collections size or type mismatch");
+          return false;
+        }
+      }
+
+      return true; 
+    }
+
+
+    /// <summary>
     /// Reads config sections into Type[]
     /// </summary>
     protected virtual Type[] ReadKnownTypes(IConfigSectionNode conf)
