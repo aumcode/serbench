@@ -88,7 +88,6 @@
                        }
 				*/
                     }
-  // TODO: 3 tests with Serbench.Specimens.Tests.TypicalPerson cannot run for some reason:
                     test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="Specimens TypicalPerson(single)" order=410 list=false serIterations=200 deserIterations=200}
                     test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="Specimens TypicalPerson(list, 10)" order=411 list=true count=10 serIterations=200 deserIterations=200}
                     test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="Specimens TypicalPerson(list, 20)" order=411 list=true count=20 serIterations=200 deserIterations=200}     

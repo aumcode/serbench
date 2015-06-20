@@ -21,16 +21,19 @@ namespace Serbench.Specimens.Serializers
     /// </summary>
 
     public class ProtoBufSerializer : Serializer
-    {   
+    {
         private RuntimeTypeModel m_model = RuntimeTypeModel.Create();
         private Type[] m_KnownTypes;
-        private Type m_primaryType;
+        private Type m_PrimaryType;
 
 
         public ProtoBufSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
             m_KnownTypes = ReadKnownTypes(conf);
+            foreach (var knownType in m_KnownTypes)
+                m_model.Add(knownType, true);
+            m_model.CompileInPlace();
         }
 
         public override void BeforeRuns(Test test)
@@ -39,10 +42,7 @@ namespace Serbench.Specimens.Serializers
 
             try
             {
-                m_primaryType = test.GetPayloadRootType();
-                foreach(var knownType in m_KnownTypes)
-                    m_model.Add(knownType, true);
-                m_model.CompileInPlace();
+                m_PrimaryType = test.GetPayloadRootType();
             }
             catch (Exception error)
             {
@@ -58,7 +58,7 @@ namespace Serbench.Specimens.Serializers
 
         public override object Deserialize(Stream stream)
         {
-            return m_model.Deserialize(stream, null, m_primaryType);
+            return m_model.Deserialize(stream, null, m_PrimaryType);
         }
 
         public override void ParallelSerialize(object root, Stream stream)
@@ -68,7 +68,7 @@ namespace Serbench.Specimens.Serializers
 
         public override object ParallelDeserialize(Stream stream)
         {
-            return m_model.Deserialize(stream, null, m_primaryType);
+            return m_model.Deserialize(stream, null, m_PrimaryType);
         }
     }
 }

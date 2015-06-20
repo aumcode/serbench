@@ -168,28 +168,10 @@ namespace Serbench.Specimens.Tests
 
         public override void PerformDeserializationTest(Serializer serializer, Stream target)
         {
-            if (m_List)
-            {
-                var got = serializer.Deserialize(target) as List<TypicalPersonData>;
-                if (got == null)
-                {
-                    Abort(serializer, "Did not get list back");
-                    return;
-                }
-                if (got.Count != m_Data.Count)
-                {
-                    Abort(serializer, "Did not get same count");
-                }
-                ;
-            }
-            else
-            {
-                var got = serializer.Deserialize(target) as TypicalPersonData;
-                if (got == null)
-                {
-                    Abort(serializer, "Did not get a person back");
-                }
-            }
+     var got = serializer.Deserialize(target);
+      
+      var originalRoot = m_List ? (object)m_Data : m_Data[0];
+      serializer.AssertPayloadEquality(this, originalRoot, got);
         }
     }
 }
