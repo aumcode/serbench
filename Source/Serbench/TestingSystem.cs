@@ -326,7 +326,7 @@ namespace Serbench
            result.SerIterations = test.SerIterations;
            result.SerDurationMs = sw.ElapsedMilliseconds;
            if ((result.SerDurationTicks = sw.ElapsedTicks) > 0)
-             result.SerOpsSec = (int)( test.SerIterations / ((double)result.SerDurationTicks / (double)TimeSpan.TicksPerSecond) );
+             result.SerOpsSec = (int)( test.SerIterations / ((double)result.SerDurationTicks / (double)Stopwatch.Frequency) );
 
            if (!result.SerSupported)
             throw new SerbenchException("Test run failed as serialization not supported");
@@ -387,7 +387,7 @@ namespace Serbench
            result.DeserIterations = test.DeserIterations;
            result.DeserDurationMs = sw.ElapsedMilliseconds;
            if ((result.DeserDurationTicks = sw.ElapsedTicks) > 0)
-             result.DeserOpsSec = (int)( test.DeserIterations / ((double)result.DeserDurationTicks / (double)TimeSpan.TicksPerSecond) );
+             result.DeserOpsSec = (int)( test.DeserIterations / ((double)result.DeserDurationTicks / (double)Stopwatch.Frequency) );
         }
 
 
