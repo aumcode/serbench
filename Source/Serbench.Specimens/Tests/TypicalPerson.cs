@@ -159,7 +159,6 @@ namespace Serbench.Specimens.Tests
             return root.GetType();
         }
 
-
         public override void PerformSerializationTest(Serializer serializer, Stream target)
         {
             var root = m_List ? (object)m_Data : m_Data[0];

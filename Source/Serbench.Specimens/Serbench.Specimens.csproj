@@ -107,6 +107,8 @@
     <Compile Include="Serializers\JilSerializer.cs" />
     <Compile Include="Serializers\JsonNet.cs" />
     <Compile Include="Serializers\MsgPackSerializer.cs" />
+    <Compile Include="Tests\EDI_X12_835.cs" />
+    <Compile Include="Tests\EDIOrder.cs" />
     <Compile Include="Tests\SimplePerson.cs" />
     <Compile Include="Tests\TypicalPerson.cs" />
   </ItemGroup>
