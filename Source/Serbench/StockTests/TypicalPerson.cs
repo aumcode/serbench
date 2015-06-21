@@ -13,6 +13,7 @@ namespace Serbench.StockTests
 
     public enum MaritalStatus { Married, Divorced, HatesAll }
 
+                  [Serializable]
                   public class TypicalPersonData
                   {
                     public string FirstName;
