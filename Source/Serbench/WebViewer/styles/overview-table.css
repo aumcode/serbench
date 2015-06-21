@@ -1,6 +1,7 @@
 .main-table {
     border-collapse: collapse;
     font-family: verdana;
+    font-size: 6pt;
 }
 
 .main-table td, .main-table th {

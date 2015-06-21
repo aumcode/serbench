@@ -15,12 +15,16 @@
 
 #[override renderHeader()]
 
-<link rel="stylesheet" type="text/css" href="overview-table.css">
-
 #[override renderBody()]
 
-<div id="overview-table"></div>
+<link rel="stylesheet" type="text/css" href="overview-table.css">
 
+<div>
+    <div class="report-header">
+        <h1>Overview: aggregate information about different serializers tests</h1>
+    </div>
+    <table id="overview-table"></table>
+</div>
 
 
 
@@ -104,9 +108,9 @@
         // seek for all tests with the same column's and row's header data
         var benchTests = data.wWhere(function (t) {
             return t.TestType == rowInfo.testType &&
-                    t.TestName == rowInfo.testName &&
-                    t.SerializerType == headerInfo.serializerType &&
-                    t.SerializerName == headerInfo.serializerName;
+                t.TestName == rowInfo.testName &&
+                t.SerializerType == headerInfo.serializerType &&
+                t.SerializerName == headerInfo.serializerName;
         });
 
         var td = document.createElement('td');
@@ -130,19 +134,15 @@
                 benchTest.SerExceptions += t.SerExceptions;
                 benchTest.SerAborts += t.SerAborts;
                 benchTest.SerDurationMs += t.SerDurationMs;
-                benchTest.SerDurationTicks += t.SerDurationTicks;
                 benchTest.SerOpsSec += t.SerOpsSec;
                 benchTest.DeserIterations += t.DeserIterations;
                 benchTest.DeserExceptions += t.DeserExceptions;
                 benchTest.DeserAborts += t.DeserAborts;
                 benchTest.DeserDurationMs += t.DeserDurationMs;
-                benchTest.DeserDurationTicks += t.DeserDurationTicks;
                 benchTest.DeserOpsSec += t.DeserOpsSec;
             });
-            benchTest.SerDurationTicks /= count;
             benchTest.SerDurationMs = benchTest.SerDurationTicks / 1000;
             benchTest.SerOpsSec /= count;
-            benchTest.DeserDurationTicks /= count;
             benchTest.DeserDurationMs = benchTest.DeserDurationTicks / 1000;
             benchTest.DeserOpsSec /= count;
         }
@@ -159,50 +159,52 @@
         var htmlTemplate =
             "<div class=\"overview-table-cell\">" +
                 "<div>" +
-                    "Run <b>@runNumber@</b> time(s)<br>" +
-                    "Payload: <b>@payloadSize@</b> byte(s)<br>" +
-                    "GC: <b>@doGc@</b>" +
+                "Run <b>@runNumber@</b> time(s)<br>" +
+                "Payload: <b>@payloadSize@</b> byte(s)<br>" +
+                "GC: <b>@doGc@</b><br>" +
+                "RunException <b>@runException@</b>" +
                 "</div>" +
                 "<div class=\"@serClass@\"><table class='inner-table'>" +
-                    "<tr><td align=\"center\"><b>Serialization</b></td></tr>" +
-                    "<tr><td>iterations:</td><td><b>@serIterations@</b></td></tr>" +
-                    "<tr><td>exceptions:</td><td><b>@serExceptions@</b></td></tr>" +
-                    "<tr><td>aborts:</td><td><b>@serAborts@</b></td></tr>" +
-                    "<tr><td>duration (ms):</td><td><b>@serDurationMs@</b></td></tr>" +
-                    "<tr><td>duration (ticks):</td><td><b>@serDurationTick@</b></td></tr>" +
-                    "<tr><td>ops/sec:</td><td><b>@serOpsSec@</b></td></tr>" +
+                "<tr><td align=\"center\"><b>Serialization</b></td></tr>" +
+                "<tr><td>iterations:</td><td><b>@serIterations@</b></td></tr>" +
+                "<tr><td>exceptions:</td><td><b>@serExceptions@</b></td></tr>" +
+                "<tr><td>aborts:</td><td><b>@serAborts@</b></td></tr>" +
+                "<tr><td>duration (ms):</td><td><b>@serDurationMs@</b></td></tr>" +
+                "<tr><td>ops/sec:</td><td><b>@serOpsSec@</b></td></tr>" +
+                "<tr><td>first error:</td><td><b>@firstSerAbortMsg@</b></td></tr>" +
                 "</table></div>" +
                 "<div class=\"@deserClass@\"><table class='inner-table'>" +
-                    "<tr><td align=\"center\"><b>Deserialization</b></td></tr>" +
-                    "<tr><td>iterations:</td><td><b>@deserIterations@</b></td></tr>" +
-                    "<tr><td>exceptions:</td><td><b>@deserExceptions@</b></td></tr>" +
-                    "<tr><td>aborts:</td><td><b>@deserAborts@</td></tr>" +
-                    "<tr><td>duration (ms):</td><td><b>@deserDurationMs@</b></td></tr>" +
-                    "<tr><td>duration (ticks):</td><td><b>@deserDurationTick@</b></td></tr>" +
-                    "<tr><td>ops/sec:</td><td><b>@deserOpsSec@</b></td></tr>" +
+                "<tr><td align=\"center\"><b>Deserialization</b></td></tr>" +
+                "<tr><td>iterations:</td><td><b>@deserIterations@</b></td></tr>" +
+                "<tr><td>exceptions:</td><td><b>@deserExceptions@</b></td></tr>" +
+                "<tr><td>aborts:</td><td><b>@deserAborts@</td></tr>" +
+                "<tr><td>duration (ms):</td><td><b>@deserDurationMs@</b></td></tr>" +
+                "<tr><td>ops/sec:</td><td><b>@deserOpsSec@</b></td></tr>" +
+                "<tr><td>first error:</td><td><b>@firstDeserAbortMsg@</b></td></tr>" +
                 "</table></div>" +
-            "</div>";
+                "</div>";
 
         td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
-                                          {
-                                              runNumber: numberWithCommas(benchTest.RunNumber),
-                                              payloadSize: numberWithCommas(benchTest.PayloadSize),
-                                              doGc: benchTest.DoGc,
-                                              serClass: serClass,
-                                              serIterations: numberWithCommas(benchTest.SerIterations),
-                                              serExceptions: numberWithCommas(benchTest.SerExceptions),
-                                              serAborts: numberWithCommas(benchTest.SerAborts),
-                                              serDurationMs: numberWithCommas(benchTest.SerDurationMs),
-                                              serDurationTick: numberWithCommas(benchTest.SerDurationTicks),
-                                              serOpsSec: numberWithCommas(benchTest.SerOpsSec),
-                                              deserClass: deserClass,
-                                              deserIterations: numberWithCommas(benchTest.DeserIterations),
-                                              deserExceptions: numberWithCommas(benchTest.DeserExceptions),
-                                              deserAborts: numberWithCommas(benchTest.DeserAborts),
-                                              deserDurationMs: numberWithCommas(benchTest.DeserDurationMs),
-                                              deserDurationTick: numberWithCommas(benchTest.DeserDurationTicks),
-                                              deserOpsSec: numberWithCommas(benchTest.DeserOpsSec),
-                                          });
+        {
+            runNumber: numberWithCommas(benchTest.RunNumber, true),
+            payloadSize: numberWithCommas(benchTest.PayloadSize, true),
+            doGc: benchTest.DoGc,
+            runException: benchTest.RunException,
+            serClass: serClass,
+            serIterations: numberWithCommas(benchTest.SerIterations, true),
+            serExceptions: numberWithCommas(benchTest.SerExceptions, true),
+            serAborts: numberWithCommas(benchTest.SerAborts, true),
+            serDurationMs: numberWithCommas(benchTest.SerDurationMs, true),
+            serOpsSec: numberWithCommas(benchTest.SerOpsSec, true),
+            firstSerAbortMsg: benchTest.FirstSerAbortMsg,
+            deserClass: deserClass,
+            deserIterations: numberWithCommas(benchTest.DeserIterations, true),
+            deserExceptions: numberWithCommas(benchTest.DeserExceptions, true),
+            deserAborts: numberWithCommas(benchTest.DeserAborts, true),
+            deserDurationMs: numberWithCommas(benchTest.DeserDurationMs, true),
+            deserOpsSec: numberWithCommas(benchTest.DeserOpsSec, true),
+            firstDeserAbortMsg: benchTest.FirstDeserAbortMsg
+        });
         tr.appendChild(td);
     };
 

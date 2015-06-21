@@ -13,10 +13,23 @@
 #</laconf>
 #[class]
 
-    public override string Title { get {return "Serbench Test Index"; } }
-
 #[override renderHeader()]
-<h1></h1>
+
 #[override renderBody()]
 
-<a href="overviewreport.htm" target="_blank">Overview</a>
+<div id="divTopPanel">
+    <div id="divHeader">
+        <h1></h1>
+    </div>
+</div>
+
+<div class="report-list-container">
+    <a href="overviewreport.htm" target="_blank">Overview: aggregate information about different serializers tests</a>
+</div>
+
+<div id="divBottomPanel">
+    <div id="divBottomContent">
+        @[renderFooter();]
+    </div>
+</div>
+<div class="orangeStripe"></div>
