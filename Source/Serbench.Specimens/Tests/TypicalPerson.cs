@@ -111,18 +111,8 @@ namespace Serbench.Specimens.Tests
         }
     }
 
-    [ProtoContract]
-    [DataContract]
-    [Serializable]
     public class TypicalPerson : Test
     {
-        [Config]
-        private int m_Count;
-
-        private List<TypicalPersonData> m_Data = new List<TypicalPersonData>();
-
-        [Config]
-        private bool m_List;
 
         public TypicalPerson(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
@@ -133,11 +123,19 @@ namespace Serbench.Specimens.Tests
                 m_Data.Add(TypicalPersonData.MakeRandom());
         }
 
+        
+        [Config]
+        private int m_Count;
+
+        private List<TypicalPersonData> m_Data = new List<TypicalPersonData>();
+
+        [Config]
+        private bool m_List;
+
+
         /// <summary>
         /// How many records in the list
         /// </summary>
-        [ProtoMember(1)]
-        [DataMember]
         public int Count
         {
             get { return m_Count; }
@@ -146,8 +144,6 @@ namespace Serbench.Specimens.Tests
         /// <summary>
         /// Determines whether list of objects is serialized isntead of a single object
         /// </summary>
-        [ProtoMember(2)]
-        [DataMember]
         public bool List
         {
             get { return m_List; }
@@ -167,10 +163,10 @@ namespace Serbench.Specimens.Tests
 
         public override void PerformDeserializationTest(Serializer serializer, Stream target)
         {
-     var got = serializer.Deserialize(target);
+           var got = serializer.Deserialize(target);
       
-      var originalRoot = m_List ? (object)m_Data : m_Data[0];
-      serializer.AssertPayloadEquality(this, originalRoot, got);
+           var originalRoot = m_List ? (object)m_Data : m_Data[0];
+           serializer.AssertPayloadEquality(this, originalRoot, got);
         }
     }
 }
