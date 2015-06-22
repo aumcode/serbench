@@ -1,0 +1,27 @@
+﻿known-types
+{
+    known-type{name="Serbench.Specimens.Tests.Conference, Serbench.Specimens"}
+  /*  known-type{name="System.Collections.Generic.List`1[Serbench.Specimens.Tests.Conference, Serbench.Specimens]"}
+    known-type{name="Serbench.Specimens.Tests.Conference[], Serbench.Specimens"}
+    
+    known-type{name="Serbench.Specimens.Tests.Address, Serbench.Specimens"} 
+   
+    known-type{name="Serbench.Specimens.Tests.Relationship, Serbench.Specimens"} 
+    known-type{name="System.Collections.Generic.List`1[Serbench.Specimens.Tests.Relationship, Serbench.Specimens]"}
+    known-type{name="Serbench.Specimens.Tests.Relationship[], Serbench.Specimens"}
+ 
+    known-type{name="Serbench.Specimens.Tests.Participant, Serbench.Specimens"} 
+    known-type{name="System.Collections.Generic.List`1[Serbench.Specimens.Tests.Participant, Serbench.Specimens]"}
+    known-type{name="Serbench.Specimens.Tests.Participant[], Serbench.Specimens"}
+    
+    known-type{name="Serbench.Specimens.Tests.Event, Serbench.Specimens"} 
+    known-type{name="System.Collections.Generic.List`1[Serbench.Specimens.Tests.Event, Serbench.Specimens]"}
+    known-type{name="Serbench.Specimens.Tests.Event[], Serbench.Specimens"}
+ 
+    known-type{name="Serbench.Specimens.Tests.ConferenceTopic, Serbench.Specimens"} 
+    known-type{name="System.Collections.Generic.List`1[Serbench.Specimens.Tests.ConferenceTopic, Serbench.Specimens]"}
+    known-type{name="Serbench.Specimens.Tests.ConferenceTopic[], Serbench.Specimens"}
+ 
+ */
+ 
+}

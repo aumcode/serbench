@@ -58,6 +58,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="knowntypes.Conference.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="objgraph.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="typicalperson.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -69,7 +69,7 @@ namespace Serbench.Specimens.Tests
     [ProtoContract] [DataContract] [Serializable] public struct Relationship
     {
          [ProtoMember(1)][DataMember] public string RelationshipName;
-         [ProtoMember(1)][DataMember] public Participant Other;
+         [ProtoMember(2)][DataMember] public Participant Other;
     }
     
     [ProtoContract] [DataContract] [Serializable] public class Participant
@@ -238,8 +238,8 @@ namespace Serbench.Specimens.Tests
             : base(context, conf)
         {
             if (m_ConferenceCount < 1) m_ConferenceCount = 1;
-            if (m_ParticipantCount < 10) m_ParticipantCount = 10;
-            if (m_EventCount < 8) m_EventCount = 8;
+            if (m_ParticipantCount < 1) m_ParticipantCount = 1;
+            if (m_EventCount < 1) m_EventCount = 1;
 
             for (var i = 0; i < m_ConferenceCount; i++)
                 m_Data.Add( ConferenceBuilder.Build(m_ParticipantCount, m_EventCount ) );
