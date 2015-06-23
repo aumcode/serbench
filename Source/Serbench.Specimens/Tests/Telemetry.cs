@@ -39,21 +39,22 @@ namespace Serbench.Specimens.Tests
         public override void PerformDeserializationTest(Serializer serializer, Stream target)
         {
             var deserialized = serializer.Deserialize(target);
+            serializer.AssertPayloadEquality(this, m_Data, deserialized);
 
-            // short test to make sure the Measurements array has the same size before serialization and after deserialization:
-            if (deserialized == null)
-            {
-                this.Abort(serializer, "Deserialized null from non-null original Telemetry");
-                return;
-            }
+            //// short test to make sure the Measurements array has the same size before serialization and after deserialization:
+            //if (deserialized == null)
+            //{
+            //    this.Abort(serializer, "Deserialized null from non-null original Telemetry");
+            //    return;
+            //}
 
-            var deserializedTyped = deserialized as TelemetryData;
-            if (deserializedTyped.Measurements == null
-                || deserializedTyped.Measurements.Length != m_Data.Measurements.Length)
-            {
-                this.Abort(serializer, "Original and deserized Measurements are mismatch");
-                return;
-            }
+            //var deserializedTyped = deserialized as TelemetryData;
+            //if (deserializedTyped.Measurements == null
+            //    || deserializedTyped.Measurements.Length != m_Data.Measurements.Length)
+            //{
+            //    this.Abort(serializer, "Original and deserized Measurements are mismatch");
+            //    return;
+            //}
         }
 
         [Config]

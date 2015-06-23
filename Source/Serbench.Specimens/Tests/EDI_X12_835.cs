@@ -34,41 +34,24 @@ namespace Serbench.Specimens.Tests
             : base(context, conf)
         {
         }
+
+        private EDI_X12_835Data m_Data;
+
         public override Type GetPayloadRootType()
         {
-            return this.GetType();
+            return m_Data.GetType();
         }
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
         {
-            //serializer.Serialize(root, target);
+            var m_Data = new EDI_X12_835Data();
+            serializer.Serialize(m_Data, target);
         }
 
         public override void PerformDeserializationTest(Serializer serializer, Stream target)
         {
             var deserialized = serializer.Deserialize(target);
-
-            //// short test to make sure the Measurements array has the same size before serialization and after deserialization:
-            // if (deserialized==null)
-            //  {
-            //    if (original==null) return true;
-            //    this.Abort(serializer, "Deserialized null from non-null Measurements");
-            //    return false;
-            //  }
-
-            //  if (this.Measurements==null)
-            //  {
-            //    if (abort) test.Abort(serializer, "Original Measurements were null but deserialized into non-null");
-            //    return false;
-            //  }
-
-            //    var deserializedTyped = deserialized as EDI_X12_835;
-            //    if (deserializedTyped.Measurements == null 
-            //        || deserializedTyped.Measurements.Length != this.Measurements.Length)
-            //    {
-            //      this.Abort(serializer, "Original and deserized Measurements are mismatch");
-            //      return false;
-            //    }
+            serializer.AssertPayloadEquality(this, m_Data, deserialized);
         }
     }
 
@@ -78,7 +61,9 @@ namespace Serbench.Specimens.Tests
     public class EDI_X12_835Data
     {
 
-        public EDI_X12_835Data() { }
+        public EDI_X12_835Data()
+        {
+        }
 
         [ProtoMember(1)]
         [DataMember]
@@ -113,6 +98,14 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class AccoungInfo
     {
+        public AccoungInfo()
+        {
+            Account_Number = NaturalTextGenerator.GenerateWord();
+            Account_Number_Qualifier = "Q";
+            DFI_Identification_Number = ExternalRandomGenerator.Instance.NextRandomInteger.ToString();
+            DFI_Number_Qualifier = "Q";
+        }
+
         [ProtoMember(1)]
         [DataMember]
         public string DFI_Number_Qualifier;
@@ -132,7 +125,22 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class BPR_FinancialInformation : Segment
     {
-        public BPR_FinancialInformation() : base("BPR") { }
+
+        public BPR_FinancialInformation()
+            : base("BPR")
+        {
+            TransactionHandlingCode = ExternalRandomGenerator.Instance.NextRandomInteger;
+            CreditDebit_Flag_Code = ExternalRandomGenerator.Instance.NextRandomInteger;
+            CreditDebit_Flag_Code = ExternalRandomGenerator.Instance.AsInt();
+            Payment_Format_Code = "CA";
+            AccoungInfo1 = new AccoungInfo();
+            Originating_Company_Identifier =
+            Originating_Company_Supplemental_Code = "CSC";
+            AccoungInfo2 = new AccoungInfo();
+            Date = DateTime.Now.ToShortDateString();
+            AccoungInfo3 = new AccoungInfo();
+        }
+
         [ProtoMember(2)]
         [DataMember]
         public int TransactionHandlingCode;
@@ -170,7 +178,15 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class TRN_ReassociationTraceNumber : Segment
     {
-        public TRN_ReassociationTraceNumber() : base("TRN") { }
+
+        public TRN_ReassociationTraceNumber()
+            : base("TRN")
+        {
+            Trace_Type_Code = "TT";
+            Reference_Identification = NaturalTextGenerator.GenerateWord();
+            Originatin_Company_Identifier = NaturalTextGenerator.GenerateWord();
+            Reference_Identification2 = NaturalTextGenerator.GenerateWord();
+        }
         [ProtoMember(2)]
         [DataMember]
         public string Trace_Type_Code;
@@ -190,6 +206,12 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class CUR_DateTime
     {
+        public CUR_DateTime()
+        {
+            Qualifier = "Q";
+            Date = DateTime.Now.ToShortDateString();
+            Time = DateTime.Now.ToShortTimeString();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Qualifier;
@@ -749,7 +771,22 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class NM1_PartyName : Segment
     {
-        public NM1_PartyName() : base("NM1") { }
+        public NM1_PartyName()
+            : base("NM1")
+        {
+            Entity_Identifier_Code = "EI";
+            Entity_Type_Qualifier = "QQ";
+            Name_Last_or_Organization_Name = NaturalTextGenerator.GenerateFullName();
+            Name_First = NaturalTextGenerator.GenerateFirstName();
+            Name_Middle = NaturalTextGenerator.GenerateFirstName();
+            Name_Prefix = "Mrs.";
+            Name_Suffix = "Jr";
+            Identification_Code_Qualifier = "CQ";
+            Identification_Code = NaturalTextGenerator.GenerateWord();
+            Entity_Relationship_Code = NaturalTextGenerator.GenerateWord();
+            Entity_Identifier_Code2 = NaturalTextGenerator.GenerateWord();
+            Name_Last_or_Organization_Name2 = NaturalTextGenerator.GenerateLastName();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Entity_Identifier_Code;
@@ -793,7 +830,20 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class MIA_InpatientAdjudicationInformation : Segment
     {
-        public MIA_InpatientAdjudicationInformation() : base("MIA") { }
+        public MIA_InpatientAdjudicationInformation()
+            : base("MIA")
+        {
+            Quantity = ExternalRandomGenerator.Instance.AsDecimal();
+            Monetary_Amount = ExternalRandomGenerator.Instance.AsDecimal();
+            Quantity2 = ExternalRandomGenerator.Instance.AsDecimal();
+            Monetary_Amount2 = ExternalRandomGenerator.Instance.AsDecimal();
+            Reference_Identification = "Ref";
+            Monetary_Amounts3 = new List<decimal>() { ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), };
+            Quantity3 = ExternalRandomGenerator.Instance.AsDecimal();
+            Monetary_Amounts4 = new List<decimal>() { ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), };
+            Reference_Identifications2 = new List<string>() { "RF2", "RF4", "RG1" };
+            Monetary_Amount5 = ExternalRandomGenerator.Instance.AsDecimal();
+        }
         [ProtoMember(1)]
         [DataMember]
         public decimal Quantity;
@@ -811,16 +861,16 @@ namespace Serbench.Specimens.Tests
         public string Reference_Identification;
         [ProtoMember(6)]
         [DataMember]
-        public List<decimal> Monetary_Amount3;
+        public List<decimal> Monetary_Amounts3;
         [ProtoMember(7)]
         [DataMember]
         public decimal? Quantity3;
         [ProtoMember(8)]
         [DataMember]
-        public List<decimal> Monetary_Amount4;
+        public List<decimal> Monetary_Amounts4;
         [ProtoMember(9)]
         [DataMember]
-        public List<string> Reference_Identification2;
+        public List<string> Reference_Identifications2;
         [ProtoMember(10)]
         [DataMember]
         public decimal? Monetary_Amount5;
@@ -831,16 +881,23 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class MOA_OutpatientAdjudicationInformation : Segment
     {
-        public MOA_OutpatientAdjudicationInformation() : base("MOA") { }
+        public MOA_OutpatientAdjudicationInformation()
+            : base("MOA")
+        {
+            Percentage_as_Decimal = ExternalRandomGenerator.Instance.AsDecimal();
+            Monetary_Amount = ExternalRandomGenerator.Instance.AsDecimal();
+            Reference_Identifications = new List<decimal>() { ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal() };
+            Monetary_Amounts = new List<decimal>() { ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal() };
+        }
         [ProtoMember(1)]
         [DataMember]
-        public int? Percentage_as_Decimal;
+        public decimal? Percentage_as_Decimal;
         [ProtoMember(2)]
         [DataMember]
         public decimal? Monetary_Amount;
         [ProtoMember(3)]
         [DataMember]
-        public List<decimal> Reference_Identification;
+        public List<decimal> Reference_Identifications;
         [ProtoMember(4)]
         [DataMember]
         public List<decimal> Monetary_Amounts;
@@ -851,6 +908,12 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class DTM_SubLoop
     {
+        public DTM_SubLoop()
+        {
+            DTM_StatementFromorToDates = new List<DTM_Date>() { new DTM_Date(), new DTM_Date(), new DTM_Date(), new DTM_Date(), new DTM_Date(), };
+            DTM_CoverageExpirationDate = new DTM_Date();
+            DTM_ClaimReceivedDate = new DTM_Date();
+        }
         [ProtoMember(1)]
         [DataMember]
         public List<DTM_Date> DTM_StatementFromorToDates;
@@ -867,7 +930,15 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class PER_ClaimContactInformation : Segment
     {
-        public PER_ClaimContactInformation() : base("PER") { }
+        public PER_ClaimContactInformation()
+            : base("PER")
+        {
+            Contact_Function_Code = "CFC";
+            Name = NaturalTextGenerator.GenerateFullName();
+            Communication_Number_Qualifier = "DL";
+            Communication_Numbers = new List<string>() { NaturalTextGenerator.GenerateEMail(), NaturalTextGenerator.GenerateEMail(), NaturalTextGenerator.GenerateEMail(), };
+            Contact_Inquiry_Reference = NaturalTextGenerator.GenerateWord();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Contact_Function_Code;
@@ -879,7 +950,7 @@ namespace Serbench.Specimens.Tests
         public string Communication_Number_Qualifier;
         [ProtoMember(4)]
         [DataMember]
-        public List<string> Communication_Number;
+        public List<string> Communication_Numbers;
         [ProtoMember(5)]
         [DataMember]
         public string Contact_Inquiry_Reference;
@@ -890,7 +961,13 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class AMT_ClaimSupplementalInformation : Segment
     {
-        public AMT_ClaimSupplementalInformation() : base("AMT") { }
+        public AMT_ClaimSupplementalInformation()
+            : base("AMT")
+        {
+            Amount_Qualifier_Code = "QC";
+            Monetary_Amount = ExternalRandomGenerator.Instance.AsDecimal();
+            Credit_Debit_Flag_Code = "USD";
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Amount_Qualifier_Code;
@@ -907,7 +984,14 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class QTY_ClaimSupplementalInformationQuantity : Segment
     {
-        public QTY_ClaimSupplementalInformationQuantity() : base("QTY") { }
+        public QTY_ClaimSupplementalInformationQuantity()
+            : base("QTY")
+        {
+            Quantity_Qualifier = "QQ";
+            Quantity = ExternalRandomGenerator.Instance.AsDecimal();
+            Description = NaturalTextGenerator.Generate();
+            Free_form_Information = NaturalTextGenerator.Generate();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Quantity_Qualifier;
@@ -927,24 +1011,48 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class TS835_2110_Loop
     {
+        public TS835_2110_Loop()
+        {
+            SVC_ServicePaymentInformation = new SVC_ServicePaymentInformation();
+            DTM_ServiceDates = new List<DTM_Date>() { new DTM_Date(), new DTM_Date(), new DTM_Date() };
+            CAS_ServiceAdjustments = new List<CAS_Adjustment>() { new CAS_Adjustment(), new CAS_Adjustment(), new CAS_Adjustment(), new CAS_Adjustment() };
+            REF_SubLoop_3 = new REF_SubLoop();
+            AMT_ServiceSupplementalAmounts = new List<AMT_ServiceSupplementalAmount>()
+                {
+                    new AMT_ServiceSupplementalAmount() ,
+                    new AMT_ServiceSupplementalAmount() ,
+                    new AMT_ServiceSupplementalAmount() ,
+                };
+            QTY_ServiceSupplementalQuantities = new List<QTY_ServiceSupplementalQuantity>(){
+                    new  QTY_ServiceSupplementalQuantity(),
+                    new  QTY_ServiceSupplementalQuantity(),
+                    new  QTY_ServiceSupplementalQuantity(),
+                };
+            LQ_HealthCareRemarkCodes = new List<LQ_HealthCareRemarkCodes>(){
+                new  LQ_HealthCareRemarkCodes(),
+                new  LQ_HealthCareRemarkCodes(),
+                new  LQ_HealthCareRemarkCodes(),
+                new  LQ_HealthCareRemarkCodes(),
+            };
+        }
         [ProtoMember(1)]
         [DataMember]
         public SVC_ServicePaymentInformation SVC_ServicePaymentInformation;
         [ProtoMember(2)]
         [DataMember]
-        public List<DTM_Date> DTM_ServiceDate;
+        public List<DTM_Date> DTM_ServiceDates;
         [ProtoMember(3)]
         [DataMember]
-        public List<CAS_Adjustment> CAS_ServiceAdjustment;
+        public List<CAS_Adjustment> CAS_ServiceAdjustments;
         [ProtoMember(4)]
         [DataMember]
         public REF_SubLoop REF_SubLoop_3;
         [ProtoMember(5)]
         [DataMember]
-        public List<AMT_ServiceSupplementalAmount> AMT_ServiceSupplementalAmount;
+        public List<AMT_ServiceSupplementalAmount> AMT_ServiceSupplementalAmounts;
         [ProtoMember(6)]
         [DataMember]
-        public List<QTY_ServiceSupplementalQuantity> QTY_ServiceSupplementalQuantity;
+        public List<QTY_ServiceSupplementalQuantity> QTY_ServiceSupplementalQuantities;
         [ProtoMember(7)]
         [DataMember]
         public List<LQ_HealthCareRemarkCodes> LQ_HealthCareRemarkCodes;
@@ -955,7 +1063,17 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class SVC_ServicePaymentInformation : Segment
     {
-        public SVC_ServicePaymentInformation() : base("SVC") { }
+        public SVC_ServicePaymentInformation()
+            : base("SVC")
+        {
+            Qualifier = "SC";
+            Monetary_Amount = ExternalRandomGenerator.Instance.AsDecimal();
+            Monetary_Amount2 = ExternalRandomGenerator.Instance.AsDecimal();
+            Product_Service_ID = NaturalTextGenerator.GenerateWord();
+            Quantity = ExternalRandomGenerator.Instance.AsDecimal();
+            Description = NaturalTextGenerator.Generate();
+            Quantity2 = ExternalRandomGenerator.Instance.AsDecimal();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Qualifier;
@@ -984,7 +1102,13 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class AMT_ServiceSupplementalAmount : Segment
     {
-        public AMT_ServiceSupplementalAmount() : base("AMT") { }
+        public AMT_ServiceSupplementalAmount()
+            : base("AMT")
+        {
+            Amount_Qualifier_Code = "SD";
+            Monetary_Amount = ExternalRandomGenerator.Instance.AsDecimal();
+            Credit_Debit_Flag_Code = NaturalTextGenerator.GenerateWord();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Amount_Qualifier_Code;
@@ -1001,7 +1125,14 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class QTY_ServiceSupplementalQuantity : Segment
     {
-        public QTY_ServiceSupplementalQuantity() : base("QTY") { }
+        public QTY_ServiceSupplementalQuantity()
+            : base("QTY")
+        {
+            Quantity_Qualifier = "DG";
+            Quantity = ExternalRandomGenerator.Instance.AsInt();
+            Info = NaturalTextGenerator.Generate(15);
+            Description = NaturalTextGenerator.Generate(35);
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Quantity_Qualifier;
@@ -1021,7 +1152,12 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class LQ_HealthCareRemarkCodes : Segment
     {
-        public LQ_HealthCareRemarkCodes() : base("LQ") { }
+        public LQ_HealthCareRemarkCodes()
+            : base("LQ")
+        {
+            Code_List_Qualifier_Code = "QK";
+            Industry_Code = NaturalTextGenerator.GenerateWord();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Code_List_Qualifier_Code;
@@ -1035,7 +1171,17 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class PLB_ProviderAdjustment : Segment
     {
-        public PLB_ProviderAdjustment() : base("PLB") { }
+        public PLB_ProviderAdjustment()
+            : base("PLB")
+        {
+            Reference_Identification = NaturalTextGenerator.GenerateWord();
+            Date = DateTime.Now.ToShortDateString();
+            MonetaryAmountAdjustment = new MonetaryAmountAdjustment();
+            MonetaryAmountAdjustments = new List<MonetaryAmountAdjustment>();
+            var count = ExternalRandomGenerator.Instance.NextScaledRandomInteger(2, 10);
+            for (var i = 0; i < count; i++)
+                MonetaryAmountAdjustments.Add(new MonetaryAmountAdjustment());
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Reference_Identification;
@@ -1055,6 +1201,11 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class MonetaryAmountAdjustment
     {
+        public MonetaryAmountAdjustment()
+        {
+            Qualifier = "QA";
+            MonetaryAmount = ExternalRandomGenerator.Instance.AsDecimal();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Qualifier;
@@ -1062,6 +1213,4 @@ namespace Serbench.Specimens.Tests
         [DataMember]
         public decimal MonetaryAmount;
     }
-
-
 }
