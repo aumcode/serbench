@@ -538,6 +538,20 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class TS835_2000_Loop
     {
+        public TS835_2000_Loop()
+        {
+            LX_HeaderNumber = new LX_HeaderNumber();
+            TS3_ProviderSummaryInformation = new TS3_ProviderSummaryInformation();
+            TS2_ProviderSupplementalSummaryInformation = new TS2_ProviderSupplementalSummaryInformation();
+            TS835_2100_Loop = new TS835_2100_Loop();
+            MIA_InpatientAdjudicationInformation = new MIA_InpatientAdjudicationInformation();
+            MOA_OutpatientAdjudicationInformation = new MOA_OutpatientAdjudicationInformation();
+            DTM_SubLoop = new DTM_SubLoop();
+            PER_ClaimContactInformations = new List<PER_ClaimContactInformation>() { new PER_ClaimContactInformation(), new PER_ClaimContactInformation(), new PER_ClaimContactInformation(), new PER_ClaimContactInformation(), };
+            AMT_ClaimSupplementalInformations = new List<AMT_ClaimSupplementalInformation>() { new AMT_ClaimSupplementalInformation(), new AMT_ClaimSupplementalInformation(), new AMT_ClaimSupplementalInformation(), };
+            QTY_ClaimSupplementalInformationQuantities = new List<QTY_ClaimSupplementalInformationQuantity>() { new QTY_ClaimSupplementalInformationQuantity(), new QTY_ClaimSupplementalInformationQuantity(), new QTY_ClaimSupplementalInformationQuantity(), new QTY_ClaimSupplementalInformationQuantity(), };
+            TS835_2110_Loop = new TS835_2110_Loop();
+        }
         [ProtoMember(1)]
         [DataMember]
         public LX_HeaderNumber LX_HeaderNumber;
@@ -561,13 +575,13 @@ namespace Serbench.Specimens.Tests
         public DTM_SubLoop DTM_SubLoop;
         [ProtoMember(8)]
         [DataMember]
-        public List<PER_ClaimContactInformation> PER_ClaimContactInformation;
+        public List<PER_ClaimContactInformation> PER_ClaimContactInformations;
         [ProtoMember(9)]
         [DataMember]
-        public List<AMT_ClaimSupplementalInformation> AMT_ClaimSupplementalInformation;
+        public List<AMT_ClaimSupplementalInformation> AMT_ClaimSupplementalInformations;
         [ProtoMember(10)]
         [DataMember]
-        public List<QTY_ClaimSupplementalInformationQuantity> QTY_ClaimSupplementalInformationQuantity;
+        public List<QTY_ClaimSupplementalInformationQuantity> QTY_ClaimSupplementalInformationQuantities;
         [ProtoMember(11)]
         [DataMember]
         public TS835_2110_Loop TS835_2110_Loop;
@@ -578,7 +592,11 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class LX_HeaderNumber : Segment
     {
-        public LX_HeaderNumber() : base("LX") { }
+        public LX_HeaderNumber()
+            : base("LX")
+        {
+            Assigned_Number = ExternalRandomGenerator.Instance.AsDecimal().ToString();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Assigned_Number;
@@ -589,7 +607,19 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class TS3_ProviderSummaryInformation : Segment
     {
-        public TS3_ProviderSummaryInformation() : base("TS3") { }
+        public TS3_ProviderSummaryInformation()
+            : base("TS3")
+        {
+            Reference_Identification = "OR";
+            Facility_Code_Value = "Factory Code Value";
+            Date = DateTime.Now.ToShortDateString();
+            Quantity = ExternalRandomGenerator.Instance.AsDecimal();
+            Monetary_Amount = ExternalRandomGenerator.Instance.AsDecimal();
+            MonetaryAmountList = new List<decimal>() { ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal() };
+            Quantity2 = ExternalRandomGenerator.Instance.AsDecimal();
+            Monetary_Amount2 = ExternalRandomGenerator.Instance.AsDecimal();
+
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Reference_Identification;
@@ -601,7 +631,7 @@ namespace Serbench.Specimens.Tests
         public string Date;
         [ProtoMember(4)]
         [DataMember]
-        public string Quantity;
+        public decimal Quantity;
         [ProtoMember(5)]
         [DataMember]
         public decimal Monetary_Amount;
@@ -621,7 +651,13 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class TS2_ProviderSupplementalSummaryInformation : Segment
     {
-        public TS2_ProviderSupplementalSummaryInformation() : base("TS2") { }
+        public TS2_ProviderSupplementalSummaryInformation()
+            : base("TS2")
+        {
+            Monetary_AmountList = new List<decimal>() { ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal(), ExternalRandomGenerator.Instance.AsDecimal() };
+            Quantity = ExternalRandomGenerator.Instance.AsDecimal();
+            Monetary_Amount2 = ExternalRandomGenerator.Instance.AsDecimal();
+        }
         [ProtoMember(1)]
         [DataMember]
         public List<decimal> Monetary_AmountList;
@@ -641,6 +677,13 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class TS835_2100_Loop
     {
+        public TS835_2100_Loop()
+        {
+            CLP_ClaimPaymentInformation = new CLP_ClaimPaymentInformation();
+            CAS_ClaimsAdjustment = new CAS_Adjustment();
+            NM1_SubLoop = new NM1_SubLoop();
+            MIA_InpatientAdjudicationInformation = new MIA_InpatientAdjudicationInformation();
+        }
         [ProtoMember(1)]
         [DataMember]
         public CLP_ClaimPaymentInformation CLP_ClaimPaymentInformation;
@@ -660,7 +703,24 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class CLP_ClaimPaymentInformation : Segment
     {
-        public CLP_ClaimPaymentInformation() : base("CLP") { }
+        public CLP_ClaimPaymentInformation()
+            : base("CLP")
+        {
+            Claim_Submitters_Identifier = NaturalTextGenerator.GenerateWord();
+            Claim_Status_Code = NaturalTextGenerator.GenerateWord();
+            Monetary_Amount = ExternalRandomGenerator.Instance.AsDecimal(); ;
+            Monetary_Amount2 = ExternalRandomGenerator.Instance.AsDecimal(); ;
+            Monetary_Amount3 = ExternalRandomGenerator.Instance.AsDecimal(); ;
+            Claim_Filing_Indicator_Code = NaturalTextGenerator.GenerateWord();
+            Reference_Identification = NaturalTextGenerator.GenerateWord();
+            Facility_Code_Value = NaturalTextGenerator.GenerateWord();
+            Claim_Frequency_Type_Code = NaturalTextGenerator.GenerateWord();
+            Patient_Status_Code = NaturalTextGenerator.GenerateWord();
+            Diagnosis_Related_Group_DRG_Code = NaturalTextGenerator.GenerateWord();
+            Quantity = ExternalRandomGenerator.Instance.AsInt().ToString();
+            Percentage_as_Decimal = ExternalRandomGenerator.Instance.AsDecimal();
+            Yes_No_Condition_or_Response_Code = NaturalTextGenerator.GenerateWord();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Claim_Submitters_Identifier;
@@ -710,7 +770,13 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class CAS_Adjustment : Segment
     {
-        public CAS_Adjustment() : base("CAS") { }
+        public CAS_Adjustment()
+            : base("CAS")
+        {
+            Claim_Adjustment_Group_Code = "CJ3";
+            ClaimAdjustment = new ClaimAdjustment();
+            ClaimAdjustments = new List<ClaimAdjustment>() { new ClaimAdjustment(), new ClaimAdjustment(), new ClaimAdjustment(), new ClaimAdjustment(), new ClaimAdjustment() };
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Claim_Adjustment_Group_Code;
@@ -727,6 +793,12 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class ClaimAdjustment
     {
+        public ClaimAdjustment()
+        {
+            Claim_Adjustment_Reason_Code = "CJ";
+            Monetary_Amount = ExternalRandomGenerator.Instance.AsDecimal();
+            Quantity = ExternalRandomGenerator.Instance.AsDecimal();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Claim_Adjustment_Reason_Code;
@@ -743,6 +815,16 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class NM1_SubLoop
     {
+        public NM1_SubLoop()
+        {
+            NM1_PatientName = new NM1_PartyName();
+            NM1_InsuredName = new NM1_PartyName();
+            NM1_CorrectedPatient_InsuredName = new NM1_PartyName();
+            NM1_ServiceProviderName = new NM1_PartyName();
+            NM1_CrossoverCarrierName = new NM1_PartyName();
+            NM1_CorrectedPriorityPayerName = new NM1_PartyName();
+            NM1_OtherSubscriberName = new NM1_PartyName();
+        }
         [ProtoMember(1)]
         [DataMember]
         public NM1_PartyName NM1_PatientName;
