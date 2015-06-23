@@ -20,7 +20,70 @@ namespace Serbench.Specimens.Tests
         public Telemetry(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
-            Initialize(context, conf);
+            if (m_MeasurementsNumber < 1) m_MeasurementsNumber = 1;
+            m_Data = new TelemetryData(m_MeasurementsNumber);
+        }
+
+
+        public override Type GetPayloadRootType()
+        {
+            return this.GetType();
+        }
+
+        public override void PerformSerializationTest(Serializer serializer, Stream target)
+        {
+            var m_Data = new TelemetryData(m_MeasurementsNumber);
+            serializer.Serialize(m_Data, target);
+        }
+
+        public override void PerformDeserializationTest(Serializer serializer, Stream target)
+        {
+            var deserialized = serializer.Deserialize(target);
+
+            // short test to make sure the Measurements array has the same size before serialization and after deserialization:
+            if (deserialized == null)
+            {
+                this.Abort(serializer, "Deserialized null from non-null original Telemetry");
+                return;
+            }
+
+            var deserializedTyped = deserialized as TelemetryData;
+            if (deserializedTyped.Measurements == null
+                || deserializedTyped.Measurements.Length != m_Data.Measurements.Length)
+            {
+                this.Abort(serializer, "Original and deserized Measurements are mismatch");
+                return;
+            }
+        }
+
+        [Config]
+        private int m_MeasurementsNumber;
+        public int MeasurementsNumber
+        {
+            get { return m_MeasurementsNumber; }
+        }
+
+        private TelemetryData m_Data;
+    }
+
+    [ProtoContract]
+    [DataContract]
+    [Serializable]
+    public class TelemetryData
+    {
+        /// <summary>
+        /// Required by some serilizers (i.e. XML)
+        /// </summary>
+        public TelemetryData() : this(1) { }
+        public TelemetryData(int measurementsNumber)
+        {
+            Id = Guid.NewGuid().ToString();
+            TimeStamp = DateTime.Now.ToString();
+            Param1 = ExternalRandomGenerator.Instance.NextRandomInteger;
+            Param2 = ExternalRandomGenerator.Instance.NextRandomInteger as uint;
+            Measurements = new double[measurementsNumber];
+            for (var i = 0; i < data.Measurements.Lenght; i++)
+                Measurements[i] = ExternalRandomGenerator.Instance.NextRandomDouble;
         }
 
         [ProtoMember(1)]
@@ -38,58 +101,5 @@ namespace Serbench.Specimens.Tests
         [ProtoMember(5)]
         [DataMember]
         public double[] Measurements;
-
-        private Telemetry Initialize(TestingSystem context, IConfigSectionNode conf)
-        {
-            Telemetry current = new Telemetry(context, conf);
-            current.Id = Guid.NewGuid().ToString();
-            current.TimeStamp = DateTime.Now;
-            current.Param1 = ExternalRandomGenerator.Instance.NextScaledRandomInteger(30, 250);
-            current.Param2 = (uint)ExternalRandomGenerator.Instance.NextScaledRandomInteger(251, 25000);
-            if (m_MeasurementsNumber > 0)
-            {
-                current.Measurements = new double[m_MeasurementsNumber];
-                for (int i = 0; i < m_MeasurementsNumber; i++)
-                    current.Measurements[i] = ExternalRandomGenerator.Instance.NextRandomDouble;
-            }
-            return current;
-        }
-
-        public override Type GetPayloadRootType()
-        {
-            return this.GetType();
-        }
-
-        public override void PerformSerializationTest(Serializer serializer, Stream target)
-        {
-            serializer.Serialize(typeof(Telemetry), target);
-        }
-
-        public override void PerformDeserializationTest(Serializer serializer, Stream target)
-        {
-            var deserialized = serializer.Deserialize(target);
-
-            // short test to make sure the Measurements array has the same size before serialization and after deserialization:
-            if (deserialized == null)
-            {
-                this.Abort(serializer, "Deserialized null from non-null original Telemetry");
-                return;
-            }
-
-            var deserializedTyped = deserialized as Telemetry;
-            if (deserializedTyped.Measurements == null
-                || deserializedTyped.Measurements.Length != this.Measurements.Length)
-            {
-                this.Abort(serializer, "Original and deserized Measurements are mismatch");
-                return;
-            }
-        }
-
-        [Config]
-        private int m_MeasurementsNumber;
-        public int MeasurementsNumber
-        {
-            get { return m_MeasurementsNumber; }
-        }
     }
 }

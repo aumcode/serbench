@@ -34,6 +34,10 @@ namespace Serbench.Specimens.Tests
                   Initialize(context, conf);
         } 
 
+        public EDI_X12_835()
+            {
+
+            }
       private static EDI_X12_835 Initialize(TestingSystem context, IConfigSectionNode conf)
         {
            EDI_X12_835 current = new EDI_X12_835(context, conf);
