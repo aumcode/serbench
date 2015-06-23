@@ -23,30 +23,62 @@ namespace Serbench.Specimens.Tests
         [DataMember]
         public string SegmentTag;
     }
+
+
     [ProtoContract]
     [DataContract]
     [Serializable]
     public class EDI_X12_835 : Test
     {
-            public EDI_X12_835(TestingSystem context, IConfigSectionNode conf)
+        public EDI_X12_835(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
-                  Initialize(context, conf);
-        } 
-
-        public EDI_X12_835()
-            {
-
-            }
-      private static EDI_X12_835 Initialize(TestingSystem context, IConfigSectionNode conf)
-        {
-           EDI_X12_835 current = new EDI_X12_835(context, conf);
-           // current.Id = Guid.NewGuid.ToString();
-           //current.TimeStamp = DateTime.Now;
-           //current.Param1 =  NaturalTextGenerator.GenerateFirstName();
-           //current.Param2 =        NaturalTextGenerator.GenerateLastName();
-          return current;
         }
+        public override Type GetPayloadRootType()
+        {
+            return this.GetType();
+        }
+
+        public override void PerformSerializationTest(Serializer serializer, Stream target)
+        {
+            //serializer.Serialize(root, target);
+        }
+
+        public override void PerformDeserializationTest(Serializer serializer, Stream target)
+        {
+            var deserialized = serializer.Deserialize(target);
+
+            //// short test to make sure the Measurements array has the same size before serialization and after deserialization:
+            // if (deserialized==null)
+            //  {
+            //    if (original==null) return true;
+            //    this.Abort(serializer, "Deserialized null from non-null Measurements");
+            //    return false;
+            //  }
+
+            //  if (this.Measurements==null)
+            //  {
+            //    if (abort) test.Abort(serializer, "Original Measurements were null but deserialized into non-null");
+            //    return false;
+            //  }
+
+            //    var deserializedTyped = deserialized as EDI_X12_835;
+            //    if (deserializedTyped.Measurements == null 
+            //        || deserializedTyped.Measurements.Length != this.Measurements.Length)
+            //    {
+            //      this.Abort(serializer, "Original and deserized Measurements are mismatch");
+            //      return false;
+            //    }
+        }
+    }
+
+    [ProtoContract]
+    [DataContract]
+    [Serializable]
+    public class EDI_X12_835Data
+    {
+
+        public EDI_X12_835Data() { }
 
         [ProtoMember(1)]
         [DataMember]
@@ -73,42 +105,7 @@ namespace Serbench.Specimens.Tests
         [DataMember]
         public List<PLB_ProviderAdjustment> PLB_ProviderAdjustmentList;
 
-        public override Type GetPayloadRootType()
-        {
-            return this.GetType();
-        }
 
-        public override void PerformSerializationTest(Serializer serializer, Stream target)
-        {
-            //serializer.Serialize(root, target);
-        }
-
-        public override void PerformDeserializationTest(Serializer serializer, Stream target)
-        {
-           var deserialized = serializer.Deserialize(target);
-      
-        //// short test to make sure the Measurements array has the same size before serialization and after deserialization:
-        // if (deserialized==null)
-        //  {
-        //    if (original==null) return true;
-        //    this.Abort(serializer, "Deserialized null from non-null Measurements");
-        //    return false;
-        //  }
-
-        //  if (this.Measurements==null)
-        //  {
-        //    if (abort) test.Abort(serializer, "Original Measurements were null but deserialized into non-null");
-        //    return false;
-        //  }
-
-        //    var deserializedTyped = deserialized as EDI_X12_835;
-        //    if (deserializedTyped.Measurements == null 
-        //        || deserializedTyped.Measurements.Length != this.Measurements.Length)
-        //    {
-        //      this.Abort(serializer, "Original and deserized Measurements are mismatch");
-        //      return false;
-        //    }
-         }
     }
 
     [ProtoContract]

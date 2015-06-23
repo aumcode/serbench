@@ -78,11 +78,11 @@ namespace Serbench.Specimens.Tests
         public TelemetryData(int measurementsNumber)
         {
             Id = Guid.NewGuid().ToString();
-            TimeStamp = DateTime.Now.ToString();
+            TimeStamp = DateTime.Now;
             Param1 = ExternalRandomGenerator.Instance.NextRandomInteger;
-            Param2 = ExternalRandomGenerator.Instance.NextRandomInteger as uint;
+            Param2 = (uint)ExternalRandomGenerator.Instance.NextRandomInteger;
             Measurements = new double[measurementsNumber];
-            for (var i = 0; i < data.Measurements.Lenght; i++)
+            for (var i = 0; i < measurementsNumber; i++)
                 Measurements[i] = ExternalRandomGenerator.Instance.NextRandomDouble;
         }
 
