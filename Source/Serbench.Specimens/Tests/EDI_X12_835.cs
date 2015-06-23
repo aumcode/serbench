@@ -33,6 +33,7 @@ namespace Serbench.Specimens.Tests
         public EDI_X12_835(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
+            m_Data = new EDI_X12_835Data();
         }
 
         private EDI_X12_835Data m_Data;
@@ -44,7 +45,6 @@ namespace Serbench.Specimens.Tests
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
         {
-            var m_Data = new EDI_X12_835Data();
             serializer.Serialize(m_Data, target);
         }
 
@@ -63,6 +63,14 @@ namespace Serbench.Specimens.Tests
 
         public EDI_X12_835Data()
         {
+            BPR_FinancialInformation = new BPR_FinancialInformation();
+            TRN_ReassociationTraceNumber = new TRN_ReassociationTraceNumber();
+            CUR_ForeignCurrencyInformation = new CUR_ForeignCurrencyInformation();
+            REF_SubLoop = new List<REF_SubLoop>() { new REF_SubLoop(), new REF_SubLoop(), new REF_SubLoop(), };
+            DTM_ProductionDate = new DTM_Date();
+            N1_SubLoop = new N1_SubLoop();
+            TS835_2000_Loop = new TS835_2000_Loop();
+            PLB_ProviderAdjustmentList = new List<PLB_ProviderAdjustment>() { new PLB_ProviderAdjustment(), new PLB_ProviderAdjustment(), new PLB_ProviderAdjustment(), new PLB_ProviderAdjustment(), };
         }
 
         [ProtoMember(1)]
@@ -228,7 +236,17 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class CUR_ForeignCurrencyInformation : Segment
     {
-        public CUR_ForeignCurrencyInformation() : base("CUR") { }
+        public CUR_ForeignCurrencyInformation()
+            : base("CUR")
+        {
+            Entity_Identifier_Code = "CU";
+            Currency_Code = "CAD";
+            Exchange_Rate = "1.25";
+            Entity_Identifier_Code2 = NaturalTextGenerator.Generate(3);
+            Currency_Code2 = "USD";
+            Currency_Market_Exchange_Code = "FX";
+            CUR_DateTimes = new List<CUR_DateTime>() { new CUR_DateTime(), new CUR_DateTime(), new CUR_DateTime(), new CUR_DateTime(), new CUR_DateTime(), new CUR_DateTime(), new CUR_DateTime(), new CUR_DateTime(), };
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Entity_Identifier_Code;
@@ -257,6 +275,11 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class REF_SubLoop
     {
+        public REF_SubLoop()
+        {
+            REF_ReceiverIdentification = new REF_Identification();
+            REF_VersionIdentification = new REF_Identification();
+        }
         [ProtoMember(1)]
         [DataMember]
         public REF_Identification REF_ReceiverIdentification;
@@ -269,7 +292,14 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class REF_Identification : Segment
     {
-        public REF_Identification() : base("REF") { }
+        public REF_Identification()
+            : base("REF")
+        {
+            Reference_Identification_Qualifier = "RF";
+            Reference_Identification = NaturalTextGenerator.GenerateWord();
+            Description = NaturalTextGenerator.Generate(50);
+            Description2 = NaturalTextGenerator.Generate(20);
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Reference_Identification_Qualifier;
@@ -290,7 +320,16 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class DTM_Date : Segment
     {
-        public DTM_Date() : base("DTM") { }
+        public DTM_Date()
+            : base("DTM")
+        {
+            Date_Time_Qualifier = "DT";
+            Date = DateTime.Now.ToShortDateString();
+            Time = DateTime.Now.ToShortTimeString();
+            Time_Code = "UTC";
+            Date_Time_Period_Format_Qualifier = "D";
+            Date_Time_Period = "M";
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Date_Time_Qualifier;
@@ -316,6 +355,11 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class N1_SubLoop
     {
+        public N1_SubLoop()
+        {
+            TS835_1000A_Loop = new TS835_1000A_Loop();
+            TS835_1000B_Loop = new TS835_1000B_Loop();
+        }
         [ProtoMember(1)]
         [DataMember]
         public TS835_1000A_Loop TS835_1000A_Loop;
@@ -329,6 +373,14 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class TS835_1000A_Loop
     {
+        public TS835_1000A_Loop()
+        {
+            N1_PayerIdentification = new N1_PartyIdentification();
+            N3_PayerAddress = new N3_PartyAddress();
+            N4_PayerCity_State_ZIPCode = new N4_PartyCity_State_ZIPCode();
+            REF_AdditionalPayerIdentification_Loop = new List<REF_AdditionalPartyIdentification>() { new REF_AdditionalPartyIdentification(), new REF_AdditionalPartyIdentification(), new REF_AdditionalPartyIdentification(), };
+            PER_SubLoop = new PER_SubLoop();
+        }
         [ProtoMember(1)]
         [DataMember]
         public N1_PartyIdentification N1_PayerIdentification;
@@ -350,6 +402,14 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class TS835_1000B_Loop
     {
+        public TS835_1000B_Loop()
+        {
+            N1_PayeeIdentification = new N1_PartyIdentification();
+            N3_PayeeAddress = new N3_PartyAddress();
+            N4_PayeeCity_State_ZIPCode = new N4_PartyCity_State_ZIPCode();
+            REF_PayeeAdditionalIdentification = new List<REF_AdditionalPartyIdentification>() { new REF_AdditionalPartyIdentification(), new REF_AdditionalPartyIdentification(), new REF_AdditionalPartyIdentification(), };
+            RDM_RemittanceDeliveryMethod = new RDM_RemittanceDeliveryMethod();
+        }
         [ProtoMember(1)]
         [DataMember]
         public N1_PartyIdentification N1_PayeeIdentification;
@@ -372,7 +432,17 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class N1_PartyIdentification : Segment
     {
-        public N1_PartyIdentification() : base("N1") { }
+        public N1_PartyIdentification()
+            : base("N1")
+        {
+            Entity_Identifier_Code = "TY";
+            Name = NaturalTextGenerator.GenerateFullName();
+            Identification_Code_Qualifier = "CU";
+            Identification_Code = NaturalTextGenerator.GenerateWord();
+            Entity_Relationship_Code = NaturalTextGenerator.GenerateWord();
+            Entity_Identifier_Code2 = NaturalTextGenerator.GenerateWord();
+        }
+
         [ProtoMember(1)]
         [DataMember]
         public string Entity_Identifier_Code;
@@ -398,7 +468,12 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class N3_PartyAddress : Segment
     {
-        public N3_PartyAddress() : base("N3") { }
+        public N3_PartyAddress()
+            : base("N3")
+        {
+            AddressInformation1 = NaturalTextGenerator.GenerateAddressLine();
+            AddressInformation2 = NaturalTextGenerator.GenerateUSCityStateZip();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string AddressInformation1;
@@ -412,7 +487,17 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class N4_PartyCity_State_ZIPCode : Segment
     {
-        public N4_PartyCity_State_ZIPCode() : base("N4") { }
+        public N4_PartyCity_State_ZIPCode()
+            : base("N4")
+        {
+            City_Name = NaturalTextGenerator.GenerateCityName();
+            State_or_Province_Code = "CA";
+            Postal_Code = "98155";
+            Country_Code = "USA";
+            Location_Qualifier = "LA";
+            Location_Identifier = "1234567.12";
+            Country_Subdivision_Code = "WW";
+        }
         [ProtoMember(1)]
         [DataMember]
         public string City_Name;
@@ -441,7 +526,14 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class REF_AdditionalPartyIdentification : Segment
     {
-        public REF_AdditionalPartyIdentification() : base("REF") { }
+        public REF_AdditionalPartyIdentification()
+            : base("REF")
+        {
+            Reference_Identification_Qualifier = "QU";
+            Reference_Identification = NaturalTextGenerator.GenerateWord();
+            Description = NaturalTextGenerator.Generate(70);
+            Description2 = NaturalTextGenerator.Generate(30);
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Reference_Identification_Qualifier;
@@ -461,6 +553,12 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class PER_SubLoop
     {
+        public PER_SubLoop()
+        {
+            PER_PayerBusinessContactInformation = new PER_PartyContactInformation();
+            PER_PayerTechnicalContactInformation = new List<PER_PartyContactInformation>() { new PER_PartyContactInformation(), new PER_PartyContactInformation(), new PER_PartyContactInformation(), new PER_PartyContactInformation(), new PER_PartyContactInformation() };
+            PER_PayerWEBSite = new PER_PartyContactInformation();
+        }
         [ProtoMember(1)]
         [DataMember]
         public PER_PartyContactInformation PER_PayerBusinessContactInformation;
@@ -477,7 +575,16 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class PER_PartyContactInformation : Segment
     {
-        public PER_PartyContactInformation() : base("PER") { }
+        public PER_PartyContactInformation()
+            : base("PER")
+        {
+            Contact_Function_Code = "RP";
+            Name = NaturalTextGenerator.GenerateFirstName();
+            CommunicationNumber1 = new CommunicationNumber();
+            CommunicationNumber2 = new CommunicationNumber();
+            CommunicationNumber3 = new CommunicationNumber();
+            Contact_Inquiry_Reference = NaturalTextGenerator.GenerateWord();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Contact_Function_Code;
@@ -502,6 +609,11 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class CommunicationNumber
     {
+        public CommunicationNumber()
+        {
+            Communication_Number_Qualifier = "QW";
+            Communication_Number = NaturalTextGenerator.GenerateEMail();
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Communication_Number_Qualifier;
@@ -515,7 +627,15 @@ namespace Serbench.Specimens.Tests
     [Serializable]
     public class RDM_RemittanceDeliveryMethod : Segment
     {
-        public RDM_RemittanceDeliveryMethod() : base("RDM") { }
+        public RDM_RemittanceDeliveryMethod()
+            : base("RDM")
+        {
+            Report_Transmission_Code = NaturalTextGenerator.GenerateWord();
+            Name = NaturalTextGenerator.GenerateFullName();
+            Communication_Number = NaturalTextGenerator.GenerateEMail();
+            Info1 = NaturalTextGenerator.Generate(50);
+            Info2 = NaturalTextGenerator.Generate(20);
+        }
         [ProtoMember(1)]
         [DataMember]
         public string Report_Transmission_Code;
