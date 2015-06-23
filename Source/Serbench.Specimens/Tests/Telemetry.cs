@@ -27,7 +27,7 @@ namespace Serbench.Specimens.Tests
 
         public override Type GetPayloadRootType()
         {
-            return this.GetType();
+            return m_Data.GetType();
         }
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
