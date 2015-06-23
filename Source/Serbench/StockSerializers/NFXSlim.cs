@@ -22,7 +22,7 @@ namespace Serbench.StockSerializers
      VendorName = "IT Adapter LLC",
      VendorLicense = "Apache 2.0 + Commercial",
      VendorURL = "http://itadapter.com",
-     VendorPackageURL = "http://github.com/aumcode/nfx",
+     VendorPackageAddress = "http://github.com/aumcode/nfx",
      FormatName = "Slim",
      LinesOfCodeK = 7,    
      DataTypes = 32,

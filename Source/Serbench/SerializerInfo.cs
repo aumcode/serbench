@@ -68,9 +68,9 @@ namespace Serbench
 
 
       /// <summary>
-      /// Name of package, .i.e. NUGET name
+      /// Name of package, .i.e. NUGET name or name of dll or address of code base
       /// </summary>
-      public string VendorPackageURL{ get; set;}
+      public string VendorPackageAddress{ get; set;}
 
       
       /// <summary>

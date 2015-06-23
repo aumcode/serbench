@@ -12,6 +12,20 @@ namespace Serbench.StockSerializers
     /// Add: a reference: System.Runtime.Serialization.dll  
     /// Add: a line: using System.Runtime.Serialization
     /// </summary>
+  [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.Attributes,
+     VendorName = "Microsoft",
+     VendorLicense = "Windows",
+     VendorURL = "https://msdn.microsoft.com/en-us/library/system.runtime.serialization.json.datacontractjsonserializer(v=vs.110).aspx",
+     VendorPackageAddress = "System.Runtime.Serialization.dll",
+     FormatName = "DataContractSerializer",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 0
+  )]
     public class MSDataContractSerializer : Serializer
     {
         private Type[] m_KnownTypes;

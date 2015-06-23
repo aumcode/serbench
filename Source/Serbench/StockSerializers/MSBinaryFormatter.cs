@@ -13,6 +13,20 @@ namespace Serbench.StockSerializers
     /// <summary>
     /// Represents Microsoft's BinaryFormatter technology
     /// </summary>
+  [SerializerInfo( 
+     Family = SerializerFamily.Binary,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Microsoft",
+     VendorLicense = "Windows",
+     VendorURL = "https://msdn.microsoft.com/en-us/library/system.runtime.serialization.formatters.binary.binaryformatter(v=vs.110).aspx",
+     VendorPackageAddress = "mscorlib.dll",
+     FormatName = "BinaryFormatter",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 0
+  )]
     public class MSBinaryFormatter : Serializer
     {
         private BinaryFormatter m_Formatter;
