@@ -12,10 +12,7 @@ using ProtoBuf;
 
 namespace Serbench.Specimens.Tests
 {
-    [ProtoContract]
-    [DataContract]
-    [Serializable]
-    public class Telemetry : Test
+     public class Telemetry : Test
     {
         public Telemetry(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)

@@ -25,9 +25,6 @@ namespace Serbench.Specimens.Tests
     }
 
 
-    [ProtoContract]
-    [DataContract]
-    [Serializable]
     public class EDI_X12_835 : Test
     {
         public EDI_X12_835(TestingSystem context, IConfigSectionNode conf)

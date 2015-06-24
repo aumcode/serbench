@@ -110,8 +110,6 @@
     <Compile Include="Tests\MsgBatching.cs" />
     <Compile Include="Tests\ObjectGraph.cs" />
     <Compile Include="Tests\EDI_X12_835.cs" />
-    <Compile Include="Tests\EDIOrder.cs" />
-    <Compile Include="Tests\SimplePerson.cs" />
     <Compile Include="Tests\Telemetry.cs" />
     <Compile Include="Tests\TypicalPerson.cs" />
   </ItemGroup>
