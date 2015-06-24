@@ -19,25 +19,41 @@
 
 <link rel="stylesheet" type="text/css" href="overview-table.css">
 
-<div>
+<div class="main-container">
     <div class="report-header">
         <h1>Overview: aggregate information about different serializers tests</h1>
     </div>
-    <table id="overview-table"></table>
+    <div id="overview-table"></div>
 </div>
 
 
 
 
 
-<script>
+<script>      
+
+    var columnHeaders;
+    var rowHeaders;
+    var topOffset;
+    var leftOffset;
+
     $(function () {
 
         var data = WAVE.arrayWalkable(window.data_TestRunData);
         var table = createOverviewTable(data);
         var container = $("#overview-table")[0];
         container.appendChild(table);
+
+        initializeGlobals();
     });
+
+    function initializeGlobals() {
+
+        columnHeaders = $('.main-table-column-header');
+        rowHeaders = $('.main-table-row-header');
+        topOffset = parseInt(columnHeaders.offset().top);
+        leftOffset = parseInt(rowHeaders.offset().left);
+    }
 
     function createOverviewTable(data) {
 
@@ -65,8 +81,7 @@
             .wEach(function (h) {
                 // insert column header cell
                 var th = document.createElement("th");
-                th.className = 'main-table-row-header';
-                var htmlTemplate = "<th><b>@serializerType@<br>@serializerName@</b></th>";
+                var htmlTemplate = "<th><div class='main-table-column-header'><b>@serializerType@<br>@serializerName@</b></div></th>";
                 th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: h.serializerType, serializerName: h.serializerName });
                 tr.appendChild(th);
 
@@ -89,8 +104,7 @@
                 // create row, insert first cell (row header)
                 var tr = document.createElement('tr');
                 var th = document.createElement('th');
-                th.className = 'main-table-row-header';
-                var htmlTemplate = "<b>@testType@<br>@testName@</b>";
+                var htmlTemplate = "<div class='main-table-row-header'><b>@testType@<br>@testName@</b></div>";
                 th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { testType: r.testType, testName: r.testName });
                 tr.appendChild(th);
 
@@ -155,6 +169,15 @@
         var deserClass;
         if (JSON.parse(benchTest.DeserSupported)) deserClass = "supported";
         else deserClass = "unsupported";
+        var runExceptionClass = "";
+        if (benchTest.RunException == null)
+            runExceptionClass = "hidden";
+        var serExceptionsClass = "";
+        if (benchTest.SerExceptions == 0)
+            serExceptionsClass = "hidden";
+        var deserExceptionsClass = "";
+        if (benchTest.DeserExceptions == 0)
+            deserExceptionsClass = "hidden";
 
         var htmlTemplate =
             "<div class=\"overview-table-cell\">" +
@@ -162,7 +185,7 @@
                 "Run <b>@runNumber@</b> time(s)<br>" +
                 "Payload: <b>@payloadSize@</b> byte(s)<br>" +
                 "GC: <b>@doGc@</b><br>" +
-                "RunException <b>@runException@</b>" +
+                "<div class='@runExceptionClass@'>RunException <b>@runException@</b></div>" +
                 "</div>" +
                 "<div class=\"@serClass@\"><table class='inner-table'>" +
                 "<tr><td align=\"center\"><b>Serialization</b></td></tr>" +
@@ -171,7 +194,7 @@
                 "<tr><td>aborts:</td><td><b>@serAborts@</b></td></tr>" +
                 "<tr><td>duration (ms):</td><td><b>@serDurationMs@</b></td></tr>" +
                 "<tr><td>ops/sec:</td><td><b>@serOpsSec@</b></td></tr>" +
-                "<tr><td>first error:</td><td><b>@firstSerAbortMsg@</b></td></tr>" +
+                "<tr class='@serExceptionsClass@'><td>first error:</td><td><b>@firstSerAbortMsg@</b></td></tr>" +
                 "</table></div>" +
                 "<div class=\"@deserClass@\"><table class='inner-table'>" +
                 "<tr><td align=\"center\"><b>Deserialization</b></td></tr>" +
@@ -180,7 +203,7 @@
                 "<tr><td>aborts:</td><td><b>@deserAborts@</td></tr>" +
                 "<tr><td>duration (ms):</td><td><b>@deserDurationMs@</b></td></tr>" +
                 "<tr><td>ops/sec:</td><td><b>@deserOpsSec@</b></td></tr>" +
-                "<tr><td>first error:</td><td><b>@firstDeserAbortMsg@</b></td></tr>" +
+                "<tr class='@deserExceptionsClass@'><td>first error:</td><td><b>@firstDeserAbortMsg@</b></td></tr>" +
                 "</table></div>" +
                 "</div>";
 
@@ -189,9 +212,11 @@
             runNumber: numberWithCommas(benchTest.RunNumber, true),
             payloadSize: numberWithCommas(benchTest.PayloadSize, true),
             doGc: benchTest.DoGc,
+            runExceptionClass: runExceptionClass,
             runException: benchTest.RunException,
             serClass: serClass,
             serIterations: numberWithCommas(benchTest.SerIterations, true),
+            serExceptionsClass: serExceptionsClass,
             serExceptions: numberWithCommas(benchTest.SerExceptions, true),
             serAborts: numberWithCommas(benchTest.SerAborts, true),
             serDurationMs: numberWithCommas(benchTest.SerDurationMs, true),
@@ -199,6 +224,7 @@
             firstSerAbortMsg: benchTest.FirstSerAbortMsg,
             deserClass: deserClass,
             deserIterations: numberWithCommas(benchTest.DeserIterations, true),
+            deserExceptionsClass: deserExceptionsClass,
             deserExceptions: numberWithCommas(benchTest.DeserExceptions, true),
             deserAborts: numberWithCommas(benchTest.DeserAborts, true),
             deserDurationMs: numberWithCommas(benchTest.DeserDurationMs, true),
@@ -215,4 +241,24 @@
     function getRowHeaderData(benchTest) {
         return { testType: benchTest.TestType, testName: benchTest.TestName };
     };
+
+    $(window).scroll(function () {
+        var currentTopScroll = $(window).scrollTop();
+        var currentLeftScroll = $(window).scrollLeft();
+        var topDelta = currentTopScroll - topOffset;
+        var leftDelta = currentLeftScroll - leftOffset;
+
+        if (topDelta > 0) {
+            columnHeaders.each(function () {
+                $(this).css("top", topDelta);
+            });
+        }
+
+        if (leftDelta > 0) {
+            rowHeaders.each(function () {
+                $(this).css("left", leftDelta);
+            });
+        }
+    });
+
 </script>

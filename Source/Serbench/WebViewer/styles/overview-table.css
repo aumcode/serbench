@@ -5,11 +5,17 @@
 }
 
 .main-table td, .main-table th {
-    border: 1px solid black;
+    border: 1px solid darkgray;
 }
 
 .main-table-row-header {
-    background-color: aliceblue;
+    background-color: lightgray;
+    position: relative;
+}
+
+.main-table-column-header {
+    background-color: lightgray;
+    position: relative;
 }
 
 .inner-table td, .inner-table th {
@@ -30,4 +36,8 @@
 
 .absent-test {
     background-color: lightgray;
+}
+
+.hidden {
+    display: none;
 }

@@ -14,8 +14,7 @@ h1{
   font-size: 150%;
   color: #4570b4;   
   text-shadow: White 1px 1px 4px;
-  display: inline;
-  margin-left: 110px;         
+  display: inline;     
 }                              
 
 h2{
@@ -127,6 +126,10 @@ a{
     padding: 20px;
 }
 
+.main-container {
+    padding: 6px;
+}
+
 .report-header {
-    padding: 10px;   
+    margin: 10px 10px 10px 0;
 }
