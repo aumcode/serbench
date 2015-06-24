@@ -15,6 +15,20 @@ namespace Serbench.StockSerializers
     /// Add: a reference: System.Xml.Serialization.dll  
     /// Add: a line: using System.Xml.Serialization.dll 
     /// </summary>
+   [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Microsoft",
+     VendorLicense = "Windows",
+     VendorURL = "https://msdn.microsoft.com/en-us/library/system.xml.serialization.xmlserializer(v=vs.110).aspx",
+     VendorPackageAddress = "System.Xml.dll, System.Xml.Serialization.dll",
+     FormatName = "XML",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 2,
+     ExternalReferences = 0,
+     PackageSizeKb = 4533 // 4510 + 23 // for .NET 4.0
+  )]
     public class MSXmlSerializer : Serializer
     {
         private Type[] m_KnownTypes;
@@ -22,7 +36,7 @@ namespace Serbench.StockSerializers
 
         public MSXmlSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
-        {
+        {      
             m_KnownTypes = ReadKnownTypes(conf);
         }
 

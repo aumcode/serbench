@@ -14,7 +14,21 @@ namespace Serbench.StockSerializers
     /// Add: reference to System.Web.Extensions.dll
     /// Add: using System.Web.Script.Serialization;
     /// </summary>
-    public class MSJavaScriptSerializer : Serializer
+   [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Microsoft",
+     VendorLicense = "Windows",
+     VendorURL = "https://msdn.microsoft.com/en-us/library/system.web.script.serialization.javascriptserializer%28v=vs.110%29.aspx",
+     VendorPackageAddress = "System.Web.Extensions.dll",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 0
+  )]
+   public class MSJavaScriptSerializer : Serializer
     {
         private readonly JavaScriptSerializer m_Serializer = new JavaScriptSerializer();
         private Type[] m_KnownTypes;

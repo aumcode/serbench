@@ -16,7 +16,21 @@ namespace Serbench.StockSerializers
   /// <summary>
   /// Represents NFX.Serialization.JSON technology
   /// </summary>
-  public class NFXJson : Serializer
+    [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "IT Adapter LLC",
+     VendorLicense = "Apache 2.0 + Commercial",
+     VendorURL = "http://itadapter.com",
+     VendorPackageAddress = "https://github.com/aumcode/nfx",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 1777
+  )]
+ public class NFXJson : Serializer
   {
     public const string CONFIG_OPTIONS_SECTION = "options";
 
