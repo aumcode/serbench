@@ -1,0 +1,4 @@
+﻿known-types
+{
+    known-type{name="Serbench.Specimens.Tests.TelemetryData, Serbench.Specimens"}
+}

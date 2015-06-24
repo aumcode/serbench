@@ -69,6 +69,12 @@
     <None Include="knowntypes.EDI.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="knowntypes.Telemetry.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="telemetry.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="typicalperson.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
