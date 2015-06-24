@@ -20,7 +20,7 @@ the tool permutes **all test instances and serializer instances** to test differ
 
 The dynamic/injectable nature of Serbench allows for coverage of many non-trivial use cases like **parallel serialization**, **stateful client/server channels**. These kind of tests are usually overlooked/not considered by testers. 
 
-Not all serializers support all features, i.e. ProtoBuf does not support cyclical object graphs. This
+Not all serializers support all features, i.e. JSON may not support cyclical object graphs. This
  is normal and actually is expected to be discovered by this tool.
  
 The tool relies on the NFX library (which is purposely inlined under Source/lib), hence it does not have much code in it: 
