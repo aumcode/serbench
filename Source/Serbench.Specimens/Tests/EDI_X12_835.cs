@@ -13,7 +13,7 @@ using ProtoBuf;
 namespace Serbench.Specimens.Tests
 {
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public abstract class Segment
     {
@@ -53,7 +53,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class EDI_X12_835Data
     {
@@ -99,7 +99,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class AccoungInfo
     {
@@ -126,7 +126,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class BPR_FinancialInformation : Segment
     {
@@ -179,7 +179,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class TRN_ReassociationTraceNumber : Segment
     {
@@ -207,7 +207,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class CUR_DateTime
     {
@@ -229,7 +229,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class CUR_ForeignCurrencyInformation : Segment
     {
@@ -268,7 +268,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class REF_SubLoop
     {
@@ -285,7 +285,7 @@ namespace Serbench.Specimens.Tests
         public REF_Identification REF_VersionIdentification;
     }
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class REF_Identification : Segment
     {
@@ -313,7 +313,7 @@ namespace Serbench.Specimens.Tests
 
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class DTM_Date : Segment
     {
@@ -348,7 +348,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class N1_SubLoop
     {
@@ -366,7 +366,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class TS835_1000A_Loop
     {
@@ -395,7 +395,7 @@ namespace Serbench.Specimens.Tests
         public PER_SubLoop PER_SubLoop;
     }
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class TS835_1000B_Loop
     {
@@ -425,7 +425,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class N1_PartyIdentification : Segment
     {
@@ -461,7 +461,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class N3_PartyAddress : Segment
     {
@@ -480,7 +480,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class N4_PartyCity_State_ZIPCode : Segment
     {
@@ -519,7 +519,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class REF_AdditionalPartyIdentification : Segment
     {
@@ -546,7 +546,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class PER_SubLoop
     {
@@ -568,7 +568,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class PER_PartyContactInformation : Segment
     {
@@ -602,7 +602,7 @@ namespace Serbench.Specimens.Tests
         public string Contact_Inquiry_Reference;
     }
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class CommunicationNumber
     {
@@ -620,7 +620,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class RDM_RemittanceDeliveryMethod : Segment
     {
@@ -651,7 +651,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class TS835_2000_Loop
     {
@@ -705,7 +705,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class LX_HeaderNumber : Segment
     {
@@ -720,7 +720,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class TS3_ProviderSummaryInformation : Segment
     {
@@ -764,7 +764,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class TS2_ProviderSupplementalSummaryInformation : Segment
     {
@@ -790,7 +790,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class TS835_2100_Loop
     {
@@ -816,7 +816,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class CLP_ClaimPaymentInformation : Segment
     {
@@ -883,7 +883,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class CAS_Adjustment : Segment
     {
@@ -906,7 +906,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class ClaimAdjustment
     {
@@ -928,7 +928,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class NM1_SubLoop
     {
@@ -966,7 +966,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class NM1_PartyName : Segment
     {
@@ -1025,7 +1025,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class MIA_InpatientAdjudicationInformation : Segment
     {
@@ -1076,7 +1076,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class MOA_OutpatientAdjudicationInformation : Segment
     {
@@ -1103,7 +1103,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class DTM_SubLoop
     {
@@ -1125,7 +1125,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class PER_ClaimContactInformation : Segment
     {
@@ -1156,7 +1156,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class AMT_ClaimSupplementalInformation : Segment
     {
@@ -1179,7 +1179,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class QTY_ClaimSupplementalInformationQuantity : Segment
     {
@@ -1206,7 +1206,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class TS835_2110_Loop
     {
@@ -1258,7 +1258,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class SVC_ServicePaymentInformation : Segment
     {
@@ -1297,7 +1297,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class AMT_ServiceSupplementalAmount : Segment
     {
@@ -1320,7 +1320,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class QTY_ServiceSupplementalQuantity : Segment
     {
@@ -1347,7 +1347,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class LQ_HealthCareRemarkCodes : Segment
     {
@@ -1366,7 +1366,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class PLB_ProviderAdjustment : Segment
     {
@@ -1396,7 +1396,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract]
+    [DataContract(IsReference = true)]
     [Serializable]
     public class MonetaryAmountAdjustment
     {
