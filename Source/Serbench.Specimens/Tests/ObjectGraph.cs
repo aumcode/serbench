@@ -31,7 +31,9 @@ namespace Serbench.Specimens.Tests
          }
     }
 
-    [ProtoContract] [DataContract] [Serializable] public class Address
+    [ProtoContract(AsReferenceDefault=true)]
+    [DataContract(IsReference=true)]
+    [Serializable] public class Address
     {
          [ProtoMember(1)][DataMember] public string Address1;
          [ProtoMember(2)][DataMember] public string Address2;
@@ -69,18 +71,20 @@ namespace Serbench.Specimens.Tests
     [ProtoContract] [DataContract] [Serializable] public struct Relationship
     {
          [ProtoMember(1)][DataMember] public string RelationshipName;
-         [ProtoMember(2)][DataMember] public Participant Other;
+         [ProtoMember(2, AsReference=true)][DataMember] public Participant Other;
     }
     
-    [ProtoContract] [DataContract] [Serializable] public class Participant
+    [ProtoContract(AsReferenceDefault=true)]
+    [DataContract(IsReference=true)]
+    [Serializable] public class Participant
     {
          [ProtoMember(1)][DataMember] public Guid ID;
          [ProtoMember(2)][DataMember] public HumanName LegalName;
          [ProtoMember(3)][DataMember] public HumanName RegistrationName;
          [ProtoMember(4)][DataMember] public DateTime RegistrationDate;
-         [ProtoMember(5)][DataMember] public Address Residence;
-         [ProtoMember(6)][DataMember] public Address Shipping;
-         [ProtoMember(7)][DataMember] public Address Billing;
+         [ProtoMember(5, AsReference=true)][DataMember] public Address Residence;
+         [ProtoMember(6, AsReference=true)][DataMember] public Address Shipping;
+         [ProtoMember(7, AsReference=true)][DataMember] public Address Billing;
          [ProtoMember(8)][DataMember] public List<Relationship> Relationships;
 
          [ProtoMember(9)][DataMember]  public bool?     Reserved_BoolFlag1;
@@ -114,7 +118,7 @@ namespace Serbench.Specimens.Tests
     }
 
 
-    [ProtoContract] [DataContract] [Serializable] public class ConferenceTopic
+    [ProtoContract(AsReferenceDefault=true)] [DataContract(IsReference=true)] [Serializable] public class ConferenceTopic
     {
          [ProtoMember(1)][DataMember] public Guid ID;
          [ProtoMember(2)][DataMember] public string Name;
@@ -127,24 +131,24 @@ namespace Serbench.Specimens.Tests
 
     }
 
-    [ProtoContract] [DataContract] [Serializable] public class Event
+    [ProtoContract(AsReferenceDefault=true)] [DataContract(IsReference=true)] [Serializable] public class Event
     {
          [ProtoMember(1)][DataMember] public Guid ID;
          [ProtoMember(2)][DataMember] public DateTime StartTime;
          [ProtoMember(3)][DataMember] public DateTime EndTime;
-         [ProtoMember(5)][DataMember] public List<Participant> Participants;
-         [ProtoMember(6)][DataMember] public List<ConferenceTopic> Topics;
+         [ProtoMember(5, AsReference=true)][DataMember] public List<Participant> Participants;
+         [ProtoMember(6, AsReference=true)][DataMember] public List<ConferenceTopic> Topics;
     }
 
 
-    [ProtoContract] [DataContract] [Serializable] public class Conference
+    [ProtoContract(AsReferenceDefault=true)] [DataContract(IsReference=true)] [Serializable] public class Conference
     {
          [ProtoMember(1)][DataMember] public Guid ID;
          [ProtoMember(2)][DataMember] public DateTime StartDate;
          [ProtoMember(3)][DataMember] public DateTime? EndDate;
-         [ProtoMember(4)][DataMember] public Address Location;
+         [ProtoMember(4, AsReference=true)][DataMember] public Address Location;
 
-         [ProtoMember(5)][DataMember] public List<Event> Events;
+         [ProtoMember(5, AsReference=true)][DataMember] public List<Event> Events;
     }
 
 
@@ -229,7 +233,12 @@ namespace Serbench.Specimens.Tests
       
     }
 
-
+    /// <summary>
+    /// NOTE: ProtBuf DOES NOT support references, the ProtoBuf.Net serializer does because it is an "extra feature" from Marc Gravell.
+    /// So technically we are favoring not ProtoBuf but ProtoBuf.NET as Google's format does not care about object normalization.
+    /// This crosses out ProtoBuff portability between platforms as other readers will not be able to "read-in" the original object graph.
+    /// see: http://stackoverflow.com/questions/6063729/does-protocol-buffers-support-serialization-of-object-graphs-with-shared-referen
+    /// </summary>
     public class ObjectGraph : Test
     {
         

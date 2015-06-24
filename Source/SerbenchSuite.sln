@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serbench", "Serbench\Serbench.csproj", "{2DA28C3B-6250-41CA-91A0-3A9045B473AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sb", "sb\sb.csproj", "{691E204E-228B-4F76-B23D-465B4B9FCEEA}"
