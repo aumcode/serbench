@@ -61,6 +61,8 @@
     <None Include="batching.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="edi.laconf" />
+    <None Include="knowntypes.EDI.laconf" />
     <None Include="knowntypes.SpecimensTypicalPerson.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

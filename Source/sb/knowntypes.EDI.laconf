@@ -1,0 +1,6 @@
+﻿known-types
+{
+    known-type{name="Serbench.Specimens.Tests.EDI_X12_835Data"}
+    known-type{name="System.Collections.Generic.List`1[Serbench.Specimens.Tests.EDI_X12_835Data]"}
+    known-type{name="Serbench.Specimens.Tests.EDI_X12_835Data[]"}
+}
