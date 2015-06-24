@@ -1,6 +1,6 @@
 ﻿known-types
 {
     known-type{name="Serbench.StockTests.TypicalPersonData"}
-    known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPersonData]"}
+    known-type{name="System.Collections.Generic.List`1[[Serbench.StockTests.TypicalPersonData, Serbench]]"}
     known-type{name="Serbench.StockTests.TypicalPersonData[]"}
 }

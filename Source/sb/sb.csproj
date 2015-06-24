@@ -61,16 +61,22 @@
     <None Include="batching.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="knowntypes.SpecimensTypicalPerson.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="typicalperson.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="knowntypes.Conference.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="objgraph.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="typicalperson.laconf">
+    <None Include="stock.typicalperson.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="knowntypes.TypicalPerson.laconf">
+    <None Include="knowntypes.StockTypicalPerson.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="highPrformanceTests.laconf">

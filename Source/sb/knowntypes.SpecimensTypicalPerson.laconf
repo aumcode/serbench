@@ -1,0 +1,6 @@
+﻿known-types
+{
+    known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
+    known-type{name="System.Collections.Generic.List`1[[Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens]]"}
+    known-type{name="Serbench.Specimens.Tests.TypicalPersonData[], Serbench.Specimens"}
+}
