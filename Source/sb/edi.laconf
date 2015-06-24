@@ -47,7 +47,7 @@
 			type="Serbench.StockSerializers.MSDataContractJsonSerializer, Serbench"
 			name="MS.DataContractJsonSerializer"
 			order=20
-			 _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+			 _include { file="knowntypes.EDI.laconf"} //include file contents
 		}
 		
 
@@ -56,7 +56,7 @@
 			type="Serbench.StockSerializers.MSDataContractSerializer, Serbench"
 			name="MS.DataContractSerializer"
 			order=30
-			 _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+			 _include { file="knowntypes.EDI.laconf"} //include file contents
 		}
 
         serializer
@@ -70,7 +70,7 @@
         {
           type="Serbench.StockSerializers.MSXmlSerializer, Serbench"
           name="MSXmlSerializer" 
- 		   _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+ 		   _include { file="knowntypes.EDI.laconf"} //include file contents
          order=50
         }
 
@@ -117,7 +117,7 @@
           type="Serbench.StockSerializers.NFXSlim, Serbench"
           name="NFX.Slim Known Types" 
           order=78
-           _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+           _include { file="knowntypes.EDI.laconf"} //include file contents
         }
 
 	    
@@ -142,7 +142,7 @@
           type="Serbench.Specimens.Serializers.JilSerializer, Serbench.Specimens"
           name="Jil" 
           order=150
-          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          _include { file="knowntypes.EDI.laconf"} //include file contents
         }
 
         serializer
@@ -150,7 +150,7 @@
           type="Serbench.Specimens.Serializers.JsonFxSerializer, Serbench.Specimens"
           name="JsonFx" 
           order=160
-          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents          
+          _include { file="knowntypes.EDI.laconf"} //include file contents          
         }
 
 		serializer
@@ -158,7 +158,7 @@
           type="Serbench.Specimens.Serializers.JsonNet, Serbench.Specimens"
           name="Json.Net" 
           order=170
-          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents         
+          _include { file="knowntypes.EDI.laconf"} //include file contents         
         }
 
 		serializer
@@ -166,7 +166,7 @@
           type="Serbench.Specimens.Serializers.MessageSharkSerializer, Serbench.Specimens"
           name="MessageShark" 
           order=180
-          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents      
+          _include { file="knowntypes.EDI.laconf"} //include file contents      
         }
 
 	
@@ -192,7 +192,7 @@
           type="Serbench.Specimens.Serializers.NetSerializerSer, Serbench.Specimens"
           name="NetSerializer" 
           order=210
-     //     _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+     //     _include { file="knowntypes.EDI.laconf"} //include file contents
         }
 
  
@@ -201,7 +201,7 @@
           type="Serbench.Specimens.Serializers.ProtoBufSerializer, Serbench.Specimens"
           name="ProtoBuf" 
           order=220
-         // _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+         // _include { file="knowntypes.EDI.laconf"} //include file contents
         }
 
 		serializer
@@ -209,7 +209,7 @@
           type="Serbench.Specimens.Serializers.ServiceStackJsonSerializer, Serbench.Specimens"
           name="ServiceStack.JsonSerializer" 
           order=230
-          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          _include { file="knowntypes.EDI.laconf"} //include file contents
         }
 
 		serializer
@@ -217,7 +217,7 @@
           type="Serbench.Specimens.Serializers.ServiceStackTypeSerializer, Serbench.Specimens"
           name="ServiceStack.TypeSerializer" 
           order=235
-          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents          
+          _include { file="knowntypes.EDI.laconf"} //include file contents          
         }
 
 

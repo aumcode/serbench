@@ -27,6 +27,8 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -61,9 +63,10 @@
     <None Include="batching.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="edi.laconf" />
-    <None Include="knowntypes.EDI.laconf" />
-    <None Include="knowntypes.SpecimensTypicalPerson.laconf">
+    <None Include="edi.laconf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="knowntypes.EDI.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="typicalperson.laconf">
