@@ -14,7 +14,7 @@ using NFX.Environment;
 namespace Serbench.Specimens.Tests
 {
     [ProtoContract]
-        [DataContract(IsReference=true)]
+    [DataContract]
     [Serializable] public class AddressMessage
     {
          [ProtoMember(1)][DataMember] public string Address1;

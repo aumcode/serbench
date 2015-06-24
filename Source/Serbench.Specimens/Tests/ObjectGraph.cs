@@ -14,7 +14,7 @@ using NFX.Environment;
 namespace Serbench.Specimens.Tests
 {
     
-    [ProtoContract]     [DataContract(IsReference=true)] [Serializable] public struct HumanName
+    [ProtoContract] [DataContract] [Serializable] public struct HumanName
     {
          [ProtoMember(1)][DataMember] public string FirstName;
          [ProtoMember(2)][DataMember] public string MiddleName;
@@ -68,7 +68,7 @@ namespace Serbench.Specimens.Tests
 
     } 
     
-    [ProtoContract]     [DataContract(IsReference=true)] [Serializable] public struct Relationship
+    [ProtoContract] [DataContract] [Serializable] public struct Relationship
     {
          [ProtoMember(1)][DataMember] public string RelationshipName;
          [ProtoMember(2, AsReference=true)][DataMember] public Participant Other;

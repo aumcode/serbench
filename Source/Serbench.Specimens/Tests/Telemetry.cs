@@ -37,21 +37,6 @@ namespace Serbench.Specimens.Tests
         {
             var deserialized = serializer.Deserialize(target);
             serializer.AssertPayloadEquality(this, m_Data, deserialized);
-
-            //// short test to make sure the Measurements array has the same size before serialization and after deserialization:
-            //if (deserialized == null)
-            //{
-            //    this.Abort(serializer, "Deserialized null from non-null original Telemetry");
-            //    return;
-            //}
-
-            //var deserializedTyped = deserialized as TelemetryData;
-            //if (deserializedTyped.Measurements == null
-            //    || deserializedTyped.Measurements.Length != m_Data.Measurements.Length)
-            //{
-            //    this.Abort(serializer, "Original and deserized Measurements are mismatch");
-            //    return;
-            //}
         }
 
         [Config]
@@ -65,7 +50,7 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [DataContract(IsReference = true)]
+    [DataContract]
     [Serializable]
     public class TelemetryData
     {

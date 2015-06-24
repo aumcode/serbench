@@ -9,7 +9,7 @@ using ProtoBuf;
 
 namespace Serbench.Specimens.Tests
 {
-    [DataContract(IsReference = true)]
+    [DataContract]
     public enum MaritalStatus
     {
         [EnumMember]
@@ -22,7 +22,7 @@ namespace Serbench.Specimens.Tests
 
     [ProtoContract]
     [CollectionDataContract]
-    [DataContract(IsReference = true)]
+    [DataContract]
     [Serializable]
     public class TypicalPersonData
     {
@@ -123,7 +123,7 @@ namespace Serbench.Specimens.Tests
                 m_Data.Add(TypicalPersonData.MakeRandom());
         }
 
-
+        
         [Config]
         private int m_Count;
 
@@ -163,10 +163,10 @@ namespace Serbench.Specimens.Tests
 
         public override void PerformDeserializationTest(Serializer serializer, Stream target)
         {
-            var got = serializer.Deserialize(target);
-
-            var originalRoot = m_List ? (object)m_Data : m_Data[0];
-            serializer.AssertPayloadEquality(this, originalRoot, got);
+           var got = serializer.Deserialize(target);
+      
+           var originalRoot = m_List ? (object)m_Data : m_Data[0];
+           serializer.AssertPayloadEquality(this, originalRoot, got);
         }
     }
 }
