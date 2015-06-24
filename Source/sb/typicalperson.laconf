@@ -31,6 +31,7 @@
           
             test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(single)" order=100 list=false runs=1 ser-iterations=75000 deser-iterations=75000}
             test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 100)" order=200 list=true count=100 runs=1 ser-iterations=2000 deser-iterations=2000}
+            test { type="Serbench.Specimens.Tests.TypicalPerson, Serbench.Specimens" name="TypicalPerson(list, 5000)" order=300 list=true count=5000 runs=1 ser-iterations=25 deser-iterations=25}
         }//tests     
      
      
