@@ -57,14 +57,16 @@
     <Reference Include="MsgPack">
       <HintPath>..\packages\MsgPack.Cli.0.5.11\lib\net45\MsgPack.dll</HintPath>
     </Reference>
-    <Reference Include="NetJSON">
-      <HintPath>..\packages\NetJSON.1.0.7\lib\net40\NetJSON.dll</HintPath>
+    <Reference Include="NetJSON, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NetJSON.1.0.8\lib\net40\NetJSON.dll</HintPath>
     </Reference>
     <Reference Include="NetSerializer">
       <HintPath>..\packages\NetSerializer.3.0.0.0\lib\net40\NetSerializer.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NFX, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
