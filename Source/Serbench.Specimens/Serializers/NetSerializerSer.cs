@@ -15,6 +15,20 @@ namespace Serbench.Specimens.Serializers
     /// See here: https://github.com/tomba/netserializer  
     /// Add: PM> Install-Package NetSerializer
     /// </summary>
+    [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.Attributes,
+     VendorName = "Tomi Valkeinen",
+     VendorLicense = "The Mozilla Public License 2.0 (MPL)",
+     VendorURL = "https://github.com/tomba/netserializer",
+     VendorPackageAddress = "Install-Package NetSerializer",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 30
+    )]
     public class NetSerializerSer : Serializer
     {
         public NetSerializerSer(TestingSystem context, IConfigSectionNode conf)

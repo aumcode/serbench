@@ -9,10 +9,24 @@ using JsonFx.Json;
 namespace Serbench.Specimens.Serializers
 {
     /// <summary>
-    ///     Represents JsonFx by Stephen McKamey:
+    ///     Represents JsonFx by Stephen M. McKamey:
     /// See here https://github.com/jsonfx/jsonfx
     /// >PM Install-Package JsonFx 
     /// </summary>
+     [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Stephen M. McKamey",
+     VendorLicense = "The MIT License (MIT)",
+     VendorURL = "https://github.com/jsonfx/jsonfx",
+     VendorPackageAddress = "Install-Package JsonFx",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 214
+  )]
     public class JsonFxSerializer : Serializer
     {
         static readonly JsonWriter m_jw = new JsonWriter();

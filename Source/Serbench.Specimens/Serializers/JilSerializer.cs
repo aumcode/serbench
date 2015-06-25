@@ -11,8 +11,22 @@ namespace Serbench.Specimens.Serializers
     /// <summary>
     ///     Represents Jil serializer:
     /// See here https://github.com/kevin-montrose/Jil
-    /// >PM Install-Package  
+    /// >PM Install-Package Jil 
     /// </summary>
+     [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Kevin Montrose",
+     VendorLicense = "The MIT License (MIT)",
+     VendorURL = "https://github.com/kevin-montrose/Jil",
+     VendorPackageAddress = "Install-Package Jil",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 393
+  )]
     public class JilSerializer : Serializer
     {
         //private readonly JilSerializer m_Serializer;

@@ -15,6 +15,20 @@ namespace Serbench.Specimens.Serializers
     /// See here: http://www.sharpserializer.com/en/index.html  
     /// Add: PM> Install-Package SharpSerializer
     /// </summary>
+    [SerializerInfo( 
+     Family = SerializerFamily.Binary,    
+     MetadataRequirement = MetadataRequirement.Attributes,
+     VendorName = "Pawel Idzikowski / Polenter-Software Solutions",
+     VendorLicense = "New BSD License (BSD)",
+     VendorURL = "http://www.sharpserializer.com/en/index.html",
+     VendorPackageAddress = "Install-Package SharpSerializer",
+     FormatName = "SharpSerializer",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 244
+    )]
     public class SharpSerializer : Serializer
     {
         public SharpSerializer(TestingSystem context, IConfigSectionNode conf)

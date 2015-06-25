@@ -13,6 +13,20 @@ namespace Serbench.Specimens.Serializers
     /// See here https://github.com/ServiceStack/ServiceStack.Text
     /// >PM Install-Package ServiceStack.Text 
     /// </summary>
+    [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.Attributes,
+     VendorName = "Service Stack",
+     VendorLicense = "All OSS Licenses + Commercial",
+     VendorURL = "https://github.com/ServiceStack/ServiceStack.Text",
+     VendorPackageAddress = "Install-Package ServiceStack.Text",
+     FormatName = "JSV",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 307
+    )]
     public class ServiceStackTypeSerializer : Serializer
     {
         private Type[] m_KnownTypes;

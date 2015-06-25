@@ -13,7 +13,21 @@ namespace Serbench.Specimens.Serializers
     /// See here http://www.codeproject.com/Articles/491742/APJSON
     /// Manually download a dll from mentioned site and add a reference to it. 
     /// </summary>
-    public class ApJsonSerializer : Serializer
+    [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Aron Kovacs",
+     VendorLicense = "The Code Project Open License (CPOL)",
+     VendorURL = "http://www.codeproject.com/Articles/491742/APJSON",
+     VendorPackageAddress = "Apolyton.FastJson.dll",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 70
+  )]
+   public class ApJsonSerializer : Serializer
     {
         //private Type[] m_KnownTypes;
         private Type m_PrimaryType;

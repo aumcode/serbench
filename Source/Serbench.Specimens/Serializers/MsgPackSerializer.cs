@@ -15,6 +15,20 @@ namespace Serbench.Specimens.Serializers
     /// See here https://github.com/msgpack/msgpack-cli
     /// >PM Install-Package MsgPack.Cli
     /// </summary>
+    [SerializerInfo( 
+     Family = SerializerFamily.Binary,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Sadayuki Furuhashi",
+     VendorLicense = "Apache 2.0",
+     VendorURL = "https://github.com/msgpack/msgpack-cli",
+     VendorPackageAddress = "Install-Package MsgPack.Cli",
+     FormatName = "MsgPack",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 429
+    )]
     public class MsgPackSerializer : Serializer
     {
         public MsgPackSerializer(TestingSystem context, IConfigSectionNode conf)

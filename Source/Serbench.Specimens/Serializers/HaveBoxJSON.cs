@@ -13,6 +13,20 @@ namespace Serbench.Specimens.Serializers
     /// See here https://www.nuget.org/packages/HaveBoxJSON/
     /// >PM Install-Package HaveBoxJSON 
     /// </summary>
+     [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Mehdi Gholam",
+     VendorLicense = "The Code Project Open License (CPOL)",
+     VendorURL = "https://www.nuget.org/packages/HaveBoxJSON/",
+     VendorPackageAddress = "Install-Package HaveBoxJSON",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 40
+  )]
     public class HaveBoxJSON : Serializer
     {
         private readonly JsonConverter m_Serializer = new JsonConverter();

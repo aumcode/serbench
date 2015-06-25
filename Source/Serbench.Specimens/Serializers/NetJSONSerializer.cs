@@ -13,7 +13,21 @@ namespace Serbench.Specimens.Serializers
     /// See here https://github.com/rpgmaker/NetJSON
     /// >PM Install-Package NetJSON 
     /// </summary>
-    public class NetJSONSerializer : Serializer
+    [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Phoenix Service Bus, Inc",
+     VendorLicense = "The MIT License (MIT)",
+     VendorURL = "https://github.com/rpgmaker/NetJSON",
+     VendorPackageAddress = "Install-Package NetJSON",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 162
+    )]
+   public class NetJSONSerializer : Serializer
     {
         public NetJSONSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)

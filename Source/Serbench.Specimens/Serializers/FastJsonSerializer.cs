@@ -12,7 +12,21 @@ namespace Serbench.Specimens.Serializers
     /// See here https://github.com/mgholam/fastJSON
     /// >PM Install-Package fastJSON 
     /// </summary>
-    public class FastJsonSerializer : Serializer
+     [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Mehdi Gholam",
+     VendorLicense = "The Code Project Open License (CPOL)",
+     VendorURL = "https://github.com/mgholam/fastJSON",
+     VendorPackageAddress = "Install-Package fastJSON",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 40
+  )]
+   public class FastJsonSerializer : Serializer
     {
         private readonly FastJsonSerializer m_Serializer;
         private Type m_PrimaryType;

@@ -19,6 +19,20 @@ namespace Serbench.Specimens.Serializers
     ///     NOTE: I use the protobuf-net NuGet package because of
     ///     [http://stackoverflow.com/questions/2522376/how-to-choose-between-protobuf-csharp-port-and-protobuf-net]
     /// </summary>
+    [SerializerInfo( 
+     Family = SerializerFamily.Binary,    
+     MetadataRequirement = MetadataRequirement.Attributes,
+     VendorName = "Marc Gravell",
+     VendorLicense = "The Apache License 2.0",
+     VendorURL = "https://github.com/tomba/netserializer",
+     VendorPackageAddress = "Install-Package protobuf-net",
+     FormatName = "protobuf",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 193
+    )]
     public class ProtoBufSerializer : Serializer
     {
         public ProtoBufSerializer(TestingSystem context, IConfigSectionNode conf)

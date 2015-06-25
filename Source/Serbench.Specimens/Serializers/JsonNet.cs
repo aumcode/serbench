@@ -13,6 +13,20 @@ namespace Serbench.Specimens.Serializers
     /// See here http://www.newtonsoft.com/json
     /// >PM Install-Package Newtonsoft.Json 
     /// </summary>
+     [SerializerInfo( 
+     Family = SerializerFamily.Textual,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "Stephen M. McKamey",
+     VendorLicense = "The MIT License (MIT)",
+     VendorURL = "http://www.newtonsoft.com/json",
+     VendorPackageAddress = "Install-Package Newtonsoft.Json",
+     FormatName = "JSON",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 502
+  )]
     public class JsonNet : Serializer
     {
         private readonly JsonSerializer m_Serializer  = new JsonSerializer();

@@ -13,7 +13,21 @@ namespace Serbench.Specimens.Serializers
     /// See here https://github.com/rpgmaker/MessageShark
     /// >PM Install-Package MessageShark 
     /// </summary>
-    public class MessageSharkSerializer : Serializer
+      [SerializerInfo( 
+     Family = SerializerFamily.Binary,    
+     MetadataRequirement = MetadataRequirement.None,
+     VendorName = "TJ Bakre",
+     VendorLicense = "The GNU Library General Public License (LGPL)",
+     VendorURL = "https://github.com/rpgmaker/MessageShark",
+     VendorPackageAddress = "Install-Package MessageShark",
+     FormatName = "MessageShark",
+     LinesOfCodeK = 0,                     
+     DataTypes = 0,
+     Assemblies = 1,
+     ExternalReferences = 0,
+     PackageSizeKb = 49
+  )]
+   public class MessageSharkSerializer : Serializer
     {
 
         private Type m_primaryType;
