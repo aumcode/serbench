@@ -31,11 +31,23 @@
 
 
 <script>      
-
+    
+    // globals
     var columnHeaders;
     var rowHeaders;
     var topOffset;
     var leftOffset;
+    var speedColors = [
+              '#0046E5',
+              '#1840CB',
+              '#313BB2',
+              '#4A3698',
+              '#63317F',
+              '#7C2B65',
+              '#95264C',
+              '#AE2132',
+              '#C71C19',
+              '#E01700'];
 
     $(function () {
 
@@ -58,8 +70,8 @@
     function createOverviewTable(data) {
 
         var table = document.createElement('table');
-        var headerInfo = createTableHeader(data, table);
-        createTableRows(data, table, headerInfo);
+        var headersInfo = createTableHeader(data, table);
+        createTableRows(data, table, headersInfo);
         table.className = 'main-table';
 
         return table;
@@ -70,10 +82,12 @@
         // create header row, append 1st empty cell
         var thead = document.createElement('thead');
         var tr = document.createElement('tr');
-        tr.appendChild(document.createElement('th'));
+        var th = document.createElement('th');
+        th.className = 'corner-cell';
+        tr.appendChild(th);
         thead.appendChild(tr);
 
-        var headerInfo = [];
+        var headersInfo = [];
 
         // create other header cells
         data.wSelect(function (e) { return getColumnHeaderData(e); })
@@ -81,59 +95,132 @@
             .wEach(function (h) {
                 // insert column header cell
                 var th = document.createElement("th");
-                var htmlTemplate = "<th><div class='main-table-column-header'><b>@serializerType@<br>@serializerName@</b></div></th>";
+                th.className = 'main-table-column-header';
+                var htmlTemplate = "<b>@serializerType@<br>@serializerName@</b>";
                 th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: h.serializerType, serializerName: h.serializerName });
                 tr.appendChild(th);
 
                 // populate header info
-                headerInfo.push(h);
+                headersInfo.push(h);
             });
 
         table.appendChild(thead);
 
-        return headerInfo;
+        return headersInfo;
     }
 
-    function createTableRows(data, table, headerInfo) {
+    function createTableRows(data, table, headersInfo) {
 
         var tbody = document.createElement('tbody');
 
         data.wSelect(function (e) { return getRowHeaderData(e); })
             .wDistinct(function (a, b) { return a.testType == b.testType && a.testName == b.testName; })
             .wEach(function (r) {
+                // prepare cell data
+                var cellDatas = WAVE.arrayWalkable(headersInfo).wSelect(function (h) { return getCellData(data, r, h); });
+
                 // create row, insert first cell (row header)
-                var tr = document.createElement('tr');
-                var th = document.createElement('th');
-                var htmlTemplate = "<div class='main-table-row-header'><b>@testType@<br>@testName@</b></div>";
-                th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { testType: r.testType, testName: r.testName });
-                tr.appendChild(th);
+                var tr = createRow(r, cellDatas);
+
+                // prepare row aggregate & statistics data
+                var metaData = prepareRowMetadata(cellDatas);
 
                 // fill table cells
-                WAVE.arrayWalkable(headerInfo).wEach(function (h) { createTableCell(data, tr, r, h); });
+                cellDatas.wEach(function (d) {
+                    createTableCell(d, tr, metaData);
+                });
 
                 tbody.appendChild(tr);
             });
 
         table.appendChild(tbody);
+    } 
+
+    function createRow(r, cellDatas){
+        
+        var payloadOrdered = cellDatas.wWhere(function (d) { return d !== null; })
+                                      .wOrder(function (a, b) { return a.PayloadSize > b.PayloadSize ? 1 : a.PayloadSize < b.PayloadSize ? -1 : 0; })
+                                      .wToArray();
+        var goldPayload = payloadOrdered.length == 0 ? null : payloadOrdered[0];
+        var silverPayload = payloadOrdered.length == 0 ? null :
+                            payloadOrdered.length == 1 ? payloadOrdered[0] : payloadOrdered[1];
+        var bronzePayload = payloadOrdered.length == 0 ? null :
+                            payloadOrdered.length == 1 ? payloadOrdered[0] :
+                            payloadOrdered.length == 2 ? payloadOrdered[1] : payloadOrdered[2];
+
+        var speedOrdered = cellDatas.wWhere(function (d) { return d !== null; })
+                                    .wOrder(function (a, b) { return a.speed < b.speed ? 1 : a.speed > b.speed ? -1 : 0; })
+                                    .wToArray();
+        var goldSpeed = speedOrdered.length == 0 ? null : speedOrdered[0];
+        var silverSpeed = speedOrdered.length == 0 ? null :
+                          speedOrdered.length == 1 ? speedOrdered[0] : speedOrdered[1];
+        var bronzeSpeed = speedOrdered.length == 0 ? null :
+                          speedOrdered.length == 1 ? speedOrdered[0] :
+                          speedOrdered.length == 2 ? speedOrdered[1] : speedOrdered[2];
+
+        var tr = document.createElement('tr');
+        var th = document.createElement('th');
+        th.className = 'main-table-row-header';
+        var htmlTemplate =
+            "<div align='left'>" +
+            "<b>@testType@<br>@testName@</b><br>" +
+            "by speed:<br>" +
+            "1. @goldSpeed@<br>" +
+            "2. @silverSpeed@<br>" +
+            "3. @bronzeSpeed@<br>" +
+            "by payload:<br>" +
+            "1. @goldPayload@<br>" +
+            "2. @silverPayload@<br>" +
+            "3. @bronzePayload@<br>" +
+            "<div>";
+        th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
+            {
+                testType: r.testType,
+                testName: r.testName,
+                goldSpeed: goldSpeed.SerializerName,
+                silverSpeed: silverSpeed.SerializerName,
+                bronzeSpeed: bronzeSpeed.SerializerName, 
+                goldPayload: goldPayload.SerializerName,
+                silverPayload: silverPayload.SerializerName,
+                bronzePayload: bronzePayload.SerializerName
+            });
+        tr.appendChild(th);
+
+        return tr;
     }
 
-    function createTableCell(data, tr, rowInfo, headerInfo) {
+    function prepareRowMetadata(cellDatas){
+
+        var speedMin = null;
+        var speedMax = null;
+        cellDatas.wEach(function (d) {
+            
+            if (d == null)
+                return;
+
+            var speed = parseFloat(d.SerOpsSec) < parseFloat(d.DeserOpsSec) ? d.SerOpsSec : d.DeserOpsSec;
+            if (speedMin == null || speedMin > speed)
+                speedMin = speed;
+            if (speedMax == null || speedMax < speed)
+                speedMax = speed;
+        });
+
+        return { speedMin: speedMin, speedMax: speedMax };
+    }
+
+    function getCellData(data, rowHeaderInfo, columnHeaderInfo) {
 
         // seek for all tests with the same column's and row's header data
         var benchTests = data.wWhere(function (t) {
-            return t.TestType == rowInfo.testType &&
-                t.TestName == rowInfo.testName &&
-                t.SerializerType == headerInfo.serializerType &&
-                t.SerializerName == headerInfo.serializerName;
+            return t.TestType == rowHeaderInfo.testType &&
+                t.TestName == rowHeaderInfo.testName &&
+                t.SerializerType == columnHeaderInfo.serializerType &&
+                t.SerializerName == columnHeaderInfo.serializerName;
         });
-
-        var td = document.createElement('td');
 
         // if there is no test - fill cell with empty (gray) space
         if (!benchTests.wAny()) {
-            td.className = 'absent-test';
-            tr.appendChild(td);
-            return;
+            return null;
         }
 
         var benchTest = benchTests.wFirst();
@@ -142,14 +229,11 @@
         var count = benchTests.wCount();
         if (count > 1) {
             benchTests.wSkip(1).wEach(function (t) {
-                benchTest.RunNumber += t.RunNumber;
                 benchTest.PayloadSize += t.PayloadSize;
-                benchTest.SerIterations += t.SerIterations;
                 benchTest.SerExceptions += t.SerExceptions;
                 benchTest.SerAborts += t.SerAborts;
                 benchTest.SerDurationMs += t.SerDurationMs;
                 benchTest.SerOpsSec += t.SerOpsSec;
-                benchTest.DeserIterations += t.DeserIterations;
                 benchTest.DeserExceptions += t.DeserExceptions;
                 benchTest.DeserAborts += t.DeserAborts;
                 benchTest.DeserDurationMs += t.DeserDurationMs;
@@ -160,63 +244,90 @@
             benchTest.DeserDurationMs = benchTest.DeserDurationTicks / 1000;
             benchTest.DeserOpsSec /= count;
         }
+        benchTest.runCount = count;
+        benchTest.speed = parseFloat(benchTest.SerOpsSec) < parseFloat(benchTest.DeserOpsSec);
+
+        return benchTest;
+    };
+
+    function createTableCell(benchTest, tr, metaData) {
+
+        var td = document.createElement('td');
+
+        // if there is no test - fill cell with empty (gray) space
+        if (benchTest == null) {
+            td.className = 'absent-test';
+            tr.appendChild(td);
+            return;
+        }
+
+        // cell styling 
+
+        var serClass = JSON.parse(benchTest.SerSupported) ? "supported" : "unsupported";
+        var deserClass = JSON.parse(benchTest.DeserSupported) ? "supported" : "unsupported";
+        var runExceptionClass = benchTest.RunException == null ? "hidden" : "empty";
+        var serExceptionsClass = benchTest.SerExceptions == 0 ? "hidden" : "empty";
+        var serAbortsClass = benchTest.SerAborts == 0 ? "hidden" : "empty";
+        var deserExceptionsClass = benchTest.DeserExceptions == 0 ? "hidden" : "empty";
+        var deserAbortsClass = benchTest.DeserAborts == 0 ? "hidden" : "empty";
+        var serOpsSecClass = "empty";
+        var deserOpsSecClass = "empty";
+        var speed;
+        if (parseFloat(benchTest.SerOpsSec) < parseFloat(benchTest.DeserOpsSec)) {
+            serOpsSecClass = 'worst-speed';
+            speed = benchTest.SerOpsSec;
+        }
+        else {
+            deserOpsSecClass = 'worst-speed';
+            speed = benchTest.DeserOpsSec;
+        }
+
+        var speedColor = getSpeedColor(metaData.speedMin, metaData.speedMax, speed);
 
         // populate cell with data
-
-        var serClass;
-        if (JSON.parse(benchTest.SerSupported)) serClass = "supported";
-        else serClass = "unsupported";
-        var deserClass;
-        if (JSON.parse(benchTest.DeserSupported)) deserClass = "supported";
-        else deserClass = "unsupported";
-        var runExceptionClass = "";
-        if (benchTest.RunException == null)
-            runExceptionClass = "hidden";
-        var serExceptionsClass = "";
-        if (benchTest.SerExceptions == 0)
-            serExceptionsClass = "hidden";
-        var deserExceptionsClass = "";
-        if (benchTest.DeserExceptions == 0)
-            deserExceptionsClass = "hidden";
 
         var htmlTemplate =
             "<div class=\"overview-table-cell\">" +
                 "<div>" +
                 "Run <b>@runNumber@</b> time(s)<br>" +
                 "Payload: <b>@payloadSize@</b> byte(s)<br>" +
+                "Speed: <b style='background-color:@speedColor@; color:white'>@speed@</b> ops/sec<br>" +
                 "GC: <b>@doGc@</b><br>" +
                 "<div class='@runExceptionClass@'>RunException <b>@runException@</b></div>" +
                 "</div>" +
                 "<div class=\"@serClass@\"><table class='inner-table'>" +
                 "<tr><td align=\"center\"><b>Serialization</b></td></tr>" +
                 "<tr><td>iterations:</td><td><b>@serIterations@</b></td></tr>" +
-                "<tr><td>exceptions:</td><td><b>@serExceptions@</b></td></tr>" +
-                "<tr><td>aborts:</td><td><b>@serAborts@</b></td></tr>" +
+                "<tr class='@serExceptionsClass@'><td>exceptions:</td><td><b>@serExceptions@</b></td></tr>" +
+                "<tr class='@serAbortsClass@'><td>aborts:</td><td><b>@serAborts@</b></td></tr>" +
                 "<tr><td>duration (ms):</td><td><b>@serDurationMs@</b></td></tr>" +
-                "<tr><td>ops/sec:</td><td><b>@serOpsSec@</b></td></tr>" +
-                "<tr class='@serExceptionsClass@'><td>first error:</td><td><b>@firstSerAbortMsg@</b></td></tr>" +
+                "<tr><td>ops/sec:</td><td class='@serOpsSecClass@'><b>@serOpsSec@</b></td></tr>" +
+                "<tr class='@serAbortsClass@'><td>first error:</td><td><b>@firstSerAbortMsg@</b></td></tr>" +
                 "</table></div>" +
                 "<div class=\"@deserClass@\"><table class='inner-table'>" +
                 "<tr><td align=\"center\"><b>Deserialization</b></td></tr>" +
                 "<tr><td>iterations:</td><td><b>@deserIterations@</b></td></tr>" +
-                "<tr><td>exceptions:</td><td><b>@deserExceptions@</b></td></tr>" +
-                "<tr><td>aborts:</td><td><b>@deserAborts@</td></tr>" +
+                "<tr class='@deserExceptionsClass@'><td>exceptions:</td><td><b>@deserExceptions@</b></td></tr>" +
+                "<tr class='@deserAbortsClass@'><td>aborts:</td><td><b>@deserAborts@</td></tr>" +
                 "<tr><td>duration (ms):</td><td><b>@deserDurationMs@</b></td></tr>" +
-                "<tr><td>ops/sec:</td><td><b>@deserOpsSec@</b></td></tr>" +
-                "<tr class='@deserExceptionsClass@'><td>first error:</td><td><b>@firstDeserAbortMsg@</b></td></tr>" +
+                "<tr><td>ops/sec:</td><td class='@deserOpsSecClass@'><b>@deserOpsSec@</b></td></tr>" +
+                "<tr class='@deserAbortsClass@'><td>first error:</td><td><b>@firstDeserAbortMsg@</b></td></tr>" +
                 "</table></div>" +
                 "</div>";
 
         td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
         {
-            runNumber: numberWithCommas(benchTest.RunNumber, true),
+            runNumber: numberWithCommas(benchTest.runCount, true),
             payloadSize: numberWithCommas(benchTest.PayloadSize, true),
+            speed: speed,
+            speedColor: speedColor, 
             doGc: benchTest.DoGc,
             runExceptionClass: runExceptionClass,
             runException: benchTest.RunException,
             serClass: serClass,
             serIterations: numberWithCommas(benchTest.SerIterations, true),
             serExceptionsClass: serExceptionsClass,
+            serAbortsClass: serAbortsClass,
             serExceptions: numberWithCommas(benchTest.SerExceptions, true),
             serAborts: numberWithCommas(benchTest.SerAborts, true),
             serDurationMs: numberWithCommas(benchTest.SerDurationMs, true),
@@ -225,11 +336,14 @@
             deserClass: deserClass,
             deserIterations: numberWithCommas(benchTest.DeserIterations, true),
             deserExceptionsClass: deserExceptionsClass,
+            deserAbortsClass: deserAbortsClass,
             deserExceptions: numberWithCommas(benchTest.DeserExceptions, true),
             deserAborts: numberWithCommas(benchTest.DeserAborts, true),
             deserDurationMs: numberWithCommas(benchTest.DeserDurationMs, true),
             deserOpsSec: numberWithCommas(benchTest.DeserOpsSec, true),
-            firstDeserAbortMsg: benchTest.FirstDeserAbortMsg
+            firstDeserAbortMsg: benchTest.FirstDeserAbortMsg,
+            serOpsSecClass: serOpsSecClass,
+            deserOpsSecClass: deserOpsSecClass
         });
         tr.appendChild(td);
     };
@@ -243,22 +357,39 @@
     };
 
     $(window).scroll(function () {
-        var currentTopScroll = $(window).scrollTop();
-        var currentLeftScroll = $(window).scrollLeft();
-        var topDelta = currentTopScroll - topOffset;
-        var leftDelta = currentLeftScroll - leftOffset;
-
-        if (topDelta > 0) {
-            columnHeaders.each(function () {
-                $(this).css("top", topDelta);
-            });
-        }
-
-        if (leftDelta > 0) {
-            rowHeaders.each(function () {
-                $(this).css("left", leftDelta);
-            });
-        }
+        
+        arrangeColumnHeaders();
+        arrangeRowHeaders();
     });
+
+    function arrangeColumnHeaders (){
+
+        var currentTopScroll = $(window).scrollTop();
+        var topDelta = currentTopScroll - topOffset;
+        if (topDelta < 0)
+            topDelta = 0;
+
+        columnHeaders.each(function () {
+            $(this).css("top", topDelta);
+        });
+    };
+
+    function arrangeRowHeaders() {
+
+        var currentLeftScroll = $(window).scrollLeft();
+        var leftDelta = currentLeftScroll - leftOffset;
+        if (leftDelta < 0)
+            leftDelta = 0;
+
+        rowHeaders.each(function () {
+            $(this).css("left", leftDelta);
+        });
+    };
+
+    function getSpeedColor(max, min, value) {
+        var normed = (value - min) * (speedColors.length - 1) / (max - min);
+        var index = normed.toFixed();
+        return speedColors[index];
+    }
 
 </script>

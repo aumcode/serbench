@@ -5,17 +5,13 @@
 }
 
 .main-table td, .main-table th {
-    border: 1px solid darkgray;
+    border: 1px solid royalblue;
 }
 
-.main-table-row-header {
-    background-color: lightgray;
+.main-table-row-header, .main-table-column-header {
+    background-color: lightsteelblue;
     position: relative;
-}
-
-.main-table-column-header {
-    background-color: lightgray;
-    position: relative;
+    padding: 3px;
 }
 
 .inner-table td, .inner-table th {
@@ -38,6 +34,18 @@
     background-color: lightgray;
 }
 
+.corner-cell {
+    border: 0 !important;
+}
+
+.worst-speed {
+    color: red;
+    font-size: 12px;
+}
+
 .hidden {
     display: none;
+}
+
+.empty {
 }
