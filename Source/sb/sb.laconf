@@ -194,7 +194,7 @@
           type="Serbench.StockSerializers.NFXSlim, Serbench"
           name="NFX.Slim Known Types" 
           order=78
-          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          _include { file="knowntypes.StockTypicalPerson.laconf"} //include file contents
         }
 
 	    
@@ -281,7 +281,7 @@
         {
           type="Serbench.Specimens.Serializers.NetSerializerSer, Serbench.Specimens"
           name="NetSerializer" 
-          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          //_include { file="knowntypes.StockTypicalPerson.laconf"} //include file contents
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=210
         }
@@ -291,7 +291,7 @@
         {
           type="Serbench.Specimens.Serializers.ProtoBufSerializer, Serbench.Specimens"
           name="ProtoBuf" 
-          _include { file="knowntypes.TypicalPerson.laconf"} //include file contents
+          //_include { file="knowntypes.StockTypicalPerson.laconf"} //include file contents
           known-type{name="Serbench.Specimens.Tests.TypicalPersonData, Serbench.Specimens"}
           order=220
         }
