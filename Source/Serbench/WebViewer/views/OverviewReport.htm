@@ -38,16 +38,9 @@
     var topOffset;
     var leftOffset;
     var speedColors = [
-              '#0046E5',
-              '#1840CB',
-              '#313BB2',
-              '#4A3698',
-              '#63317F',
-              '#7C2B65',
-              '#95264C',
-              '#AE2132',
-              '#C71C19',
-              '#E01700'];
+              '#5050FF',
+              '#FF9900',
+              '#FF4040'];
 
     $(function () {
 
@@ -244,6 +237,8 @@
 
         var speedMin = null;
         var speedMax = null;
+        var payloadMin = null;
+        var payloadMax = null;
         cellDatas.wEach(function (d) {
             
             if (d == null)
@@ -254,14 +249,19 @@
                 speedMin = speed;
             if (speedMax == null || speedMax < speed)
                 speedMax = speed;
+            if (payloadMin == null || payloadMin > d.PayloadSize)
+                payloadMin = d.PayloadSize;
+            if (payloadMax == null || payloadMax < d.PayloadSize)
+                payloadMax = d.PayloadSize;
         });
 
-        return { speedMin: speedMin, speedMax: speedMax };
+        return { speedMin: speedMin, speedMax: speedMax, payloadMin: payloadMin, payloadMax: payloadMax };
     }
 
     function createTableCell(benchTest, tr, metaData) {
 
         var td = document.createElement('td');
+        td.style.verticalAlign = 'top';
 
         // if there is no test - fill cell with empty (gray) space
         if (benchTest == null) {
@@ -281,54 +281,119 @@
         var deserAbortsClass = benchTest.DeserAborts == 0 ? "hidden" : "empty";
         var serOpsSecClass = "empty";
         var deserOpsSecClass = "empty";
-        var speed;
         if (parseFloat(benchTest.SerOpsSec) < parseFloat(benchTest.DeserOpsSec)) {
             serOpsSecClass = 'worst-speed';
-            speed = benchTest.SerOpsSec;
         }
         else {
             deserOpsSecClass = 'worst-speed';
-            speed = benchTest.DeserOpsSec;
         }
 
-        var speedColor = getSpeedColor(metaData.speedMin, metaData.speedMax, speed);
+        var speedColor = getColor(metaData.speedMin, metaData.speedMax, benchTest.speed, false);
+        var payloadColor = getColor(metaData.payloadMin, metaData.payloadMax, benchTest.PayloadSize, true);
 
         // populate cell with data
 
+        var cellHeaderHtmlTemplate =
+            "<div>" +
+                "<table class='inner-table'>" +
+                	"<tr>" +
+                		"<td>Run:</td>" +
+                        "<td><b>@runNumber@</b> time(s)</td>" +
+                	"</tr>" +
+                	"<tr>" +
+                		"<td>Payload:</td>" +
+                        "<td><div><div class='color-mark left' style='background-color:@payloadColor@;'></div><div class='left'><b>@payloadSize@</b> byte(s)</div></div></td>" +
+                        "</tr> " +
+                	"<tr>" +
+                		"<td>Speed:</td>" +
+                		"<td><div><div class='color-mark left' style='background-color:@speedColor@;'></div><div class='left'><b>@speed@</b> ops/sec</div></div></td>" +
+                        "</tr>" +
+                	"<tr>" +
+                		"<td>GC:</td>" +
+                		"<td><b>@doGc@</b></td>" +
+                	"</tr>" +
+                "</table> " +
+                "<div class='@runExceptionClass@'>RunException <b>@runException@</b></div>" +
+            "</div>";
+
+        var serDataHtmlTemplate =
+            "<div class=\"@serClass@\">" +
+                "<table class='inner-table'>" +
+                    "<tr>" +
+                        "<td align=\"center\"><b>Serialization</b></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>iterations:</td>" +
+                        "<td><b>@serIterations@</b></td>" +
+                    "</tr>" +
+                    "<tr class='@serExceptionsClass@'>" +
+                        "<td>exceptions:</td>" +
+                        "<td><b>@serExceptions@</b></td>" +
+                    "</tr>" +
+                    "<tr class='@serAbortsClass@'>" +
+                        "<td>aborts:</td>" +
+                        "<td><b>@serAborts@</b></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>duration (ms):</td>" +
+                        "<td><b>@serDurationMs@</b></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>ops/sec:</td>" +
+                        "<td class='@serOpsSecClass@'><b>@serOpsSec@</b></td>" +
+                    "</tr>" +
+                    "<tr class='@serAbortsClass@'>" +
+                        "<td>first error:</td>" +
+                        "<td><b>@firstSerAbortMsg@</b></td>" +
+                    "</tr>" +
+                "</table>" +
+            "</div>";
+
+        var deserDataHtmlTemplate =
+            "<div class=\"@deserClass@\"><table class='inner-table'>" +
+                "<tr>" +
+                    "<td align=\"center\"><b>Deserialization</b></td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td>iterations:</td>" +
+                    "<td><b>@deserIterations@</b></td>" +
+                "</tr>" +
+                "<tr class='@deserExceptionsClass@'>" +
+                    "<td>exceptions:</td>" +
+                    "<td><b>@deserExceptions@</b></td>" +
+                "</tr>" +
+                "<tr class='@deserAbortsClass@'>" +
+                    "<td>aborts:</td>" +
+                    "<td><b>@deserAborts@</td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td>duration (ms):</td>" +
+                    "<td><b>@deserDurationMs@</b></td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td>ops/sec:</td>" +
+                    "<td class='@deserOpsSecClass@'><b>@deserOpsSec@</b></td>" +
+                "</tr>" +
+                "<tr class='@deserAbortsClass@'>" +
+                    "<td>first error:</td>" +
+                    "<td><b>@firstDeserAbortMsg@</b></td>" +
+                "</tr>" +
+            "</table>" +
+        "</div>";
+
         var htmlTemplate =
             "<div class=\"overview-table-cell\">" +
-                "<div>" +
-                "Run <b>@runNumber@</b> time(s)<br>" +
-                "Payload: <b>@payloadSize@</b> byte(s)<br>" +
-                "Speed: <b style='background-color:@speedColor@; color:white'>@speed@</b> ops/sec<br>" +
-                "GC: <b>@doGc@</b><br>" +
-                "<div class='@runExceptionClass@'>RunException <b>@runException@</b></div>" +
-                "</div>" +
-                "<div class=\"@serClass@\"><table class='inner-table'>" +
-                "<tr><td align=\"center\"><b>Serialization</b></td></tr>" +
-                "<tr><td>iterations:</td><td><b>@serIterations@</b></td></tr>" +
-                "<tr class='@serExceptionsClass@'><td>exceptions:</td><td><b>@serExceptions@</b></td></tr>" +
-                "<tr class='@serAbortsClass@'><td>aborts:</td><td><b>@serAborts@</b></td></tr>" +
-                "<tr><td>duration (ms):</td><td><b>@serDurationMs@</b></td></tr>" +
-                "<tr><td>ops/sec:</td><td class='@serOpsSecClass@'><b>@serOpsSec@</b></td></tr>" +
-                "<tr class='@serAbortsClass@'><td>first error:</td><td><b>@firstSerAbortMsg@</b></td></tr>" +
-                "</table></div>" +
-                "<div class=\"@deserClass@\"><table class='inner-table'>" +
-                "<tr><td align=\"center\"><b>Deserialization</b></td></tr>" +
-                "<tr><td>iterations:</td><td><b>@deserIterations@</b></td></tr>" +
-                "<tr class='@deserExceptionsClass@'><td>exceptions:</td><td><b>@deserExceptions@</b></td></tr>" +
-                "<tr class='@deserAbortsClass@'><td>aborts:</td><td><b>@deserAborts@</td></tr>" +
-                "<tr><td>duration (ms):</td><td><b>@deserDurationMs@</b></td></tr>" +
-                "<tr><td>ops/sec:</td><td class='@deserOpsSecClass@'><b>@deserOpsSec@</b></td></tr>" +
-                "<tr class='@deserAbortsClass@'><td>first error:</td><td><b>@firstDeserAbortMsg@</b></td></tr>" +
-                "</table></div>" +
-                "</div>";
+                cellHeaderHtmlTemplate +
+                serDataHtmlTemplate +
+                deserDataHtmlTemplate +
+            "</div>";
 
         td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
         {
             runNumber: numberWithCommas(benchTest.runCount, true),
             payloadSize: numberWithCommas(benchTest.PayloadSize, true),
-            speed: speed,
+            speed: benchTest.speed,
+            payloadColor: payloadColor,
             speedColor: speedColor, 
             doGc: benchTest.DoGc,
             runExceptionClass: runExceptionClass,
@@ -395,9 +460,9 @@
         });
     };
 
-    function getSpeedColor(max, min, value) {
+    function getColor(max, min, value, reverse) {
         var normed = (value - min) * (speedColors.length - 1) / (max - min);
-        var index = normed.toFixed();
+        var index = reverse ? speedColors.length - normed.toFixed() - 1 : normed.toFixed();
         return speedColors[index];
     }
 

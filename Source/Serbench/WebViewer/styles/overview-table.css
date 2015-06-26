@@ -5,11 +5,11 @@
 }
 
 .main-table td, .main-table th {
-    border: 1px solid royalblue;
+    border: 1px dotted #a0a0a0;
 }
 
 .main-table-row-header, .main-table-column-header {
-    background-color: lightsteelblue;
+    background-color: #e4e4e0;
     position: relative;
     padding: 3px;
 }
@@ -39,8 +39,9 @@
 }
 
 .worst-speed {
-    color: red;
-    font-size: 12px;
+    color: #f0f0f0;
+    font-size: 18px;
+    text-shadow: 1px 1px 4px black;
 }
 
 .hidden {
@@ -48,4 +49,13 @@
 }
 
 .empty {
+}
+
+.left {
+    float:left;
+}
+
+.color-mark {
+    height: 10px;
+    width: 10px;
 }
