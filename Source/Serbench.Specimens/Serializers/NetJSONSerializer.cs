@@ -13,21 +13,21 @@ namespace Serbench.Specimens.Serializers
     /// See here https://github.com/rpgmaker/NetJSON
     /// >PM Install-Package NetJSON 
     /// </summary>
-    [SerializerInfo( 
-     Family = SerializerFamily.Textual,    
+    [SerializerInfo(
+     Family = SerializerFamily.Textual,
      MetadataRequirement = MetadataRequirement.None,
      VendorName = "Phoenix Service Bus, Inc",
      VendorLicense = "The MIT License (MIT)",
      VendorURL = "https://github.com/rpgmaker/NetJSON",
      VendorPackageAddress = "Install-Package NetJSON",
      FormatName = "JSON",
-     LinesOfCodeK = 0,                     
+     LinesOfCodeK = 0,
      DataTypes = 0,
      Assemblies = 1,
      ExternalReferences = 0,
      PackageSizeKb = 162
     )]
-   public class NetJSONSerializer : Serializer
+    public class NetJSONSerializer : Serializer
     {
         public NetJSONSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
@@ -61,7 +61,7 @@ namespace Serbench.Specimens.Serializers
 
         public override void ParallelSerialize(object root, Stream stream)
         {
-             using (var sw = new StreamWriter(stream))
+            using (var sw = new StreamWriter(stream))
             {
                 sw.Write(NetJSON.NetJSON.Serialize(m_RootType, root));
             }
@@ -73,6 +73,18 @@ namespace Serbench.Specimens.Serializers
             {
                 return NetJSON.NetJSON.Deserialize(m_RootType, sr.ReadToEnd());
             }
+        }
+
+        public override bool AssertPayloadEquality(Test test, object original, object deserialized, bool abort = true)
+        {
+            string serError = null;
+            if (test.Name.Contains("Telemetry"))
+                if (!Serbench.Specimens.Tests.TelemetryData.AssertPayloadEquality(original, deserialized, out serError))
+                {
+                    if (abort) test.Abort(this, serError);
+                    return false;
+                }
+            return base.AssertPayloadEquality(test, original, deserialized, abort);
         }
     }
 }

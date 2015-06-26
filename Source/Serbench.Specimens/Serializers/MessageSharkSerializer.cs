@@ -13,21 +13,21 @@ namespace Serbench.Specimens.Serializers
     /// See here https://github.com/rpgmaker/MessageShark
     /// >PM Install-Package MessageShark 
     /// </summary>
-      [SerializerInfo( 
-     Family = SerializerFamily.Binary,    
-     MetadataRequirement = MetadataRequirement.None,
-     VendorName = "TJ Bakre",
-     VendorLicense = "The GNU Library General Public License (LGPL)",
-     VendorURL = "https://github.com/rpgmaker/MessageShark",
-     VendorPackageAddress = "Install-Package MessageShark",
-     FormatName = "MessageShark",
-     LinesOfCodeK = 0,                     
-     DataTypes = 0,
-     Assemblies = 1,
-     ExternalReferences = 0,
-     PackageSizeKb = 49
-  )]
-   public class MessageSharkSerializer : Serializer
+    [SerializerInfo(
+   Family = SerializerFamily.Binary,
+   MetadataRequirement = MetadataRequirement.None,
+   VendorName = "TJ Bakre",
+   VendorLicense = "The GNU Library General Public License (LGPL)",
+   VendorURL = "https://github.com/rpgmaker/MessageShark",
+   VendorPackageAddress = "Install-Package MessageShark",
+   FormatName = "MessageShark",
+   LinesOfCodeK = 0,
+   DataTypes = 0,
+   Assemblies = 1,
+   ExternalReferences = 0,
+   PackageSizeKb = 49
+)]
+    public class MessageSharkSerializer : Serializer
     {
 
         private Type m_primaryType;
@@ -39,39 +39,56 @@ namespace Serbench.Specimens.Serializers
 
         public override void BeforeRuns(Test test)
         {
-            m_primaryType = test.GetPayloadRootType();
+            m_RootType = test.GetPayloadRootType();
         }
 
+
+        private Type m_RootType;
+
         public override void Serialize(object root, Stream stream)
-        { 
+        {
             var buf = MessageShark.MessageSharkSerializer.Serialize(root);
             stream.Write(buf, 0, buf.Length);
+            //using (var sw = new StreamWriter(stream))
+            //{
+            //    sw.Write(MessageShark.MessageSharkSerializer.Serialize(root));
+            //}
         }
 
         public override object Deserialize(Stream stream)
         {
-            using (MemoryStream ms = new MemoryStream())
+            //using (MemoryStream ms = new MemoryStream())
+            //{
+            //     stream.CopyTo(ms);
+            //    return MessageShark.MessageSharkSerializer.Deserialize<object>(ms.ToArray());
+            //}
+            using (var sr = new StreamReader(stream))
             {
-                 stream.CopyTo(ms);
-                return MessageShark.MessageSharkSerializer.Deserialize<object>(ms.ToArray());
+                var temp = sr.ReadToEnd();
+                byte[] bytes = new byte[temp.Length * sizeof(char)];
+                System.Buffer.BlockCopy(temp.ToCharArray(), 0, bytes, 0, bytes.Length);
+                return MessageShark.MessageSharkSerializer.Deserialize<object>(bytes);
             }
-           // return null;   // TODO: How to call  Deserialize<T>(ms.ToArray()) with  m_primaryType ?
+            // return null;   // TODO: How to call  Deserialize<T>(ms.ToArray()) with  m_primaryType ?
         }
 
         public override void ParallelSerialize(object root, Stream stream)
         {
-            var buf = MessageShark.MessageSharkSerializer.Serialize(root);
-            //stream.Write(buf, 0, buf.Length);
+            using (var sw = new StreamWriter(stream))
+            {
+                sw.Write(MessageShark.MessageSharkSerializer.Serialize(root));
+            }
         }
 
         public override object ParallelDeserialize(Stream stream)
         {
-          using (MemoryStream ms = new MemoryStream())
+            using (var sr = new StreamReader(stream))
             {
-                 stream.CopyTo(ms);
-                return MessageShark.MessageSharkSerializer.Deserialize<object>(ms.ToArray());
+                var temp = sr.ReadToEnd();
+                byte[] bytes = new byte[temp.Length * sizeof(char)];
+                System.Buffer.BlockCopy(temp.ToCharArray(), 0, bytes, 0, bytes.Length);
+                return MessageShark.MessageSharkSerializer.Deserialize<object>(bytes);
             }
-           // return null;   // TODO: How to call  Deserialize<T>(ms.ToArray()) with  m_primaryType ?
-       }
+        }
     }
 }

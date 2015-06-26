@@ -39,7 +39,7 @@ namespace Serbench.Specimens.Tests
             serializer.AssertPayloadEquality(this, m_Data, deserialized);
         }
 
-        [Config(Default=64)]
+        [Config(Default = 64)]
         private int m_MeasurementsNumber;
         public int MeasurementsNumber
         {
@@ -81,19 +81,19 @@ namespace Serbench.Specimens.Tests
         [ProtoMember(2)]
         [DataMember]
         public string DataSource;
-      
+
         [ProtoMember(3)]
         [DataMember]
         public DateTime TimeStamp;
-      
+
         [ProtoMember(4)]
         [DataMember]
         public int Param1;
-      
+
         [ProtoMember(5)]
         [DataMember]
         public uint Param2;
-      
+
         [ProtoMember(6)]
         [DataMember]
         public double[] Measurements;
@@ -110,6 +110,25 @@ namespace Serbench.Specimens.Tests
         [DataMember]
         public bool WasProcessed;
 
+        public static bool AssertPayloadEquality(object original, object deserialized, out string errorString)
+        {
+            errorString = null;
 
+            var originalTyped = original as Serbench.Specimens.Tests.TelemetryData;
+            var deserializedTyped = deserialized as Serbench.Specimens.Tests.TelemetryData;
+
+            if (originalTyped == null || deserializedTyped == null)
+                errorString = "Error: originalTyped or deserializedTyped == null";
+            else if (originalTyped.Measurements == null || deserializedTyped.Measurements == null)
+                errorString = "Error: originalTyped or deserializedTyped == null";
+            else if (originalTyped.Measurements.Length != deserializedTyped.Measurements.Length)
+                errorString = "Error: originalTyped.Measurements.Length == deserializedTyped.Measurements.Length ({0} != {1}".Args(originalTyped.Measurements.Length, deserializedTyped.Measurements.Length);
+            else if (originalTyped.AssociatedProblemID != deserializedTyped.AssociatedProblemID || originalTyped.AssociatedLogID != deserializedTyped.AssociatedLogID)
+                errorString = "Error: originalTyped.AssociatedProblemID != deserializedTyped.AssociatedProblemID ({0} != {1})  || originalTyped.AssociatedLogID != deserializedTyped.AssociatedLogID ({2} != {3})".Args(
+                    originalTyped.AssociatedProblemID, deserializedTyped.AssociatedProblemID,
+                     originalTyped.AssociatedLogID, deserializedTyped.AssociatedLogID
+                    );
+            return (errorString == null) ? true : false;
+        }
     }
 }

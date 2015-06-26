@@ -15,15 +15,15 @@ namespace Serbench.Specimens.Serializers
     /// See here: http://www.sharpserializer.com/en/index.html  
     /// Add: PM> Install-Package SharpSerializer
     /// </summary>
-    [SerializerInfo( 
-     Family = SerializerFamily.Binary,    
+    [SerializerInfo(
+     Family = SerializerFamily.Binary,
      MetadataRequirement = MetadataRequirement.Attributes,
      VendorName = "Pawel Idzikowski / Polenter-Software Solutions",
      VendorLicense = "New BSD License (BSD)",
      VendorURL = "http://www.sharpserializer.com/en/index.html",
      VendorPackageAddress = "Install-Package SharpSerializer",
      FormatName = "SharpSerializer",
-     LinesOfCodeK = 0,                     
+     LinesOfCodeK = 0,
      DataTypes = 0,
      Assemblies = 1,
      ExternalReferences = 0,
@@ -38,7 +38,7 @@ namespace Serbench.Specimens.Serializers
               {
                   Mode = BinarySerializationMode.Burst
               };
-            m_Serializer = new Polenter.Serialization.SharpSerializer(settings);   
+            m_Serializer = new Polenter.Serialization.SharpSerializer(settings);
         }
 
         private Polenter.Serialization.SharpSerializer m_Serializer;
@@ -62,6 +62,18 @@ namespace Serbench.Specimens.Serializers
         public override object ParallelDeserialize(Stream stream)
         {
             return m_Serializer.Deserialize(stream);
+        }
+
+        public override bool AssertPayloadEquality(Test test, object original, object deserialized, bool abort = true)
+        {
+            string serError = null;
+            if (test.Name.Contains("Telemetry"))
+                if (!Serbench.Specimens.Tests.TelemetryData.AssertPayloadEquality(original, deserialized, out serError))
+                {
+                    if (abort) test.Abort(this, serError);
+                    return false;
+                }
+            return base.AssertPayloadEquality(test, original, deserialized, abort);
         }
     }
 }

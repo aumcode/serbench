@@ -19,15 +19,15 @@ namespace Serbench.Specimens.Serializers
     ///     NOTE: I use the protobuf-net NuGet package because of
     ///     [http://stackoverflow.com/questions/2522376/how-to-choose-between-protobuf-csharp-port-and-protobuf-net]
     /// </summary>
-    [SerializerInfo( 
-     Family = SerializerFamily.Binary,    
+    [SerializerInfo(
+     Family = SerializerFamily.Binary,
      MetadataRequirement = MetadataRequirement.Attributes,
      VendorName = "Marc Gravell",
      VendorLicense = "The Apache License 2.0",
      VendorURL = "https://github.com/tomba/netserializer",
      VendorPackageAddress = "Install-Package protobuf-net",
      FormatName = "protobuf",
-     LinesOfCodeK = 0,                     
+     LinesOfCodeK = 0,
      DataTypes = 0,
      Assemblies = 1,
      ExternalReferences = 0,
@@ -53,7 +53,7 @@ namespace Serbench.Specimens.Serializers
 
         public override void BeforeRuns(Test test)
         {
-           m_PrimaryType = test.GetPayloadRootType();
+            m_PrimaryType = test.GetPayloadRootType();
         }
 
 
@@ -75,6 +75,17 @@ namespace Serbench.Specimens.Serializers
         public override object ParallelDeserialize(Stream stream)
         {
             return m_Model.Deserialize(stream, null, m_PrimaryType);
+        }
+        public override bool AssertPayloadEquality(Test test, object original, object deserialized, bool abort = true)
+        {
+            string serError = null;
+            if (test.Name.Contains("Telemetry"))
+                if (!Serbench.Specimens.Tests.TelemetryData.AssertPayloadEquality(original, deserialized, out serError))
+                {
+                    if (abort) test.Abort(this, serError);
+                    return false;
+                }
+            return base.AssertPayloadEquality(test, original, deserialized, abort);
         }
     }
 }
