@@ -25,8 +25,8 @@
       
         tests
         {
-            test { type="Serbench.Specimens.Tests.Telemetry, Serbench.Specimens" name="Warmup Telemetry" order=000 list=false runs=1 ser-iterations=1 deser-iterations=1}
-            test { type="Serbench.Specimens.Tests.Telemetry, Serbench.Specimens" name="Telemetry" order=010 list=false runs=1 ser-iterations=1000 deser-iterations=1000}
+            test { type="Serbench.Specimens.Tests.Telemetry, Serbench.Specimens" name="Warmup Telemetry" order=000 runs=1 ser-iterations=1 deser-iterations=1}
+            test { type="Serbench.Specimens.Tests.Telemetry, Serbench.Specimens" name="Telemetry" order=010 runs=1 ser-iterations=25000 deser-iterations=25000}
         }//tests     
      
      
