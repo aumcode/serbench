@@ -136,79 +136,6 @@
             });
 
         table.appendChild(tbody);
-    } 
-
-    function createRow(r, cellDatas){
-        
-        var payloadOrdered = cellDatas.wWhere(function (d) { return d !== null; })
-                                      .wOrder(function (a, b) { return a.PayloadSize > b.PayloadSize ? 1 : a.PayloadSize < b.PayloadSize ? -1 : 0; })
-                                      .wToArray();
-        var goldPayload = payloadOrdered.length == 0 ? null : payloadOrdered[0];
-        var silverPayload = payloadOrdered.length == 0 ? null :
-                            payloadOrdered.length == 1 ? payloadOrdered[0] : payloadOrdered[1];
-        var bronzePayload = payloadOrdered.length == 0 ? null :
-                            payloadOrdered.length == 1 ? payloadOrdered[0] :
-                            payloadOrdered.length == 2 ? payloadOrdered[1] : payloadOrdered[2];
-
-        var speedOrdered = cellDatas.wWhere(function (d) { return d !== null; })
-                                    .wOrder(function (a, b) { return a.speed < b.speed ? 1 : a.speed > b.speed ? -1 : 0; })
-                                    .wToArray();
-        var goldSpeed = speedOrdered.length == 0 ? null : speedOrdered[0];
-        var silverSpeed = speedOrdered.length == 0 ? null :
-                          speedOrdered.length == 1 ? speedOrdered[0] : speedOrdered[1];
-        var bronzeSpeed = speedOrdered.length == 0 ? null :
-                          speedOrdered.length == 1 ? speedOrdered[0] :
-                          speedOrdered.length == 2 ? speedOrdered[1] : speedOrdered[2];
-
-        var tr = document.createElement('tr');
-        var th = document.createElement('th');
-        th.className = 'main-table-row-header';
-        var htmlTemplate =
-            "<div align='left'>" +
-            //"<b>@testType@<br>@testName@</b><br>" +
-            "<b>@testName@</b><br/><br>" +
-            "by speed:<br>" +
-            "1. @goldSpeed@<br>" +
-            "2. @silverSpeed@<br>" +
-            "3. @bronzeSpeed@<br>" +
-            "by payload:<br>" +
-            "1. @goldPayload@<br>" +
-            "2. @silverPayload@<br>" +
-            "3. @bronzePayload@<br>" +
-            "<div>";
-        th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
-            {
-                //testType: r.testType,
-                testName: r.testName,
-                goldSpeed: goldSpeed.SerializerName,
-                silverSpeed: silverSpeed.SerializerName,
-                bronzeSpeed: bronzeSpeed.SerializerName, 
-                goldPayload: goldPayload.SerializerName,
-                silverPayload: silverPayload.SerializerName,
-                bronzePayload: bronzePayload.SerializerName
-            });
-        tr.appendChild(th);
-
-        return tr;
-    }
-
-    function prepareRowMetadata(cellDatas){
-
-        var speedMin = null;
-        var speedMax = null;
-        cellDatas.wEach(function (d) {
-            
-            if (d == null)
-                return;
-
-            var speed = parseFloat(d.SerOpsSec) < parseFloat(d.DeserOpsSec) ? d.SerOpsSec : d.DeserOpsSec;
-            if (speedMin == null || speedMin > speed)
-                speedMin = speed;
-            if (speedMax == null || speedMax < speed)
-                speedMax = speed;
-        });
-
-        return { speedMin: speedMin, speedMax: speedMax };
     }
 
     function getCellData(data, rowHeaderInfo, columnHeaderInfo) {
@@ -248,10 +175,89 @@
             benchTest.DeserOpsSec /= count;
         }
         benchTest.runCount = count;
-        benchTest.speed = parseFloat(benchTest.SerOpsSec) < parseFloat(benchTest.DeserOpsSec);
+        benchTest.speed = parseFloat(benchTest.SerOpsSec) < parseFloat(benchTest.DeserOpsSec) ? benchTest.SerOpsSec : benchTest.DeserOpsSec;
 
         return benchTest;
     };
+
+    function createRow(r, cellDatas){
+        
+        var payloadOrdered = cellDatas.wWhere(function (d) { return d !== null; })
+                                      .wOrder(function (a, b) { return a.PayloadSize > b.PayloadSize ? 1 : a.PayloadSize < b.PayloadSize ? -1 : 0; })
+                                      .wToArray();
+        var goldPayloadTest = payloadOrdered.length == 0 ? null : payloadOrdered[0];
+        var silverPayloadTest = payloadOrdered.length == 0 ? null :
+                            payloadOrdered.length == 1 ? payloadOrdered[0] : payloadOrdered[1];
+        var bronzePayloadTest = payloadOrdered.length == 0 ? null :
+                            payloadOrdered.length == 1 ? payloadOrdered[0] :
+                            payloadOrdered.length == 2 ? payloadOrdered[1] : payloadOrdered[2];
+
+        var speedOrdered = cellDatas.wWhere(function (d) { return d !== null; })
+                                    .wOrder(function (a, b) { return a.speed < b.speed ? 1 : a.speed > b.speed ? -1 : 0; })
+                                    .wToArray();
+        var goldSpeedTest = speedOrdered.length == 0 ? null : speedOrdered[0];
+        var silverSpeedTest = speedOrdered.length == 0 ? null :
+                          speedOrdered.length == 1 ? speedOrdered[0] : speedOrdered[1];
+        var bronzeSpeedTest = speedOrdered.length == 0 ? null :
+                          speedOrdered.length == 1 ? speedOrdered[0] :
+                          speedOrdered.length == 2 ? speedOrdered[1] : speedOrdered[2];
+
+        var tr = document.createElement('tr');
+        var th = document.createElement('th');
+        th.className = 'main-table-row-header';
+        var htmlTemplate =
+            "<div align='left'>" +
+            //"<b>@testType@<br>@testName@</b><br>" +
+            "<b>@testName@</b><br/><br>" +
+            "by speed:<br>" +
+            "1. @goldSpeedTest@ (@goldSpeed@ ops/sec)<br>" +
+            "2. @silverSpeedTest@ (@silverSpeed@ ops/sec)<br>" +
+            "3. @bronzeSpeedTest@ (@bronzeSpeed@ ops/sec)<br><br>" +
+            "by payload:<br>" +
+            "1. @goldPayloadTest@ (@goldPayload@ byte(s))<br>" +
+            "2. @silverPayloadTest@ (@silverPayload@ byte(s))<br>" +
+            "3. @bronzePayloadTest@ (@bronzePayload@ byte(s))<br>" +
+            "<div>";
+        th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
+            {
+                //testType: r.testType,
+                testName: r.testName,
+                goldSpeedTest: goldSpeedTest.SerializerName,
+                silverSpeedTest: silverSpeedTest.SerializerName,
+                bronzeSpeedTest: bronzeSpeedTest.SerializerName,
+                goldPayloadTest: goldPayloadTest.SerializerName,
+                silverPayloadTest: silverPayloadTest.SerializerName,
+                bronzePayloadTest: bronzePayloadTest.SerializerName,
+                goldSpeed: goldSpeedTest.speed,
+                silverSpeed: silverSpeedTest.speed,
+                bronzeSpeed: bronzeSpeedTest.speed,
+                goldPayload: goldPayloadTest.PayloadSize,
+                silverPayload: silverPayloadTest.PayloadSize,
+                bronzePayload: bronzePayloadTest.PayloadSize
+            });
+        tr.appendChild(th);
+
+        return tr;
+    }
+
+    function prepareRowMetadata(cellDatas){
+
+        var speedMin = null;
+        var speedMax = null;
+        cellDatas.wEach(function (d) {
+            
+            if (d == null)
+                return;
+
+            var speed = parseFloat(d.SerOpsSec) < parseFloat(d.DeserOpsSec) ? d.SerOpsSec : d.DeserOpsSec;
+            if (speedMin == null || speedMin > speed)
+                speedMin = speed;
+            if (speedMax == null || speedMax < speed)
+                speedMax = speed;
+        });
+
+        return { speedMin: speedMin, speedMax: speedMax };
+    }
 
     function createTableCell(benchTest, tr, metaData) {
 
