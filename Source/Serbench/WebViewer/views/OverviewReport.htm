@@ -96,8 +96,10 @@
                 // insert column header cell
                 var th = document.createElement("th");
                 th.className = 'main-table-column-header';
-                var htmlTemplate = "<b>@serializerType@<br>@serializerName@</b>";
-                th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: h.serializerType, serializerName: h.serializerName });
+                //var htmlTemplate = "<b>@serializerType@<br>@serializerName@</b>";
+                var htmlTemplate = "<b>@serializerName@</b>";
+                //th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: h.serializerType, serializerName: h.serializerName });
+                th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerName: h.serializerName });
                 tr.appendChild(th);
 
                 // populate header info
@@ -163,7 +165,8 @@
         th.className = 'main-table-row-header';
         var htmlTemplate =
             "<div align='left'>" +
-            "<b>@testType@<br>@testName@</b><br>" +
+            //"<b>@testType@<br>@testName@</b><br>" +
+            "<b>@testName@</b><br/><br>" +
             "by speed:<br>" +
             "1. @goldSpeed@<br>" +
             "2. @silverSpeed@<br>" +
@@ -175,7 +178,7 @@
             "<div>";
         th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
             {
-                testType: r.testType,
+                //testType: r.testType,
                 testName: r.testName,
                 goldSpeed: goldSpeed.SerializerName,
                 silverSpeed: silverSpeed.SerializerName,
