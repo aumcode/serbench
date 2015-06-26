@@ -69,6 +69,7 @@
     <None Include="knowntypes.EDI.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="knowntypes.SpecimensTypicalPerson.laconf" />
     <None Include="knowntypes.Telemetry.laconf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

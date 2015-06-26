@@ -132,7 +132,7 @@
         serializer
         {
           type="Serbench.StockSerializers.MSJavaScriptSerializer, Serbench"
-          name="MSJavaScriptSerializer" 
+          name="MS.JavaScriptSerializer" 
  		  //known-type{name="Serbench.StockTests.TypicalPerson"}
           // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
 		  // known-type{name="Serbench.StockTests.MaritalStatus"}
@@ -143,7 +143,7 @@
        serializer
         {
           type="Serbench.StockSerializers.MSXmlSerializer, Serbench"
-          name="MSXmlSerializer" 
+          name="MS.XmlSerializer" 
  		  //known-type{name="Serbench.StockTests.TypicalPerson"}
           // known-type{name="System.Collections.Generic.List`1[Serbench.StockTests.TypicalPerson]"}
 		  // known-type{name="Serbench.StockTests.MaritalStatus"}

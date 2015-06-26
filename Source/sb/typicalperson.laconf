@@ -66,14 +66,14 @@
         serializer
         {
           type="Serbench.StockSerializers.MSJavaScriptSerializer, Serbench"
-          name="MSJavaScriptSerializer" 
+          name="MS.JavaScriptSerializer" 
  		  order=40
         }
 
        serializer
         {
           type="Serbench.StockSerializers.MSXmlSerializer, Serbench"
-          name="MSXmlSerializer" 
+          name="MS.XmlSerializer" 
  		   _include { file="knowntypes.SpecimensTypicalPerson.laconf"} //include file contents
          order=50
         }
