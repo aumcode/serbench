@@ -67,7 +67,7 @@
              type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
              name="Count: 5000" 
              order=003
-             runs=100 
+             runs=50 
              ser-iterations=1 
              deser-iterations=1
              
@@ -87,15 +87,16 @@
 			name="MS.BinaryFormatter"
 			order=10
 		}        
-        /*
+        
+        /* It does not support batching
         serializer 
         {
 			type="Serbench.StockSerializers.MSDataContractSerializer, Serbench"
 			name="MS.DataContractSerializer"
 			order=30
-			 _include { file="knowntypes.Conference.laconf"} //include file contents
 		}
         */
+       
 
         serializer
         {

@@ -50,7 +50,6 @@ namespace Serbench.Specimens.Tests
 
     } 
 
-
     [ProtoContract()]
     [DataContract()]
     [Serializable] public class SomePersonalDataMessage
@@ -91,7 +90,7 @@ namespace Serbench.Specimens.Tests
          {
            var rnd = ExternalRandomGenerator.Instance.NextRandomInteger;
            var primaryAddr = AddressMessage.Build();
-           return new SomePersonalDataMessage
+           var data = new SomePersonalDataMessage
            {
             ID = Guid.NewGuid(),
             LegalName = HumanName.Build(),
@@ -108,8 +107,10 @@ namespace Serbench.Specimens.Tests
 
             AssetsAtHand = 567000m,
             TotalDebt = 2345m,
-            CreditScale = 0.02323d
+            CreditScale = 0.02323d 
            };
+
+           return data;
          }
     }
 
