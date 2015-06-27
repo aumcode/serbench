@@ -26,15 +26,16 @@
 }
 
 .supported {
-    background: #A3D119;
+    background: #CFFCBF;
 }
 
 .unsupported {
-    background: #FF704D;
+    background: #FDCCCC;
 }
 
-.overview-table-cell :hover {
-    background: lightsteelblue;
+.main-table-row :hover {
+    background-color: #ffffe0;
+    border: 1px solid #808080;
 }
 
 .row-header {

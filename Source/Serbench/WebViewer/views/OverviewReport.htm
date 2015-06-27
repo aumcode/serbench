@@ -122,8 +122,9 @@
             .wDistinct(function (a, b) { return a.testType == b.testType && a.testName == b.testName; })
             .wEach(function (r) {
                 // prepare cell data
-                var cellDatas = WAVE.arrayWalkable(headersInfo).wSelect(function (h) { return getCellData(data, r, h); });
-
+                var cellDatas = WAVE.arrayWalkable(headersInfo)
+                                    .wSelect(function (h) { return getCellData(data, r, h); })
+                                    .wToArray();
                 // create row, insert first cell (row header)
                 var tr = createRow(r, cellDatas);
 
@@ -131,7 +132,7 @@
                 var metaData = prepareRowMetadata(cellDatas);
 
                 // fill table cells
-                cellDatas.wEach(function (d) {
+                WAVE.arrayWalkable(cellDatas).wEach(function (d) {
                     createTableCell(d, tr, metaData);
                 });
 
@@ -184,10 +185,10 @@
     };
 
     function createRow(r, cellDatas){
-        
-        var payloadOrdered = cellDatas.wWhere(function (d) { return d !== null && d.PayloadSize != 0; })
-                                      .wOrder(function (a, b) { return a.PayloadSize > b.PayloadSize ? 1 : a.PayloadSize < b.PayloadSize ? -1 : 0; })
-                                      .wToArray();
+
+        var payloadOrdered = WAVE.arrayWalkable(cellDatas).wWhere(function (d) { return d !== null && d.PayloadSize != 0; })
+                                                          .wOrder(function (a, b) { return a.PayloadSize > b.PayloadSize ? 1 : a.PayloadSize < b.PayloadSize ? -1 : 0; })
+                                                          .wToArray();
         var goldPayloadTest = payloadOrdered.length == 0 ? null : payloadOrdered[0];
         var silverPayloadTest = payloadOrdered.length == 0 ? null :
                             payloadOrdered.length == 1 ? payloadOrdered[0] : payloadOrdered[1];
@@ -195,9 +196,9 @@
                             payloadOrdered.length == 1 ? payloadOrdered[0] :
                             payloadOrdered.length == 2 ? payloadOrdered[1] : payloadOrdered[2];
 
-        var speedOrdered = cellDatas.wWhere(function (d) { return d !== null && d.speed != 0; })
-                                    .wOrder(function (a, b) { return a.speed < b.speed ? 1 : a.speed > b.speed ? -1 : 0; })
-                                    .wToArray();
+        var speedOrdered = WAVE.arrayWalkable(cellDatas).wWhere(function (d) { return d !== null && d.speed != 0; })
+                                                        .wOrder(function (a, b) { return a.speed < b.speed ? 1 : a.speed > b.speed ? -1 : 0; })
+                                                        .wToArray();
         var goldSpeedTest = speedOrdered.length == 0 ? null : speedOrdered[0];
         var silverSpeedTest = speedOrdered.length == 0 ? null :
                           speedOrdered.length == 1 ? speedOrdered[0] : speedOrdered[1];
@@ -206,6 +207,7 @@
                           speedOrdered.length == 2 ? speedOrdered[1] : speedOrdered[2];
 
         var tr = document.createElement('tr');
+        tr.className = 'main-table-row';
         var th = document.createElement('th');
         th.className = 'main-table-row-header';
         var htmlTemplate =
@@ -248,9 +250,9 @@
         var speedMax = null;
         var payloadMin = null;
         var payloadMax = null;
-        cellDatas.wEach(function (d) {
+        WAVE.arrayWalkable(cellDatas).wEach(function (d) {
             
-            if (d == null)
+            if (d == null || d.PayloadSize == 0 || d.speed == 0)
                 return;
 
             var speed = parseFloat(d.SerOpsSec) < parseFloat(d.DeserOpsSec) ? d.SerOpsSec : d.DeserOpsSec;
@@ -391,7 +393,7 @@
         "</div>";
 
         var htmlTemplate =
-            "<div class=\"overview-table-cell\">" +
+            "<div>" +
                 cellHeaderHtmlTemplate +
                 serDataHtmlTemplate +
                 deserDataHtmlTemplate +
