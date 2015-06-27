@@ -21,7 +21,6 @@ namespace Serbench.Specimens.Tests
     }
 
     [ProtoContract]
-    [CollectionDataContract]
     [DataContract]
     [Serializable]
     public class TypicalPersonData
