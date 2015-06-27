@@ -1,8 +1,6 @@
-function numberWithCommas(x, round) {
-    if (typeof round == 'undefined')
-        round = false;
-    if (round)
-        x = x.toFixed(0);
+function numberWithCommas(x, precision) {
+    if (typeof precision != 'undefined')
+        x = x.toFixed(precision);
 
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");

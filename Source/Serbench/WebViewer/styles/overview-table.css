@@ -13,6 +13,7 @@
     background-color: #e4e4e0;
     position: relative;
     padding: 3px;
+    font-size: 10px;
 }
 
 .inner-table td, .inner-table th {
@@ -34,6 +35,10 @@
 
 .overview-table-cell :hover {
     background: lightsteelblue;
+}
+
+.row-header {
+    text-align: left;
 }
 
 .absent-test {

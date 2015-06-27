@@ -209,7 +209,7 @@
         var th = document.createElement('th');
         th.className = 'main-table-row-header';
         var htmlTemplate =
-            "<div align='left'>" +
+            "<div class='row-header'>" +
                 "<b>@testName@</b><br>@testType@<br><br>" +
                 "<b>by speed:</b><br>" +
                 "1. @goldSpeedTest@ (@goldSpeed@ ops/sec)<br>" +
@@ -230,12 +230,12 @@
                 goldPayloadTest: goldPayloadTest.SerializerName,
                 silverPayloadTest: silverPayloadTest.SerializerName,
                 bronzePayloadTest: bronzePayloadTest.SerializerName,
-                goldSpeed: goldSpeedTest.speed,
-                silverSpeed: silverSpeedTest.speed,
-                bronzeSpeed: bronzeSpeedTest.speed,
-                goldPayload: goldPayloadTest.PayloadSize,
-                silverPayload: silverPayloadTest.PayloadSize,
-                bronzePayload: bronzePayloadTest.PayloadSize
+                goldSpeed: numberWithCommas(goldSpeedTest.speed, 0),
+                silverSpeed: numberWithCommas(silverSpeedTest.speed, 0),
+                bronzeSpeed: numberWithCommas(bronzeSpeedTest.speed, 0),
+                goldPayload: numberWithCommas(goldPayloadTest.PayloadSize, 0),
+                silverPayload: numberWithCommas(silverPayloadTest.PayloadSize, 0),
+                bronzePayload: numberWithCommas(bronzePayloadTest.PayloadSize, 0)
             });
         tr.appendChild(th);
 
@@ -289,8 +289,8 @@
         var deserExceptionsClass = benchTest.DeserExceptions == 0 ? "hidden" : "empty";
         var deserAbortsClass = benchTest.DeserAborts == 0 ? "hidden" : "empty";
 
-        var speedColor = getColor(metaData.speedMin, metaData.speedMax, benchTest.speed, false);
-        var payloadColor = getColor(metaData.payloadMin, metaData.payloadMax, benchTest.PayloadSize, true);
+        var speedColor = getColor(metaData.speedMin, metaData.speedMax, benchTest.speed, true);
+        var payloadColor = getColor(metaData.payloadMin, metaData.payloadMax, benchTest.PayloadSize, false);
 
         // populate cell with data
 
@@ -298,8 +298,8 @@
             "<div>" +
                 "<table class='inner-table test-header-table'>" +
                     "<tr>" +
-                        "<td class='stat-result' bgcolor='@speedColor@'><b>@speed@</b></td>" +
-                        "<td class='stat-result' bgcolor='@payloadColor@'><b>@payloadSize@</b></td>" +
+                        "<td class='stat-result' bgcolor='@speedColor@'><b>@prettySpeed@</b></td>" +
+                        "<td class='stat-result' bgcolor='@payloadColor@'><b>@prettyPayloadSize@</b></td>" +
                     "</tr>" +
                     "<tr><td colspan='2'>" +
                         "<table class='inner-table'>" +
@@ -399,31 +399,33 @@
 
         td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
         {
-            runNumber: numberWithCommas(benchTest.runCount, true),
-            payloadSize: benchTest.PayloadSize == 0 ? '-' : shortenByteSize(benchTest.PayloadSize),
-            speed: benchTest.speed == 0 ? '-' : shortenQuantity(benchTest.speed),
+            runNumber: numberWithCommas(benchTest.runCount, 0),
+            prettyPayloadSize: benchTest.PayloadSize == 0 ? '-' : shortenByteSize(benchTest.PayloadSize),
+            payloadSize: benchTest.PayloadSize == 0 ? '-' : numberWithCommas(benchTest.PayloadSize, 0),
+            prettySpeed: benchTest.speed == 0 ? '-' : shortenQuantity(benchTest.speed),
+            speed: benchTest.speed == 0 ? '-' : numberWithCommas(benchTest.speed, 0),
             payloadColor: payloadColor,
             speedColor: speedColor, 
             doGc: benchTest.DoGc,
             runExceptionClass: runExceptionClass,
             runException: benchTest.RunException,
             serClass: serClass,
-            serIterations: numberWithCommas(benchTest.SerIterations, true),
+            serIterations: numberWithCommas(benchTest.SerIterations, 0),
             serExceptionsClass: serExceptionsClass,
             serAbortsClass: serAbortsClass,
-            serExceptions: numberWithCommas(benchTest.SerExceptions, true),
-            serAborts: numberWithCommas(benchTest.SerAborts, true),
-            serDurationMs: numberWithCommas(benchTest.SerDurationMs, true),
-            serOpsSec: numberWithCommas(benchTest.SerOpsSec, true),
+            serExceptions: numberWithCommas(benchTest.SerExceptions, 0),
+            serAborts: numberWithCommas(benchTest.SerAborts, 0),
+            serDurationMs: numberWithCommas(benchTest.SerDurationMs, 0),
+            serOpsSec: numberWithCommas(benchTest.SerOpsSec, 0),
             firstSerAbortMsg: benchTest.FirstSerAbortMsg,
             deserClass: deserClass,
-            deserIterations: numberWithCommas(benchTest.DeserIterations, true),
+            deserIterations: numberWithCommas(benchTest.DeserIterations, 0),
             deserExceptionsClass: deserExceptionsClass,
             deserAbortsClass: deserAbortsClass,
-            deserExceptions: numberWithCommas(benchTest.DeserExceptions, true),
-            deserAborts: numberWithCommas(benchTest.DeserAborts, true),
-            deserDurationMs: numberWithCommas(benchTest.DeserDurationMs, true),
-            deserOpsSec: numberWithCommas(benchTest.DeserOpsSec, true),
+            deserExceptions: numberWithCommas(benchTest.DeserExceptions, 0),
+            deserAborts: numberWithCommas(benchTest.DeserAborts, 0),
+            deserDurationMs: numberWithCommas(benchTest.DeserDurationMs, 0),
+            deserOpsSec: numberWithCommas(benchTest.DeserOpsSec, 0),
             firstDeserAbortMsg: benchTest.FirstDeserAbortMsg
         });
         tr.appendChild(td);
