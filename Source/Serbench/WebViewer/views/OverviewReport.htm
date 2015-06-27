@@ -17,7 +17,7 @@
 
 #[override renderBody()]
 
-<link rel="stylesheet" type="text/css" href="overview-table.css">
+<link rel="stylesheet" type="text/css" href="styles/overview-table.css">
 
 <div class="main-container">
     <div class="report-header">
@@ -38,9 +38,21 @@
     var topOffset;
     var leftOffset;
     var speedColors = [
-              '#5050FF',
-              '#FF9900',
-              '#FF4040'];
+              '#ff7060',
+              '#ff9070',
+              '#ffa060',
+              '#ffb050',
+              '#ffc040',
+              '#ffd030',
+              '#e0e030',
+              '#d0f030',
+              '#c0ff30',
+              '#c0ff70',
+              '#c0ffA0',
+              '#c0ffC0',
+              '#b0ffE0',
+              '#a0ffF0',
+              '#80ffFF'];
 
     $(function () {
 
@@ -89,10 +101,8 @@
                 // insert column header cell
                 var th = document.createElement("th");
                 th.className = 'main-table-column-header';
-                //var htmlTemplate = "<b>@serializerType@<br>@serializerName@</b>";
-                var htmlTemplate = "<b>@serializerName@</b>";
-                //th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: h.serializerType, serializerName: h.serializerName });
-                th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerName: h.serializerName });
+                var htmlTemplate = "<b>@serializerName@</b><br>@serializerType@";
+                th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: h.serializerType, serializerName: h.serializerName });
                 tr.appendChild(th);
 
                 // populate header info
@@ -175,7 +185,7 @@
 
     function createRow(r, cellDatas){
         
-        var payloadOrdered = cellDatas.wWhere(function (d) { return d !== null; })
+        var payloadOrdered = cellDatas.wWhere(function (d) { return d !== null && d.PayloadSize != 0; })
                                       .wOrder(function (a, b) { return a.PayloadSize > b.PayloadSize ? 1 : a.PayloadSize < b.PayloadSize ? -1 : 0; })
                                       .wToArray();
         var goldPayloadTest = payloadOrdered.length == 0 ? null : payloadOrdered[0];
@@ -185,7 +195,7 @@
                             payloadOrdered.length == 1 ? payloadOrdered[0] :
                             payloadOrdered.length == 2 ? payloadOrdered[1] : payloadOrdered[2];
 
-        var speedOrdered = cellDatas.wWhere(function (d) { return d !== null; })
+        var speedOrdered = cellDatas.wWhere(function (d) { return d !== null && d.speed != 0; })
                                     .wOrder(function (a, b) { return a.speed < b.speed ? 1 : a.speed > b.speed ? -1 : 0; })
                                     .wToArray();
         var goldSpeedTest = speedOrdered.length == 0 ? null : speedOrdered[0];
@@ -200,20 +210,19 @@
         th.className = 'main-table-row-header';
         var htmlTemplate =
             "<div align='left'>" +
-            //"<b>@testType@<br>@testName@</b><br>" +
-            "<b>@testName@</b><br/><br>" +
-            "by speed:<br>" +
-            "1. @goldSpeedTest@ (@goldSpeed@ ops/sec)<br>" +
-            "2. @silverSpeedTest@ (@silverSpeed@ ops/sec)<br>" +
-            "3. @bronzeSpeedTest@ (@bronzeSpeed@ ops/sec)<br><br>" +
-            "by payload:<br>" +
-            "1. @goldPayloadTest@ (@goldPayload@ byte(s))<br>" +
-            "2. @silverPayloadTest@ (@silverPayload@ byte(s))<br>" +
-            "3. @bronzePayloadTest@ (@bronzePayload@ byte(s))<br>" +
+                "<b>@testName@</b><br>@testType@<br><br>" +
+                "<b>by speed:</b><br>" +
+                "1. @goldSpeedTest@ (@goldSpeed@ ops/sec)<br>" +
+                "2. @silverSpeedTest@ (@silverSpeed@ ops/sec)<br>" +
+                "3. @bronzeSpeedTest@ (@bronzeSpeed@ ops/sec)<br><br>" +
+                "<b>by payload:</b><br>" +
+                "1. @goldPayloadTest@ (@goldPayload@ byte(s))<br>" +
+                "2. @silverPayloadTest@ (@silverPayload@ byte(s))<br>" +
+                "3. @bronzePayloadTest@ (@bronzePayload@ byte(s))<br>" +
             "<div>";
         th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
             {
-                //testType: r.testType,
+                testType: r.testType,
                 testName: r.testName,
                 goldSpeedTest: goldSpeedTest.SerializerName,
                 silverSpeedTest: silverSpeedTest.SerializerName,
@@ -279,14 +288,6 @@
         var serAbortsClass = benchTest.SerAborts == 0 ? "hidden" : "empty";
         var deserExceptionsClass = benchTest.DeserExceptions == 0 ? "hidden" : "empty";
         var deserAbortsClass = benchTest.DeserAborts == 0 ? "hidden" : "empty";
-        var serOpsSecClass = "empty";
-        var deserOpsSecClass = "empty";
-        if (parseFloat(benchTest.SerOpsSec) < parseFloat(benchTest.DeserOpsSec)) {
-            serOpsSecClass = 'worst-speed';
-        }
-        else {
-            deserOpsSecClass = 'worst-speed';
-        }
 
         var speedColor = getColor(metaData.speedMin, metaData.speedMax, benchTest.speed, false);
         var payloadColor = getColor(metaData.payloadMin, metaData.payloadMax, benchTest.PayloadSize, true);
@@ -295,24 +296,32 @@
 
         var cellHeaderHtmlTemplate =
             "<div>" +
-                "<table class='inner-table'>" +
-                	"<tr>" +
-                		"<td>Run:</td>" +
-                        "<td><b>@runNumber@</b> time(s)</td>" +
-                	"</tr>" +
-                	"<tr>" +
-                		"<td>Payload:</td>" +
-                        "<td><div><div class='color-mark left' style='background-color:@payloadColor@;'></div><div class='left'><b>@payloadSize@</b> byte(s)</div></div></td>" +
-                        "</tr> " +
-                	"<tr>" +
-                		"<td>Speed:</td>" +
-                		"<td><div><div class='color-mark left' style='background-color:@speedColor@;'></div><div class='left'><b>@speed@</b> ops/sec</div></div></td>" +
-                        "</tr>" +
-                	"<tr>" +
-                		"<td>GC:</td>" +
-                		"<td><b>@doGc@</b></td>" +
-                	"</tr>" +
-                "</table> " +
+                "<table class='inner-table test-header-table'>" +
+                    "<tr>" +
+                        "<td class='stat-result' bgcolor='@speedColor@'><b>@speed@</b></td>" +
+                        "<td class='stat-result' bgcolor='@payloadColor@'><b>@payloadSize@</b></td>" +
+                    "</tr>" +
+                    "<tr><td colspan='2'>" +
+                        "<table class='inner-table'>" +
+                        	"<tr>" +
+                        		"<td>Run:</td>" +
+                                "<td><b>@runNumber@</b> time(s)</td>" +
+                        	"</tr>" +
+                        	"<tr>" +
+                        		"<td>Payload:</td>" +
+                                "<td><b>@payloadSize@</b> byte(s)</td>" +
+                                "</tr> " +
+                        	"<tr>" +
+                        		"<td>Speed:</td>" +
+                        		"<td><b>@speed@</b> ops/sec</td>" +
+                                "</tr>" +
+                        	"<tr>" +
+                        		"<td>GC:</td>" +
+                        		"<td><b>@doGc@</b></td>" +
+                        	"</tr>" +
+                        "</table></td>" +
+                    "</tr>" +
+                "</table>" +
                 "<div class='@runExceptionClass@'>RunException <b>@runException@</b></div>" +
             "</div>";
 
@@ -322,10 +331,6 @@
                     "<tr>" +
                         "<td align=\"center\"><b>Serialization</b></td>" +
                     "</tr>" +
-                    "<tr>" +
-                        "<td>iterations:</td>" +
-                        "<td><b>@serIterations@</b></td>" +
-                    "</tr>" +
                     "<tr class='@serExceptionsClass@'>" +
                         "<td>exceptions:</td>" +
                         "<td><b>@serExceptions@</b></td>" +
@@ -334,17 +339,21 @@
                         "<td>aborts:</td>" +
                         "<td><b>@serAborts@</b></td>" +
                     "</tr>" +
+                    "<tr class='@serAbortsClass@'>" +
+                        "<td>first error:</td>" +
+                        "<td><b>@firstSerAbortMsg@</b></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>iterations:</td>" +
+                        "<td><b>@serIterations@</b></td>" +
+                    "</tr>" +
                     "<tr>" +
                         "<td>duration (ms):</td>" +
                         "<td><b>@serDurationMs@</b></td>" +
                     "</tr>" +
                     "<tr>" +
                         "<td>ops/sec:</td>" +
-                        "<td class='@serOpsSecClass@'><b>@serOpsSec@</b></td>" +
-                    "</tr>" +
-                    "<tr class='@serAbortsClass@'>" +
-                        "<td>first error:</td>" +
-                        "<td><b>@firstSerAbortMsg@</b></td>" +
+                        "<td><b>@serOpsSec@</b></td>" +
                     "</tr>" +
                 "</table>" +
             "</div>";
@@ -354,10 +363,6 @@
                 "<tr>" +
                     "<td align=\"center\"><b>Deserialization</b></td>" +
                 "</tr>" +
-                "<tr>" +
-                    "<td>iterations:</td>" +
-                    "<td><b>@deserIterations@</b></td>" +
-                "</tr>" +
                 "<tr class='@deserExceptionsClass@'>" +
                     "<td>exceptions:</td>" +
                     "<td><b>@deserExceptions@</b></td>" +
@@ -366,17 +371,21 @@
                     "<td>aborts:</td>" +
                     "<td><b>@deserAborts@</td>" +
                 "</tr>" +
+                "<tr class='@deserAbortsClass@'>" +
+                    "<td>first error:</td>" +
+                    "<td><b>@firstDeserAbortMsg@</b></td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td>iterations:</td>" +
+                    "<td><b>@deserIterations@</b></td>" +
+                "</tr>" +
                 "<tr>" +
                     "<td>duration (ms):</td>" +
                     "<td><b>@deserDurationMs@</b></td>" +
                 "</tr>" +
                 "<tr>" +
                     "<td>ops/sec:</td>" +
-                    "<td class='@deserOpsSecClass@'><b>@deserOpsSec@</b></td>" +
-                "</tr>" +
-                "<tr class='@deserAbortsClass@'>" +
-                    "<td>first error:</td>" +
-                    "<td><b>@firstDeserAbortMsg@</b></td>" +
+                    "<td><b>@deserOpsSec@</b></td>" +
                 "</tr>" +
             "</table>" +
         "</div>";
@@ -391,8 +400,8 @@
         td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
         {
             runNumber: numberWithCommas(benchTest.runCount, true),
-            payloadSize: numberWithCommas(benchTest.PayloadSize, true),
-            speed: benchTest.speed,
+            payloadSize: benchTest.PayloadSize == 0 ? '-' : shortenByteSize(benchTest.PayloadSize),
+            speed: benchTest.speed == 0 ? '-' : shortenQuantity(benchTest.speed),
             payloadColor: payloadColor,
             speedColor: speedColor, 
             doGc: benchTest.DoGc,
@@ -415,9 +424,7 @@
             deserAborts: numberWithCommas(benchTest.DeserAborts, true),
             deserDurationMs: numberWithCommas(benchTest.DeserDurationMs, true),
             deserOpsSec: numberWithCommas(benchTest.DeserOpsSec, true),
-            firstDeserAbortMsg: benchTest.FirstDeserAbortMsg,
-            serOpsSecClass: serOpsSecClass,
-            deserOpsSecClass: deserOpsSecClass
+            firstDeserAbortMsg: benchTest.FirstDeserAbortMsg
         });
         tr.appendChild(td);
     };
@@ -461,8 +468,12 @@
     };
 
     function getColor(max, min, value, reverse) {
+
+        if (value == 0)
+            return "lightgray";
         var normed = (value - min) * (speedColors.length - 1) / (max - min);
         var index = reverse ? speedColors.length - normed.toFixed() - 1 : normed.toFixed();
+
         return speedColors[index];
     }
 

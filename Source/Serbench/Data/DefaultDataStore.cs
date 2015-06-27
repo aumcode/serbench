@@ -155,7 +155,7 @@ namespace Serbench.Data
       {
         var packager = new WebViewer.DefaultWebPackager(this, null);
         targetDir = packager.Build(targetDir);
-        using(var fs = new FileStream(Path.Combine(targetDir, "data-{0}.js".Args(table.Key)), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
+        using(var fs = new FileStream(Path.Combine(targetDir, "scripts", "data-{0}.js".Args(table.Key)), FileMode.Create, FileAccess.Write, FileShare.None, 256*1024))
          using(var wri = new StreamWriter(fs, Encoding.UTF8))
          {
           wri.WriteLine("//Java script file for Serbench Web output. Table '{0}'".Args(table.Key));
