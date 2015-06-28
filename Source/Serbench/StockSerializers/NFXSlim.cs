@@ -87,6 +87,13 @@ namespace Serbench.StockSerializers
       if (m_Batching && 
           (test.SerIterations>1 || test.DeserIterations>1))
        throw new SerbenchException("SlimSerializer test is not properly configured. If BATCHING=true, then test may have many runs, not many ser/deser iterations as batching retains the stream state and is not an idempotent operation");
+    
+      if (m_Batching)
+      {
+        m_BatchSer.ResetCallBatch();
+        m_BatchDeser.ResetCallBatch();
+      }
+    
     }
 
 
