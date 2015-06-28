@@ -1,21 +1,3 @@
-.main-table {
-    border-collapse: collapse;
-    font-family: verdana;
-    font-size: 6pt;
-}
-
-.main-table td, .main-table th {
-    border: 1px dotted #a0a0a0;
-    font-weight: normal;
-}
-
-.main-table-row-header, .main-table-column-header {
-    background-color: #e4e4e0;
-    position: relative;
-    padding: 3px;
-    font-size: 10px;
-}
-
 .inner-table td, .inner-table th {
     border: 0;
 }
@@ -33,21 +15,8 @@
     background: #FDCCCC;
 }
 
-.main-table-row :hover {
-    background-color: #ffffe0;
-    border: 1px solid #808080;
-}
-
-.row-header {
-    text-align: left;
-}
-
 .absent-test {
     background-color: lightgray;
-}
-
-.corner-cell {
-    border: 0 !important;
 }
 
 .stat-result {
@@ -57,15 +26,4 @@
     text-align: center;
     text-shadow: 1px 1px 4px black;
 }
-
-.hidden {
-    display: none;
-}
-
-.empty {
-}
-
-.left {
-    float:left;
-}
-
+ 

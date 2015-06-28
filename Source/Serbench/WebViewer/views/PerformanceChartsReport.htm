@@ -1,0 +1,145 @@
+#<laconf>
+  compiler
+  {
+    base-class-name="Serbench.WebViewer.Master"
+    namespace="Serbench.WebViewer"
+    abstract="false"
+    summary="Different serializers' performance comparison"
+
+    using{ns="NFX.Web"}
+    using{ns="NFX.Wave"}
+    using{ns="NFX.Wave.Templatization"}
+  }
+#</laconf>
+#[class]
+
+#[override renderHeader()]
+
+#[override renderBody()]
+
+<link rel="stylesheet" type="text/css" href="styles/table.css">
+<link rel="stylesheet" type="text/css" href="styles/performance-table.css">
+
+
+<div class="main-container">
+    <div class="report-header">
+        <h1>Performance charts: different serializers' performance comparison</h1>
+    </div>
+    <div>
+        <table id="performance-table" class="main-table">
+            <col>
+            <col width="350">
+            <col width="350">
+            <thead>
+            <tr>
+                <th class="corner-cell"></th>
+                <th class="main-table-column-header">
+                    <div>Speed (ops/sec)</div></th>
+                <th class="main-table-column-header">
+                    <div>Payload (bytes)</div></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<script>
+
+    // globals
+    var barMaxWidth = '300px';
+
+    $(function() {
+
+        var data = WAVE.arrayWalkable(window.data_TestRunData);
+        var table = $('#performance-table')[0];
+        createTableBody(data, table);
+
+    });
+
+    function createTableBody(data, table) {
+
+        var tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        // distinct serializers
+        var serializersHeaders = data.wSelect(function(e) { return { serializerType: e.SerializerType, serializerName: e.SerializerName }; })
+            .wDistinct(function(a, b) { return a.serializerType == b.serializerType && a.serializerName == b.serializerName; })
+
+        // distinct tests
+        data.wSelect(function(e) { return { testType: e.TestType, testName: e.TestName }; })
+            .wDistinct(function(a, b) { return a.testType == b.testType && a.testName == b.testName; })
+            .wEach(function(r) {
+
+                var serializersData = serializersHeaders.wSelect(function(h) {
+                            return { header: h, data: getCellData(data, r, h) };
+                        })
+                        .wOrder(function (a, b) {
+                            if (a.data != null && b.data != null) {
+                                return a.data.speed < b.data.speed ? 1 : a.data.speed > b.data.speed ? -1 : 0;
+                            }
+                            else {
+                                return b.data != null ? 1 : a.data != null ? -1 : 0;
+                            }
+                });
+                var rawData = serializersData.wSelect(function(d) { return d.data; }).wToArray();
+                var testMetadata = getDataSummary(rawData);
+
+                // create header, speed and payload comparison cells
+                var tr = createRowHeader(r, rawData);
+                createPerformanceComparisonCell(tr, serializersData, testMetadata.speedMin, testMetadata.speedMax, function (d) { return d.data.speed; });
+                createPerformanceComparisonCell(tr, serializersData, testMetadata.payloadMin, testMetadata.payloadMax, function (d) { return d.data.PayloadSize; }); 
+                
+                tbody.appendChild(tr);
+            });
+    };
+
+    function createRowHeader(r, rawData) {
+         
+        var tr = document.createElement('tr');
+        tr.className = 'main-table-row';
+        var th = document.createElement('th');
+        th.className = 'main-table-row-header';
+        th.innerHTML = createTestSummary(r.testType, r.testName, rawData);
+        tr.appendChild(th);
+
+        return tr;
+    };
+
+    function createPerformanceComparisonCell(tr, serializersData, min, max, valueGetter) {
+          
+        var td = document.createElement('td');
+        tr.appendChild(td);
+
+        serializersData.wEach(function (d) {
+            
+            var div = document.createElement('div');
+            var bar = document.createElement('div');
+
+            var label = document.createElement('div');
+            label.innerHTML = d.header.serializerName;
+            label.className = 'label-text';
+
+            if(d.data == null) {
+                bar.innerHTML = "<div class='absent-serializer-test'></div>";
+            }
+            else if(d.data.speed == 0) {
+                bar.innerHTML = "<div class='error-serializer-test'></div>";
+            }
+            else {
+                var barWidth = valueGetter(d) * parseFloat(barMaxWidth) / max;
+                var barColor = getColor(min, max, valueGetter(d), false);
+                var barTemplate = "<div style='position: absolute; height:10px; width:@barWidth@px; background-color:@barColor@'></div>";
+                bar.innerHTML = WAVE.strHTMLTemplate(barTemplate, { barWidth: barWidth, barColor: barColor });
+            }
+                                         
+            div.appendChild(bar);
+            div.appendChild(label);
+            td.appendChild(div);
+        });
+    };
+
+</script>

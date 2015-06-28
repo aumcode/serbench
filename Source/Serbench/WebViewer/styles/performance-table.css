@@ -1,0 +1,18 @@
+.label-text {
+    position: relative;
+    left: 0;
+}
+
+.absent-serializer-test, .error-serializer-test {
+    position: absolute;
+    height: 10px; 
+    width: 10px; 
+} 
+
+.absent-serializer-test { 
+    background-color: lightgray;
+} 
+
+.error-serializer-test {
+    background-color: gray;
+}

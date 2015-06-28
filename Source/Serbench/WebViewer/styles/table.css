@@ -1,0 +1,43 @@
+.main-table {
+    border-collapse: collapse;
+    font-family: verdana;
+    font-size: 6pt;
+}
+
+.main-table td, .main-table th {
+    border: 1px dotted #a0a0a0;
+    font-weight: normal;
+}
+
+.main-table-row-header, .main-table-column-header {
+    background-color: #e4e4e0;
+    position: relative;
+    padding: 3px;
+    font-size: 10px;
+}
+
+.main-table-row :hover {
+    background-color: #ffffe0;
+    border: 1px solid #808080;
+}
+
+.row-header {
+    text-align: left;
+}
+
+.corner-cell {
+    border: 0 !important;
+}
+
+.hidden {
+    display: none;
+}
+
+.empty {
+}
+
+.left {
+    float: left;
+}
+
+

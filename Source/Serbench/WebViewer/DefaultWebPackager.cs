@@ -62,19 +62,20 @@ namespace Serbench.WebViewer
       AddResourceFile(path, c_ScriptsFolder, "serbench.js", @"scripts.serbench.js");
 
       AddResourceFile(path, c_StylesFolder, "default.css", @"styles.default.css");
-      AddResourceFile(path, c_StylesFolder, "chart.css", @"styles.chart.css");
+      AddResourceFile(path, c_StylesFolder, "table.css", @"styles.table.css");
       AddResourceFile(path, c_StylesFolder, "overview-table.css", @"styles.overview-table.css");
+      AddResourceFile(path, c_StylesFolder, "performance-table.css", @"styles.performance-table.css");
     }
 
     protected virtual void DoGeneratePages(string path)
     {
       var target = new NFX.Templatization.StringRenderingTarget(false);
-      new Index().Render(target, null);
-      File.WriteAllText(Path.Combine(path, "index.htm"), target.Value);
-
-      target = new NFX.Templatization.StringRenderingTarget(false);
       new OverviewReport().Render(target, null);
       File.WriteAllText(Path.Combine(path, "overviewreport.htm"), target.Value);
+
+      target = new NFX.Templatization.StringRenderingTarget(false);
+      new PerformanceChartsReport().Render(target, null);
+      File.WriteAllText(Path.Combine(path, "performancechartsreport.htm"), target.Value);
     }
 
     /// <summary>
