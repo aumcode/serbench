@@ -24,7 +24,7 @@ namespace Serbench.Specimens.Serializers
      MetadataRequirement = MetadataRequirement.Attributes,
      VendorName = "Marc Gravell",
      VendorLicense = "The Apache License 2.0",
-     VendorURL = "https://github.com/tomba/netserializer",
+     VendorURL = "https://github.com/mgravell/protobuf-net",
      VendorPackageAddress = "Install-Package protobuf-net",
      FormatName = "protobuf",
      LinesOfCodeK = 0,

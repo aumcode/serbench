@@ -99,8 +99,8 @@ namespace Serbench.Specimens.Tests
             Residence = primaryAddr,
             Shipping = primaryAddr,
             Billing = primaryAddr,
-            StageAccessCode = (0!=(rnd & (1<<30))) ? new byte[128] : null,
-            SpeakerAccessCode = (0!=(rnd & (1<<30))) ? new byte[128] : null,
+            StageAccessCode = new byte[32],
+            SpeakerAccessCode = new byte[32],
 
             YearsInSchool = (0!=(rnd & (1<<29))) ? 10 : (int?)null,
             EducationGrade = (0!=(rnd & (1<<28))) ? 230 : (int?)null,
