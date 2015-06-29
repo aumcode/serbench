@@ -34,7 +34,6 @@
     serializers
     {
         // Stock serializers: they use only Microsoft .NET libraries
-          
         serializer
 		{ 
 			type="Serbench.StockSerializers.MSBinaryFormatter, Serbench"
@@ -102,7 +101,6 @@
           name="NFX.Slim Default" 
           order=70
         }
-        
 /*      
         serializer
         {
@@ -170,7 +168,6 @@
         }
 
 	
-		// TODO: hungs up the application. Ctrl-C works.
 		serializer
         {
           type="Serbench.Specimens.Serializers.MsgPackSerializer, Serbench.Specimens"
@@ -182,7 +179,7 @@
 		serializer
         {
           type="Serbench.Specimens.Serializers.NetJSONSerializer, Serbench.Specimens"
-          name="NetJSONS" 
+          name="NetJSON" 
           order=200
         }
 
@@ -219,7 +216,6 @@
           order=235
           _include { file="knowntypes.EDI.laconf"} //include file contents          
         }
-
 
 		serializer
         {

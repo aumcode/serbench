@@ -41,7 +41,7 @@
     known-type{name="Serbench.Specimens.Tests.SVC_ServicePaymentInformation, Serbench.Specimens"}
     known-type{name="Serbench.Specimens.Tests.AMT_ServiceSupplementalAmount, Serbench.Specimens"}
     known-type{name="Serbench.Specimens.Tests.QTY_ServiceSupplementalQuantity, Serbench.Specimens"}
-    known-type{name="Serbench.Specimens.Tests.LQ_HealthCareRemarkCodes, Serbench.Specimens"}
+    known-type{name="Serbench.Specimens.Tests.LQ_HealthCareRemarkCode, Serbench.Specimens"}
     known-type{name="Serbench.Specimens.Tests.PLB_ProviderAdjustment, Serbench.Specimens"}
     known-type{name="Serbench.Specimens.Tests.MonetaryAmountAdjustment, Serbench.Specimens"}
 }
