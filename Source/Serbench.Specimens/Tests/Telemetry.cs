@@ -18,7 +18,7 @@ namespace Serbench.Specimens.Tests
             : base(context, conf)
         {
             if (m_MeasurementsNumber < 1) m_MeasurementsNumber = 1;
-            m_Data = new TelemetryData(m_MeasurementsNumber);
+            m_Data = TelemetryData.Make(m_MeasurementsNumber);
         }
 
 
@@ -29,7 +29,6 @@ namespace Serbench.Specimens.Tests
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
         {
-            var m_Data = new TelemetryData(m_MeasurementsNumber);
             serializer.Serialize(m_Data, target);
         }
 
@@ -57,23 +56,9 @@ namespace Serbench.Specimens.Tests
         /// <summary>
         /// Required by some serilizers (i.e. XML)
         /// </summary>
-        public TelemetryData() { }
-        public TelemetryData(int measurementsNumber)
-        {
-            Id = Guid.NewGuid().ToString();
-            DataSource = Guid.NewGuid().ToString();
-            TimeStamp = DateTime.Now;
-            Param1 = ExternalRandomGenerator.Instance.NextRandomInteger;
-            Param2 = (uint)ExternalRandomGenerator.Instance.NextRandomInteger;
-            Measurements = new double[measurementsNumber];
-            for (var i = 0; i < measurementsNumber; i++)
-                Measurements[i] = ExternalRandomGenerator.Instance.NextRandomDouble;
+        public TelemetryData() { }       
 
-            AssociatedProblemID = 123;
-            AssociatedLogID = 89032;
-            WasProcessed = true;
-        }
-
+ 
         [ProtoMember(1)]
         [DataMember]
         public string Id;
@@ -109,6 +94,25 @@ namespace Serbench.Specimens.Tests
         [ProtoMember(9)]
         [DataMember]
         public bool WasProcessed;
+
+        public static TelemetryData Make(int measurementsNumber)
+        {
+            TelemetryData data = new TelemetryData()
+            {
+                Id = Guid.NewGuid().ToString(),
+                DataSource = Guid.NewGuid().ToString(),
+                TimeStamp = DateTime.Now,
+                Param1 = ExternalRandomGenerator.Instance.NextRandomInteger,
+                Param2 = (uint)ExternalRandomGenerator.Instance.NextRandomInteger,
+                Measurements = new double[measurementsNumber],
+                AssociatedProblemID = 123,
+                AssociatedLogID = 89032,
+                WasProcessed = true
+            };
+            for (var i = 0; i < measurementsNumber; i++)
+                data.Measurements[i] = ExternalRandomGenerator.Instance.NextRandomDouble;
+            return data;
+        }
 
         public static bool AssertPayloadEquality(object original, object deserialized, out string errorString)
         {

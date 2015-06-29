@@ -75,5 +75,26 @@ namespace Serbench.Specimens.Serializers
                 return JSON.Deserialize(sr.ReadToEnd(), m_PrimaryType);
             }
         }
+      public override bool AssertPayloadEquality(Test test, object original, object deserialized, bool abort = true)
+        {
+            string serError = null;
+            if (test.Name.Contains("Telemetry"))
+            { 
+                if (!Serbench.Specimens.Tests.TelemetryData.AssertPayloadEquality(original, deserialized, out serError))
+                {
+                    if (abort) test.Abort(this, serError);
+                    return false;
+                }
+            }
+           else if (test.Name.Contains("EDI_X12_835"))
+            { 
+                if (!Serbench.Specimens.Tests.EDI_X12_835Data.AssertPayloadEquality(original, deserialized, out serError))
+                {
+                    if (abort) test.Abort(this, serError);
+                    return false;
+                }
+           }
+            return base.AssertPayloadEquality(test, original, deserialized, abort);
+        }
     }
 }

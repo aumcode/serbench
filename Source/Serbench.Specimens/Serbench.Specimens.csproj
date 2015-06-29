@@ -42,6 +42,9 @@
     <Reference Include="fastjson">
       <HintPath>..\packages\fastJSON.2.1.14.0\lib\net40\fastjson.dll</HintPath>
     </Reference>
+    <Reference Include="FsPickler">
+      <HintPath>..\packages\FsPickler.1.2.9\lib\net45\FsPickler.dll</HintPath>
+    </Reference>
     <Reference Include="HaveBoxJSON">
       <HintPath>..\packages\HaveBoxJSON.1.0.0\lib\net45\HaveBoxJSON.dll</HintPath>
     </Reference>
