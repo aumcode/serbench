@@ -47,68 +47,42 @@ namespace Serbench.Specimens.Serializers
 
         public override void Serialize(object root, Stream stream)
         {
-            var buf = MessageShark.MessageSharkSerializer.Serialize(root);
-            stream.Write(buf, 0, buf.Length);
-            //using (var sw = new StreamWriter(stream))
-            //{
-            //    sw.Write(MessageShark.MessageSharkSerializer.Serialize(root));
-            //}
+            MessageShark.MessageSharkSerializer.Serialize(root, stream);
         }
 
         public override object Deserialize(Stream stream)
         {
-            //using (MemoryStream ms = new MemoryStream())
-            //{
-            //     stream.CopyTo(ms);
-            //    return MessageShark.MessageSharkSerializer.Deserialize<object>(ms.ToArray());
-            //}
-            using (var sr = new StreamReader(stream))
-            {
-                var temp = sr.ReadToEnd();
-                byte[] bytes = new byte[temp.Length * sizeof(char)];
-                System.Buffer.BlockCopy(temp.ToCharArray(), 0, bytes, 0, bytes.Length);
-                return MessageShark.MessageSharkSerializer.Deserialize<object>(bytes);
-            }
-            // return null;   // TODO: How to call  Deserialize<T>(ms.ToArray()) with  m_primaryType ?
+            return MessageShark.MessageSharkSerializer.Deserialize(m_RootType, stream);
         }
 
         public override void ParallelSerialize(object root, Stream stream)
         {
-            using (var sw = new StreamWriter(stream))
-            {
-                sw.Write(MessageShark.MessageSharkSerializer.Serialize(root));
-            }
+            MessageShark.MessageSharkSerializer.Serialize(root, stream);
         }
 
         public override object ParallelDeserialize(Stream stream)
         {
-            using (var sr = new StreamReader(stream))
-            {
-                var temp = sr.ReadToEnd();
-                byte[] bytes = new byte[temp.Length * sizeof(char)];
-                System.Buffer.BlockCopy(temp.ToCharArray(), 0, bytes, 0, bytes.Length);
-                return MessageShark.MessageSharkSerializer.Deserialize<object>(bytes);
-            }
+            return MessageShark.MessageSharkSerializer.Deserialize(m_RootType, stream);
         }
-      public override bool AssertPayloadEquality(Test test, object original, object deserialized, bool abort = true)
+        public override bool AssertPayloadEquality(Test test, object original, object deserialized, bool abort = true)
         {
             string serError = null;
             if (test.Name.Contains("Telemetry"))
-            { 
+            {
                 if (!Serbench.Specimens.Tests.TelemetryData.AssertPayloadEquality(original, deserialized, out serError))
                 {
                     if (abort) test.Abort(this, serError);
                     return false;
                 }
             }
-           else if (test.Name.Contains("EDI_X12_835"))
-            { 
+            else if (test.Name.Contains("EDI_X12_835"))
+            {
                 if (!Serbench.Specimens.Tests.EDI_X12_835Data.AssertPayloadEquality(original, deserialized, out serError))
                 {
                     if (abort) test.Abort(this, serError);
                     return false;
                 }
-           }
+            }
             return base.AssertPayloadEquality(test, original, deserialized, abort);
         }
     }

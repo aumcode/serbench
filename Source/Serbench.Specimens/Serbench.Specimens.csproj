@@ -54,8 +54,9 @@
     <Reference Include="JsonFx">
       <HintPath>..\packages\JsonFx.2.0.1209.2802\lib\net40\JsonFx.dll</HintPath>
     </Reference>
-    <Reference Include="MessageShark">
-      <HintPath>..\packages\MessageShark.1.0.1\lib\net40\MessageShark.dll</HintPath>
+    <Reference Include="MessageShark, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MessageShark.1.0.2\lib\net40\MessageShark.dll</HintPath>
     </Reference>
     <Reference Include="MsgPack">
       <HintPath>..\packages\MsgPack.Cli.0.5.11\lib\net45\MsgPack.dll</HintPath>
