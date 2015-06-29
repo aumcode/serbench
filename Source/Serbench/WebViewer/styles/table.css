@@ -9,16 +9,11 @@
     font-weight: normal;
 }
 
-.main-table-row-header, .main-table-column-header {
+.main-table .main-table-row-header, .main-table-column-header {
     background-color: #e4e4e0;
     position: relative;
     padding: 3px;
     font-size: 10px;
-}
-
-.main-table-row :hover {
-    background-color: #ffffe0;
-    border: 1px solid #808080;
 }
 
 .row-header {

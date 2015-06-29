@@ -76,22 +76,27 @@
 
                 var serializersData = serializersHeaders.wSelect(function(h) {
                             return { header: h, data: getCellData(data, r, h) };
-                        })
-                        .wOrder(function (a, b) {
-                            if (a.data != null && b.data != null) {
-                                return a.data.speed < b.data.speed ? 1 : a.data.speed > b.data.speed ? -1 : 0;
-                            }
-                            else {
-                                return b.data != null ? 1 : a.data != null ? -1 : 0;
-                            }
-                });
+                        });
                 var rawData = serializersData.wSelect(function(d) { return d.data; }).wToArray();
                 var testMetadata = getDataSummary(rawData);
 
                 // create header, speed and payload comparison cells
                 var tr = createRowHeader(r, rawData);
-                createPerformanceComparisonCell(tr, serializersData, testMetadata.speedMin, testMetadata.speedMax, function (d) { return d.data.speed; });
-                createPerformanceComparisonCell(tr, serializersData, testMetadata.payloadMin, testMetadata.payloadMax, function (d) { return d.data.PayloadSize; }); 
+                createPerformanceComparisonCell(
+                    tr,
+                    serializersData.wOrder(function (a, b) { return sortBySpeedPredicate(a, b); }),
+                    testMetadata.speedMin,
+                    testMetadata.speedMax,
+                    false,
+                    function (d) { return d.data.speed; },
+                    function (v) { return shortenQuantity(v); });
+                createPerformanceComparisonCell(tr,
+                    serializersData.wOrder(function (a, b) { return sortByPayloadPredicate(a, b); }),
+                    testMetadata.payloadMin,
+                    testMetadata.payloadMax,
+                    true,
+                    function (d) { return d.data.PayloadSize; },
+                    function (v) { return shortenByteSize(v); });
                 
                 tbody.appendChild(tr);
             });
@@ -109,7 +114,7 @@
         return tr;
     };
 
-    function createPerformanceComparisonCell(tr, serializersData, min, max, valueGetter) {
+    function createPerformanceComparisonCell(tr, serializersData, min, max, revertPalette, valueGetter, valueFormatter) {
           
         var td = document.createElement('td');
         tr.appendChild(td);
@@ -117,29 +122,59 @@
         serializersData.wEach(function (d) {
             
             var div = document.createElement('div');
+            div.className = 'performance-bar-container';
+
             var bar = document.createElement('div');
 
             var label = document.createElement('div');
-            label.innerHTML = d.header.serializerName;
-            label.className = 'label-text';
+            label.className = 'performance-label';
+            var header = document.createElement('div');
+            header.innerHTML = d.header.serializerName;
+            header.className = 'label-header';
+            label.appendChild(header);
+            var value = document.createElement('div');
+            value.className = 'label-value';
+            label.appendChild(value);
 
             if(d.data == null) {
                 bar.innerHTML = "<div class='absent-serializer-test'></div>";
+                value.innerHTML = '-';
             }
-            else if(d.data.speed == 0) {
+            else if (valueGetter(d) == 0) {
                 bar.innerHTML = "<div class='error-serializer-test'></div>";
+                value.innerHTML = '-';
             }
             else {
-                var barWidth = valueGetter(d) * parseFloat(barMaxWidth) / max;
-                var barColor = getColor(min, max, valueGetter(d), false);
-                var barTemplate = "<div style='position: absolute; height:10px; width:@barWidth@px; background-color:@barColor@'></div>";
+                var val = valueGetter(d);
+                var barWidth = val * parseFloat(barMaxWidth) / max;
+                var barColor = getColor(min, max, val, revertPalette);
+                var barTemplate = "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>";
                 bar.innerHTML = WAVE.strHTMLTemplate(barTemplate, { barWidth: barWidth, barColor: barColor });
+                value.innerHTML = valueFormatter(val);
             }
-                                         
+
             div.appendChild(bar);
             div.appendChild(label);
             td.appendChild(div);
         });
     };
+
+    function sortBySpeedPredicate(a, b) {
+        if (a.data != null && b.data != null) {
+            return a.data.speed < b.data.speed ? 1 : a.data.speed > b.data.speed ? -1 : 0;
+        }
+        else {
+            return b.data != null ? 1 : a.data != null ? -1 : 0;
+        }
+    }
+
+    function sortByPayloadPredicate(a, b) {
+        if (a.data != null && b.data != null) {
+            return (a.data.PayloadSize == 0 || a.data.PayloadSize > b.data.PayloadSize) ? 1 : (b.data.PayloadSize == 0 || a.data.PayloadSize < b.data.PayloadSize) ? -1 : 0;
+        }
+        else {
+            return b.data != null ? 1 : a.data != null ? -1 : 0;
+        }
+    }
 
 </script>

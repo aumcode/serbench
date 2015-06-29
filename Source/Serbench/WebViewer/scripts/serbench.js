@@ -21,13 +21,24 @@ var performancePalette = [
 // ******************************** Number format functions ********************************
 
 // formats number with comma as thousand delimeter and rounds it with given accuracy 
-function numberWithCommas(x, precision) {
+function numberWithCommas(x, precision, removeTrailingZeros) {
+
     if (typeof precision != 'undefined')
         x = x.toFixed(precision);
+    if (typeof removeTrailingZeros == 'undefined')
+        removeTrailingZeros = true;
 
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
+
+    if (removeTrailingZeros && parts.length > 1) {
+        parts[1] = parts[1].replace(/0+$/g, "");
+    }
+
+    if (parts[1] !== "")
+        return parts.join(".");
+
+    return parts[0];
 };
 
 // shortens number with well-known suffixes (K, M, ...) and rounds it with given accuracy
