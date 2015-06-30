@@ -28,8 +28,8 @@
     <div>
         <table id="performance-table" class="main-table">
             <col>
-            <col width="350">
-            <col width="350">
+            <col width="370">
+            <col width="370">
             <thead>
             <tr>
                 <th class="corner-cell"></th>
@@ -57,7 +57,6 @@
         var data = WAVE.arrayWalkable(window.data_TestRunData);
         var table = $('#performance-table')[0];
         createTableBody(data, table);
-
     });
 
     function createTableBody(data, table) {
@@ -76,25 +75,28 @@
 
                 var serializersData = serializersHeaders.wSelect(function(h) {
                             return { header: h, data: getCellData(data, r, h) };
-                        });
-                var rawData = serializersData.wSelect(function(d) { return d.data; }).wToArray();
+                    }).wToArray();
+                var rawData = WAVE.arrayWalkable(serializersData).wSelect(function(d) { return d.data; }).wToArray();
                 var testMetadata = getDataSummary(rawData);
 
                 // create header, speed and payload comparison cells
                 var tr = createRowHeader(r, rawData);
                 createPerformanceComparisonCell(
                     tr,
-                    serializersData.wOrder(function (a, b) { return sortBySpeedPredicate(a, b); }),
+                    serializersData,
                     testMetadata.speedMin,
                     testMetadata.speedMax,
                     false,
+                    function (a, b) { return sortBySpeedPredicate(a, b); },
                     function (d) { return d.data.speed; },
                     function (v) { return shortenQuantity(v); });
-                createPerformanceComparisonCell(tr,
-                    serializersData.wOrder(function (a, b) { return sortByPayloadPredicate(a, b); }),
+                createPerformanceComparisonCell(
+                    tr,
+                    serializersData,
                     testMetadata.payloadMin,
                     testMetadata.payloadMax,
                     true,
+                    function (a, b) { return sortByPayloadPredicate(a, b); },
                     function (d) { return d.data.PayloadSize; },
                     function (v) { return shortenByteSize(v); });
                 
@@ -116,49 +118,51 @@
         return tr;
     };
 
-    function createPerformanceComparisonCell(tr, serializersData, min, max, revertPalette, valueGetter, valueFormatter) {
+    function createPerformanceComparisonCell(tr, dataList, min, max, revertPalette, comparator, valueGetter, valueFormatter) {
           
         var td = document.createElement('td');
         td.className = 'stat-container';
         tr.appendChild(td);
 
-        serializersData.wEach(function (d) {
+        WAVE.arrayWalkable(dataList)
+            .wOrder(function (a, b) { return comparator(a, b);})
+            .wEach(function (d) {
             
-            var div = document.createElement('div');
-            div.className = 'performance-bar-container';
-
-            var bar = document.createElement('div');
-
-            var label = document.createElement('div');
-            label.className = 'performance-label';
-            var header = document.createElement('div');
-            header.innerHTML = d.header.serializerName;
-            header.className = 'label-header';
-            label.appendChild(header);
-            var value = document.createElement('div');
-            value.className = 'label-value';
-            label.appendChild(value);
-
-            if(d.data == null) {
-                bar.innerHTML = "<div class='absent-serializer-test'></div>";
-                value.innerHTML = '-';
-            }
-            else if (valueGetter(d) == 0) {
-                bar.innerHTML = "<div class='error-serializer-test'></div>";
-                value.innerHTML = '-';
-            }
-            else {
-                var val = valueGetter(d);
-                var barWidth = val * parseFloat(barMaxWidth) / max;
-                var barColor = getColor(min, max, val, revertPalette);
-                var barTemplate = "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>";
-                bar.innerHTML = WAVE.strHTMLTemplate(barTemplate, { barWidth: barWidth, barColor: barColor });
-                value.innerHTML = valueFormatter(val);
-            }
-
-            div.appendChild(bar);
-            div.appendChild(label);
-            td.appendChild(div);
+                var div = document.createElement('div');
+                div.className = 'performance-bar-container';
+                
+                var bar = document.createElement('div');
+                
+                var label = document.createElement('div');
+                label.className = 'performance-label';
+                var header = document.createElement('div');
+                header.innerHTML = d.header.serializerName;
+                header.className = 'label-header';
+                label.appendChild(header);
+                var value = document.createElement('div');
+                value.className = 'label-value';
+                label.appendChild(value);
+                
+                if(d.data == null) {
+                    bar.innerHTML = "<div class='absent-serializer-test'></div>";
+                    value.innerHTML = '-';
+                }
+                else if (valueGetter(d) == 0) {
+                    bar.innerHTML = "<div class='error-serializer-test'></div>";
+                    value.innerHTML = '-';
+                }
+                else {
+                    var val = valueGetter(d);
+                    var barWidth = val * parseFloat(barMaxWidth) / max;
+                    var barColor = getColor(min, max, val, revertPalette);
+                    var barTemplate = "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>";
+                    bar.innerHTML = WAVE.strHTMLTemplate(barTemplate, { barWidth: barWidth, barColor: barColor });
+                    value.innerHTML = valueFormatter(val);
+                }
+                
+                div.appendChild(bar);
+                div.appendChild(label);
+                td.appendChild(div);
         });
     };
 
