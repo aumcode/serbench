@@ -191,21 +191,40 @@ function getDataSummary(cellDatas){
 
     WAVE.arrayWalkable(cellDatas).wEach(function (d) {
         
-        if (d == null || d.PayloadSize == 0 || d.speed == 0)
+        if (d == null)
             return;
 
-        var speed = parseFloat(d.SerOpsSec) < parseFloat(d.DeserOpsSec) ? d.SerOpsSec : d.DeserOpsSec;
-        if (speedMin == null || speedMin > speed)
-            speedMin = speed;
-        if (speedMax == null || speedMax < speed)
-            speedMax = speed;
-        if (payloadMin == null || payloadMin > d.PayloadSize)
-            payloadMin = d.PayloadSize;
-        if (payloadMax == null || payloadMax < d.PayloadSize)
-            payloadMax = d.PayloadSize;
+        if (d.speed != 0) {
+            var speed = parseFloat(d.SerOpsSec) < parseFloat(d.DeserOpsSec) ? d.SerOpsSec : d.DeserOpsSec;
+            if (speedMin == null || speedMin > speed)
+                speedMin = speed;
+            if (speedMax == null || speedMax < speed)
+                speedMax = speed;
+        }
+
+        if (d.PayloadSize != 0) {
+            if (payloadMin == null || payloadMin > d.PayloadSize)
+                payloadMin = d.PayloadSize;
+            if (payloadMax == null || payloadMax < d.PayloadSize)
+                payloadMax = d.PayloadSize;
+        }
     });
 
     return { speedMin: speedMin, speedMax: speedMax, payloadMin: payloadMin, payloadMax: payloadMax };
+}
+
+
+
+// **************************************** UI ****************************************
+
+function highlightRow(row) {
+    row.style.border = "1px solid #808080";
+    row.style.background = "#ffffe0";
+}
+
+function unhighlightRow(row) {
+    row.style.border = "0px";
+    row.style.background = "#ffffff";
 }
 
 // for a given value returns color which is linear mapped to performance palette

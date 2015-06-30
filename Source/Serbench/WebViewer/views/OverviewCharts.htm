@@ -18,12 +18,12 @@
 #[override renderBody()]
 
 <link rel="stylesheet" type="text/css" href="styles/table.css">
-<link rel="stylesheet" type="text/css" href="styles/performance-table.css">
+<link rel="stylesheet" type="text/css" href="styles/overview-charts.css">
 
 
 <div class="main-container">
     <div class="report-header">
-        <h1>Performance charts: different serializers' performance comparison</h1>
+        <h1>Charts: different serializers' performance comparison</h1>
     </div>
     <div>
         <table id="performance-table" class="main-table">
@@ -106,6 +106,8 @@
          
         var tr = document.createElement('tr');
         tr.className = 'main-table-row';
+        tr.onmouseover = function () { highlightRow(tr) };
+        tr.onmouseout = function () { unhighlightRow(tr) };
         var th = document.createElement('th');
         th.className = 'main-table-row-header';
         th.innerHTML = createTestSummary(r.testType, r.testName, rawData);
@@ -117,6 +119,7 @@
     function createPerformanceComparisonCell(tr, serializersData, min, max, revertPalette, valueGetter, valueFormatter) {
           
         var td = document.createElement('td');
+        td.className = 'stat-container';
         tr.appendChild(td);
 
         serializersData.wEach(function (d) {

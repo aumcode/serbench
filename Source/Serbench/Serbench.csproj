@@ -78,11 +78,11 @@
     <Compile Include="WebViewer\views\Master.htm.auto.cs">
       <DependentUpon>Master.htm</DependentUpon>
     </Compile>
-    <Compile Include="WebViewer\views\OverviewReport.htm.auto.cs">
-      <DependentUpon>OverviewReport.htm</DependentUpon>
+    <Compile Include="WebViewer\views\OverviewTable.htm.auto.cs">
+      <DependentUpon>OverviewTable.htm</DependentUpon>
     </Compile>
-    <Compile Include="WebViewer\views\PerformanceChartsReport.htm.auto.cs">
-      <DependentUpon>PerformanceChartsReport.htm</DependentUpon>
+    <Compile Include="WebViewer\views\OverviewCharts.htm.auto.cs">
+      <DependentUpon>OverviewCharts.htm</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -92,11 +92,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="WebViewer\views\Master.htm" />
-    <None Include="WebViewer\views\OverviewReport.htm" />
-    <None Include="WebViewer\views\PerformanceChartsReport.htm" />
+    <None Include="WebViewer\views\OverviewTable.htm" />
+    <None Include="WebViewer\views\OverviewCharts.htm" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="WebViewer\styles\performance-table.css" />
+    <EmbeddedResource Include="WebViewer\styles\overview-charts.css" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WebViewer\styles\table.css" />

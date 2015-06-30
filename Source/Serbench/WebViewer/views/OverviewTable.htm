@@ -26,7 +26,7 @@
         <h1>Overview: aggregate information about different serializers tests</h1>
     </div>
     <div class="report-list-container">
-        <a href="performancechartsreport.htm" target="_blank">Performance charts: different serializers' performance comparison</a>
+        <a href="overview-charts.htm" target="_blank">Charts: different serializers' performance comparison</a>
     </div>
     <div id="overview-table"></div>
 </div>
@@ -137,6 +137,8 @@
 
         var tr = document.createElement('tr');
         tr.className = 'main-table-row';
+        tr.onmouseover = function () { highlightRow(tr) };
+        tr.onmouseout = function () { unhighlightRow(tr) };
         var th = document.createElement('th');
         th.className = 'main-table-row-header';
         th.innerHTML = createTestSummary(r.testType, r.testName, cellDatas);
