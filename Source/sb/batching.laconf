@@ -73,7 +73,43 @@
              
              msg-count=5000
             }
-         
+
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="RPC Count: 100" 
+             order=100
+             runs=100 
+             ser-iterations=1 
+             deser-iterations=1
+             rpc=true
+             msg-count=100
+            }
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="RPC Count: 1000" 
+             order=200
+             runs=100 
+             ser-iterations=1 
+             deser-iterations=1
+             rpc=true
+             msg-count=1000
+            }
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="RPC Count: 5000" 
+             order=300
+             runs=50 
+             ser-iterations=1 
+             deser-iterations=1
+             rpc=true
+             msg-count=5000
+            }
+            
         }//tests     
      
      

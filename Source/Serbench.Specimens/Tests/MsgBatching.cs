@@ -47,7 +47,6 @@ namespace Serbench.Specimens.Tests
             Fax = (0!=(rnd & (1<<30)))  ? "(555) 111-22239" : null,
            };
          }
-
     } 
 
     [ProtoContract()]
@@ -116,6 +115,87 @@ namespace Serbench.Specimens.Tests
 
 
 
+    [ProtoContract]
+    [DataContract]
+    [Serializable] public class BankMsg
+    {
+         [ProtoMember(1)][DataMember] public string FIPSCode;
+         [ProtoMember(2)][DataMember] public string HCFACode;
+         [ProtoMember(3)][DataMember] public long LANGRARCode;
+         [ProtoMember(4)][DataMember] public bool IsChargeable;
+
+         public static BankMsg Build()
+         {
+           var rnd = ExternalRandomGenerator.Instance.NextRandomInteger;
+           return new BankMsg
+           {
+            FIPSCode = NaturalTextGenerator.Generate(20),
+            HCFACode = NaturalTextGenerator.Generate(20),
+            LANGRARCode = 1239872633238L,
+            IsChargeable = true
+           };
+         }
+    } 
+
+
+    [ProtoContract]
+    [DataContract]
+    [Serializable] public class RPCMessage
+    {
+         [ProtoMember(1)][DataMember] public Guid RequestID;
+         [ProtoMember(2)][DataMember] public string TypeName;
+         [ProtoMember(3)][DataMember] public string MethodName;
+         [ProtoMember(4)][DataMember] public int MethodID;
+         [ProtoMember(5)][DataMember] public Guid? RemoteInstance;
+         [ProtoMember(6)][DataMember] public double? RequiredReliability;
+         [ProtoMember(7)][DataMember] public bool WrapException;
+         [ProtoMember(8)][DataMember] public bool ElevatePermission;
+         
+         //Protobuf can not do it
+         //http://stackoverflow.com/questions/25141791/serialize-object-with-protobuf-net
+         //Can not support primitives, can not support byte[]
+         //http://stackoverflow.com/questions/17192702/protobuf-net-serializing-system-object-with-dynamictype-throws-exception
+         
+         //http://stackoverflow.com/questions/11762851/protobuf-net-a-reference-tracked-object-changed-reference-during-deserializarti
+         // '... A warning though: you mention "subclasses"; DynamicType does not play nicely with inheritance at the moment;
+         // I have some outstanding work to do there.' –  Marc Gravell♦ Aug 2 '12 at 7:22 
+
+         [ProtoMember(9, DynamicType=true)][DataMember] public object[] CallArguments;
+
+         public static RPCMessage Build()
+         {
+           var rnd = ExternalRandomGenerator.Instance.NextRandomInteger;
+           var msg = new RPCMessage
+           {
+            RequestID = Guid.NewGuid(),
+            TypeName = NaturalTextGenerator.Generate(80),
+            MethodName = NaturalTextGenerator.Generate(30),
+            MethodID = rnd % 25,
+            RemoteInstance = (0!=(rnd & (1<<32)))  ? Guid.NewGuid() : (Guid?)null,
+
+            RequiredReliability = (0!=(rnd & (1<<31)))  ? rnd / 100d : (double?)null,
+            WrapException = (0!=(rnd & (1<<30))),
+            ElevatePermission = (0!=(rnd & (1<<29)))
+           };
+
+           msg.CallArguments = new object[ExternalRandomGenerator.Instance.NextScaledRandomInteger(0, 10)];
+           for(var i=0; i<msg.CallArguments.Length; i++)
+           {
+             var r = ExternalRandomGenerator.Instance.NextScaledRandomInteger(0, 4);
+              if (r==1)  msg.CallArguments[i] = BankMsg.Build();
+              else if (r==2)  msg.CallArguments[i] = NaturalTextGenerator.Generate();
+              else if (r==3)  msg.CallArguments[i] = null; //new byte[16]; Protobuf does not support byte[] via object[]
+              else
+                msg.CallArguments[i] = AddressMessage.Build();
+           }
+
+           return msg;
+         }
+
+    } 
+
+
+
     /// <summary>
     /// This Test shows a batching scenario i.e. a full-duplex socket connection
     /// when a party needs to send X consequitive atomic messages one after another in batches
@@ -129,21 +209,24 @@ namespace Serbench.Specimens.Tests
         {
             if (m_MsgCount < 1) m_MsgCount = 1;
 
-            m_Data = new List<SomePersonalDataMessage>(m_MsgCount);
+            m_Data = new List<object>(m_MsgCount);
 
             for (var i = 0; i < m_MsgCount; i++)
-              m_Data.Add( SomePersonalDataMessage.Build() );
+              m_Data.Add( m_RPC ? (object)RPCMessage.Build() : SomePersonalDataMessage.Build() );
         }
 
         [Config]
         private int m_MsgCount;
 
-        private List<SomePersonalDataMessage> m_Data = new List<SomePersonalDataMessage>();
+        [Config]
+        private bool m_RPC;
+
+        private List<object> m_Data = new List<object>();
 
 
         public override Type GetPayloadRootType()
         {                      
-            return typeof(SomePersonalDataMessage);
+            return m_RPC ? typeof(RPCMessage) : typeof(SomePersonalDataMessage);
         }
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
