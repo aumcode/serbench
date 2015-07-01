@@ -113,17 +113,16 @@
                 
                 // prepare cell data
                 var cellDatas = WAVE.arrayWalkable(headersInfo)
-                                    .wSelect(function (h) { return getCellData(data, r, h); })
-                                    .wToArray();
+                                    .wSelect(function (h) { return getCellData(data, r, h); });
 
                 // create row, insert first cell (row header)
                 var tr = createRow(r, cellDatas);
 
                 // prepare row aggregate & statistics data
-                var metaData = getDataSummary(cellDatas);
+                var metaData = getDataSummary(cellDatas, false);
 
                 // fill table cells
-                WAVE.arrayWalkable(cellDatas).wEach(function (d) {
+                cellDatas.wEach(function (d) {
                     createTableCell(d, tr, metaData);
                 });
 
@@ -141,7 +140,7 @@
         tr.onmouseout = function () { unhighlightRow(tr) };
         var th = document.createElement('th');
         th.className = 'main-table-row-header';
-        th.innerHTML = createTestSummary(r.testType, r.testName, cellDatas);
+        th.innerHTML = createTestSummary(r.testType, r.testName, cellDatas, false);
         tr.appendChild(th);
 
         return tr;

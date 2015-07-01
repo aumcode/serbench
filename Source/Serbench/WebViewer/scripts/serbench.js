@@ -81,6 +81,13 @@ function shortenByteSize(x, precision) {
 
 // ******************************** Data aggregate functions *******************************
 
+function isTestClear(testData) {
+    return testData.speed != 0 &&
+           testData.PayloadSize != 0 &&
+           JSON.parse(testData.SerSupported) &&
+           JSON.parse(testData.DeserSupported);
+}
+
 // returns aggregate data for all tests with given test's and serializer's name and type
 function getCellData(data, rowHeaderInfo, columnHeaderInfo) {
 
@@ -98,38 +105,64 @@ function getCellData(data, rowHeaderInfo, columnHeaderInfo) {
     }
 
     var benchTest = benchTests.wFirst();
+    var result = {
+        TestType : benchTest.TestType,
+        TestName : benchTest.TestName,
+        SerializerType : benchTest.SerializerType,
+        SerializerName : benchTest.SerializerName,
+        RunException : benchTest.RunException,
+        DoGc : benchTest.DoGc, 
+        SerSupported : benchTest.SerSupported,
+        SerIterations : benchTest.SerIterations, 
+        FirstSerAbortMsg : benchTest.FirstSerAbortMsg,
+        DeserSupported : benchTest.DeserSupported,
+        DeserIterations : benchTest.DeserIterations,  
+        FirstDeserAbortMsg : benchTest.FirstDeserAbortMsg,
+        PayloadSize: benchTest.PayloadSize,
+        SerExceptions: benchTest.SerExceptions,
+        SerAborts: benchTest.SerAborts,
+        SerDurationMs: benchTest.SerDurationMs,
+        SerOpsSec: benchTest.SerOpsSec,
+        DeserExceptions: benchTest.DeserExceptions,
+        DeserAborts: benchTest.DeserAborts,
+        DeserDurationMs: benchTest.DeserDurationMs,
+        DeserOpsSec: benchTest.DeserOpsSec
+    };
 
     // if there are many tests, calculate avarage data
     var count = benchTests.wCount();
     if (count > 1) {
         benchTests.wSkip(1).wEach(function (t) {
-            benchTest.PayloadSize += t.PayloadSize;
-            benchTest.SerExceptions += t.SerExceptions;
-            benchTest.SerAborts += t.SerAborts;
-            benchTest.SerDurationMs += t.SerDurationMs;
-            benchTest.SerOpsSec += t.SerOpsSec;
-            benchTest.DeserExceptions += t.DeserExceptions;
-            benchTest.DeserAborts += t.DeserAborts;
-            benchTest.DeserDurationMs += t.DeserDurationMs;
-            benchTest.DeserOpsSec += t.DeserOpsSec;
+            result.PayloadSize += t.PayloadSize;
+            result.SerExceptions += t.SerExceptions;
+            result.SerAborts += t.SerAborts;
+            result.SerDurationMs += t.SerDurationMs;
+            result.SerOpsSec += t.SerOpsSec;
+            result.DeserExceptions += t.DeserExceptions;
+            result.DeserAborts += t.DeserAborts;
+            result.DeserDurationMs += t.DeserDurationMs;
+            result.DeserOpsSec += t.DeserOpsSec;
         });
-        benchTest.SerDurationMs = benchTest.SerDurationTicks / 1000;
-        benchTest.SerOpsSec /= count;
-        benchTest.DeserDurationMs = benchTest.DeserDurationTicks / 1000;
-        benchTest.DeserOpsSec /= count;
+        result.SerDurationMs = result.SerDurationTicks / 1000;
+        result.SerOpsSec /= count;
+        result.DeserDurationMs = result.DeserDurationTicks / 1000;
+        result.DeserOpsSec /= count;
     }
-    benchTest.runCount = count;
-    benchTest.speed = parseFloat(benchTest.SerOpsSec) < parseFloat(benchTest.DeserOpsSec) ? benchTest.SerOpsSec : benchTest.DeserOpsSec;
+    result.runCount = count;
+    result.speed = parseFloat(result.SerOpsSec) < parseFloat(result.DeserOpsSec) ? result.SerOpsSec : result.DeserOpsSec;
 
-    return benchTest;
+    return result;
 };
                     
 // returns information about best serializers for a given test (by speed and payload)
-function createTestSummary(testName, testType, cellDatas){
+function createTestSummary(testName, testType, cellDatas, onlyClearTests) {
 
-    var payloadOrdered = WAVE.arrayWalkable(cellDatas).wWhere(function (d) { return d !== null && d.PayloadSize != 0; })
-                                                      .wOrder(function (a, b) { return a.PayloadSize > b.PayloadSize ? 1 : a.PayloadSize < b.PayloadSize ? -1 : 0; })
-                                                      .wToArray();
+    var payloadPredicate = onlyClearTests ?
+                           function (d) { return d !== null && isTestClear(d); } :
+                           function (d) { return d !== null && d.PayloadSize != 0; };
+    var payloadOrdered = cellDatas.wWhere(payloadPredicate)
+                                  .wOrder(function (a, b) { return a.PayloadSize > b.PayloadSize ? 1 : a.PayloadSize < b.PayloadSize ? -1 : 0; })
+                                  .wToArray();
     var goldPayloadTest = payloadOrdered.length == 0 ? null : payloadOrdered[0];
     var silverPayloadTest = payloadOrdered.length == 0 ? null :
                         payloadOrdered.length == 1 ? payloadOrdered[0] : payloadOrdered[1];
@@ -137,9 +170,12 @@ function createTestSummary(testName, testType, cellDatas){
                         payloadOrdered.length == 1 ? payloadOrdered[0] :
                         payloadOrdered.length == 2 ? payloadOrdered[1] : payloadOrdered[2];
 
-    var speedOrdered = WAVE.arrayWalkable(cellDatas).wWhere(function (d) { return d !== null && d.speed != 0; })
-                                                    .wOrder(function (a, b) { return a.speed < b.speed ? 1 : a.speed > b.speed ? -1 : 0; })
-                                                    .wToArray();
+    var speedPredicate = onlyClearTests ?
+                         function (d) { return d !== null && isTestClear(d); } :
+                         function (d) { return d !== null && d.speed != 0; };
+    var speedOrdered = cellDatas.wWhere(speedPredicate)
+                                .wOrder(function (a, b) { return a.speed < b.speed ? 1 : a.speed > b.speed ? -1 : 0; })
+                                .wToArray();
     var goldSpeedTest = speedOrdered.length == 0 ? null : speedOrdered[0];
     var silverSpeedTest = speedOrdered.length == 0 ? null :
                       speedOrdered.length == 1 ? speedOrdered[0] : speedOrdered[1];
@@ -182,16 +218,19 @@ function createTestSummary(testName, testType, cellDatas){
 }
 
 // returns performance boundaries for a given set of tests 
-function getDataSummary(cellDatas){
+function getDataSummary(cellDatas, onlyClearTests){
 
     var speedMin = null;
     var speedMax = null;
     var payloadMin = null;
     var payloadMax = null;
 
-    WAVE.arrayWalkable(cellDatas).wEach(function (d) {
+    cellDatas.wEach(function (d) {
         
         if (d == null)
+            return;
+
+        if (onlyClearTests && !isTestClear(d))
             return;
 
         if (d.speed != 0) {

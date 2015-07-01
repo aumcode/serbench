@@ -65,8 +65,8 @@
         table.appendChild(tbody);
 
         // distinct serializers
-        var serializersHeaders = data.wSelect(function(e) { return { serializerType: e.SerializerType, serializerName: e.SerializerName }; })
-            .wDistinct(function(a, b) { return a.serializerType == b.serializerType && a.serializerName == b.serializerName; })
+        var serializersHeaders = data.wSelect(function (e) { return { serializerType: e.SerializerType, serializerName: e.SerializerName }; })
+                                     .wDistinct(function (a, b) { return a.serializerType == b.serializerType && a.serializerName == b.serializerName; });
 
         // distinct tests
         data.wSelect(function(e) { return { testType: e.TestType, testName: e.TestName }; })
@@ -75,9 +75,9 @@
 
                 var serializersData = serializersHeaders.wSelect(function(h) {
                             return { header: h, data: getCellData(data, r, h) };
-                    }).wToArray();
-                var rawData = WAVE.arrayWalkable(serializersData).wSelect(function(d) { return d.data; }).wToArray();
-                var testMetadata = getDataSummary(rawData);
+                            });
+                var rawData = serializersData.wSelect(function(d) { return d.data; });
+                var testMetadata = getDataSummary(rawData, true);
 
                 // create header, speed and payload comparison cells
                 var tr = createRowHeader(r, rawData);
@@ -112,7 +112,7 @@
         tr.onmouseout = function () { unhighlightRow(tr) };
         var th = document.createElement('th');
         th.className = 'main-table-row-header';
-        th.innerHTML = createTestSummary(r.testType, r.testName, rawData);
+        th.innerHTML = createTestSummary(r.testType, r.testName, rawData, true);
         tr.appendChild(th);
 
         return tr;
@@ -124,64 +124,63 @@
         td.className = 'stat-container';
         tr.appendChild(td);
 
-        WAVE.arrayWalkable(dataList)
-            .wOrder(function (a, b) { return comparator(a, b);})
-            .wEach(function (d) {
+        dataList.wOrder(function (a, b) { return comparator(a, b);})
+                .wEach(function (d) {
             
-                var div = document.createElement('div');
-                div.className = 'performance-bar-container';
-                
-                var bar = document.createElement('div');
-                
-                var label = document.createElement('div');
-                label.className = 'performance-label';
-                var header = document.createElement('div');
-                header.innerHTML = d.header.serializerName;
-                header.className = 'label-header';
-                label.appendChild(header);
-                var value = document.createElement('div');
-                value.className = 'label-value';
-                label.appendChild(value);
-                
-                if(d.data == null) {
-                    bar.innerHTML = "<div class='absent-serializer-test'></div>";
-                    value.innerHTML = '-';
-                }
-                else if (valueGetter(d) == 0) {
-                    bar.innerHTML = "<div class='error-serializer-test'></div>";
-                    value.innerHTML = '-';
-                }
-                else {
-                    var val = valueGetter(d);
-                    var barWidth = val * parseFloat(barMaxWidth) / max;
-                    var barColor = getColor(min, max, val, revertPalette);
-                    var barTemplate = "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>";
-                    bar.innerHTML = WAVE.strHTMLTemplate(barTemplate, { barWidth: barWidth, barColor: barColor });
-                    value.innerHTML = valueFormatter(val);
-                }
-                
-                div.appendChild(bar);
-                div.appendChild(label);
-                td.appendChild(div);
+                    var div = document.createElement('div');
+                    div.className = 'performance-bar-container';
+                    
+                    var bar = document.createElement('div');
+                    
+                    var label = document.createElement('div');
+                    label.className = 'performance-label';
+                    var header = document.createElement('div');
+                    header.innerHTML = d.header.serializerName;
+                    header.className = 'label-header';
+                    label.appendChild(header);
+                    var value = document.createElement('div');
+                    value.className = 'label-value';
+                    label.appendChild(value);
+                    
+                    if(d.data == null) {
+                        bar.innerHTML = "<div class='absent-serializer-test'></div>";
+                        value.innerHTML = '-';
+                    }
+                    else if (!isTestClear(d.data)) {
+                        bar.innerHTML = "<div class='error-serializer-test'></div>";
+                        value.innerHTML = '-';
+                    }
+                    else {
+                        var val = valueGetter(d);
+                        var barWidth = val * parseFloat(barMaxWidth) / max;
+                        var barColor = getColor(min, max, val, revertPalette);
+                        var barTemplate = "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>";
+                        bar.innerHTML = WAVE.strHTMLTemplate(barTemplate, { barWidth: barWidth, barColor: barColor });
+                        value.innerHTML = valueFormatter(val);
+                    }
+                    
+                    div.appendChild(bar);
+                    div.appendChild(label);
+                    td.appendChild(div);
         });
     };
 
     function sortBySpeedPredicate(a, b) {
-        if (a.data != null && b.data != null) {
-            return a.data.speed < b.data.speed ? 1 : a.data.speed > b.data.speed ? -1 : 0;
-        }
-        else {
-            return b.data != null ? 1 : a.data != null ? -1 : 0;
-        }
+        if (a.data == null)
+            return b.data == null ? 0 : 1;
+        if (!isTestClear(a.data))
+            return b.data == null ? -1 : (!isTestClear(b.data) ? 0 : 1);
+
+        return (b.data == null || !isTestClear(b.data)) ? -1 : (a.data.speed < b.data.speed ? 1 : -1);
     }
 
     function sortByPayloadPredicate(a, b) {
-        if (a.data != null && b.data != null) {
-            return (a.data.PayloadSize == 0 || a.data.PayloadSize > b.data.PayloadSize) ? 1 : (b.data.PayloadSize == 0 || a.data.PayloadSize < b.data.PayloadSize) ? -1 : 0;
-        }
-        else {
-            return b.data != null ? 1 : a.data != null ? -1 : 0;
-        }
+        if (a.data == null)
+            return b.data == null ? 0 : 1;
+        if (!isTestClear(a.data))
+            return b.data == null ? -1 : (!isTestClear(b.data) ? 0 : 1);
+        
+        return (b.data == null || !isTestClear(b.data)) ? -1 : (a.data.PayloadSize > b.data.PayloadSize ? 1 : -1);
     }
 
 </script>
