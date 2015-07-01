@@ -181,6 +181,10 @@
           name="MessageShark" 
           order=180
           _include { file="knowntypes.Conference.laconf"} //include file contents      
+          
+          not-supported-abort-message=
+$"Unhandled Exception: System.AccessViolationException: Attempted to read or write protected memory.
+ This is often an indication that other memory is corrupt."
         }
 
 	
