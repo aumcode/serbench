@@ -194,6 +194,22 @@ namespace Serbench
                       try
                       {
                           test.ResetAbort();
+
+                          if (serializer.NotSupportedAbortMessage!=null)
+                          {
+                            test.Abort(serializer, serializer.NotSupportedAbortMessage);
+                            log(MessageType.Warning, serializer.Name, "Serializer configured as not-supported: " + serializer.NotSupportedAbortMessage);
+                            continue;//todo return result into aborted tests dataset
+                          }
+
+                          if (test.NotSupportedAbortMessage!=null)
+                          {
+                            test.Abort(serializer, serializer.NotSupportedAbortMessage);
+                            log(MessageType.Warning, serializer.Name+"->"+test.Name, "Test configured as not-supported: " + test.NotSupportedAbortMessage);
+                            continue;//todo return result into aborted tests dataset
+                          }
+
+
                           serializer.BeforeRuns(test);
                           if (test.Aborted)
                           {

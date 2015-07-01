@@ -170,6 +170,9 @@
           type="Serbench.Specimens.Serializers.MessageSharkSerializer, Serbench.Specimens"
           name="MessageShark" 
           order=180
+          
+          not-supported-abort-message="This serializer crashes the process without even throwing any exceptions"
+          
           _include { file="knowntypes.SpecimensTypicalPerson.laconf"} //include file contents      
         }
 
@@ -188,6 +191,8 @@
           type="Serbench.Specimens.Serializers.NetJSONSerializer, Serbench.Specimens"
           name="NetJSONS" 
           order=200
+          
+          not-supported-abort-message="Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
         }
 
 
@@ -230,6 +235,8 @@
           type="Serbench.Specimens.Serializers.SharpSerializer, Serbench.Specimens"
           name="SharpSerializer" 
           order=240
+          
+          not-supported-abort-message="Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
         }
 
         

@@ -30,6 +30,9 @@ namespace Serbench
     [Config]
     private int m_Order;
 
+    [Config]
+    private string m_NotSupportedAbortMessage;
+
 
     /// <summary>
     /// The context of test execution
@@ -46,6 +49,14 @@ namespace Serbench
     /// Returns the relative order of test instance execution
     /// </summary>
     public int Order { get { return m_Order; }}
+
+
+    /// <summary>
+    /// When set aborts the test or serializer as a whole - when capability is not supported in general,
+    /// i.e. you can set this field for some serializer that crashes the test run, while retaining it in the config file.
+    /// The abort message will be issued instead of a serializer run
+    /// </summary>
+    public string NotSupportedAbortMessage { get { return m_NotSupportedAbortMessage; }}
 
   }
 }

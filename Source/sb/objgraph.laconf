@@ -184,7 +184,6 @@
         }
 
 	
-		// TODO: hungs up the application. Ctrl-C works.
 		serializer
         {
           type="Serbench.Specimens.Serializers.MsgPackSerializer, Serbench.Specimens"
@@ -198,6 +197,8 @@
           type="Serbench.Specimens.Serializers.NetJSONSerializer, Serbench.Specimens"
           name="NetJSONS" 
           order=200
+          
+          not-supported-abort-message="Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
         }
 
 
@@ -240,6 +241,8 @@
           type="Serbench.Specimens.Serializers.SharpSerializer, Serbench.Specimens"
           name="SharpSerializer" 
           order=240
+          
+          not-supported-abort-message="Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
         }
 
         
