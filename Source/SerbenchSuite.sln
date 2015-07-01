@@ -10,10 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{6748725B-A5CD-4C77-A87C-85A239E32BCB}"
 	ProjectSection(SolutionItems) = preProject
 		lib\NFX.dll = lib\NFX.dll
-		lib\NFX.Wave.dll = lib\NFX.Wave.dll
-		lib\NFX.Wave.XML = lib\NFX.Wave.XML
-		lib\NFX.Web.dll = lib\NFX.Web.dll
-		lib\NFX.Web.XML = lib\NFX.Web.XML
 		lib\NFX.XML = lib\NFX.XML
 		lib\ntc.exe = lib\ntc.exe
 	EndProjectSection

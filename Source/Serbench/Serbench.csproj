@@ -101,6 +101,12 @@
   <ItemGroup>
     <EmbeddedResource Include="WebViewer\styles\table.css" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebViewer\scripts\jquery-1.11.0.min.js" />
+    <EmbeddedResource Include="WebViewer\scripts\wv.chart.svg.js" />
+    <EmbeddedResource Include="WebViewer\scripts\wv.gui.js" />
+    <EmbeddedResource Include="WebViewer\scripts\wv.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>"$(SolutionDir)..\Source\lib\ntc" "$(ProjectDir)\WebViewer\*.htm" -r -ext ".auto.cs" /src</PreBuildEvent>

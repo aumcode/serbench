@@ -15,9 +15,9 @@ namespace Serbench.WebViewer
   /// </summary>
   public class DefaultWebPackager
   {
-    private const string c_ScriptsFolder = "scripts";
-    private const string c_StylesFolder = "styles";
-    private const string c_WebFolder = "web";
+    private const string SCRIPTS_DIR = "scripts";
+    private const string STYLES_DIR = "styles";
+    private const string WEB_DIR = "web";
 
     public DefaultWebPackager(Data.ITestDataStore data, IConfigSectionNode config)
     {
@@ -43,9 +43,9 @@ namespace Serbench.WebViewer
     /// </summary>
     protected virtual string DoCreateTargetDir(string rootPath)
     {
-      var targetDir = Path.Combine(rootPath, c_WebFolder);
-      var scriptsDir = Path.Combine(targetDir, c_ScriptsFolder);
-      var stylesDir = Path.Combine(targetDir, c_StylesFolder);
+      var targetDir = Path.Combine(rootPath, WEB_DIR);
+      var scriptsDir = Path.Combine(targetDir, SCRIPTS_DIR);
+      var stylesDir = Path.Combine(targetDir, STYLES_DIR);
       Directory.CreateDirectory(scriptsDir);
       Directory.CreateDirectory(stylesDir);
 
@@ -54,17 +54,17 @@ namespace Serbench.WebViewer
 
     protected virtual void DoAddResources(string path)
     {
-      AddStockScriptResource(path, c_ScriptsFolder, "jquery-1.11.0.min.js");
-      AddStockScriptResource(path, c_ScriptsFolder, "wv.js");
-      AddStockScriptResource(path, c_ScriptsFolder, "wv.gui.js");
-      AddStockScriptResource(path, c_ScriptsFolder, "wv.chart.svg.js");
-      AddResourceFile(path, c_ScriptsFolder, "chart.js", @"scripts.chart.js");
-      AddResourceFile(path, c_ScriptsFolder, "serbench.js", @"scripts.serbench.js");
+      AddStockScriptResource(path, SCRIPTS_DIR, "jquery-1.11.0.min.js");
+      AddStockScriptResource(path, SCRIPTS_DIR, "wv.js");
+      AddStockScriptResource(path, SCRIPTS_DIR, "wv.gui.js");
+      AddStockScriptResource(path, SCRIPTS_DIR, "wv.chart.svg.js");
+      AddResourceFile(path, SCRIPTS_DIR, "chart.js", @"scripts.chart.js");
+      AddResourceFile(path, SCRIPTS_DIR, "serbench.js", @"scripts.serbench.js");
 
-      AddResourceFile(path, c_StylesFolder, "default.css", @"styles.default.css");
-      AddResourceFile(path, c_StylesFolder, "table.css", @"styles.table.css");
-      AddResourceFile(path, c_StylesFolder, "overview-table.css", @"styles.overview-table.css");
-      AddResourceFile(path, c_StylesFolder, "overview-charts.css", @"styles.overview-charts.css");
+      AddResourceFile(path, STYLES_DIR, "default.css", @"styles.default.css");
+      AddResourceFile(path, STYLES_DIR, "table.css", @"styles.table.css");
+      AddResourceFile(path, STYLES_DIR, "overview-table.css", @"styles.overview-table.css");
+      AddResourceFile(path, STYLES_DIR, "overview-charts.css", @"styles.overview-charts.css");
     }
 
     protected virtual void DoGeneratePages(string path)
@@ -78,14 +78,13 @@ namespace Serbench.WebViewer
       File.WriteAllText(Path.Combine(path, "overview-charts.htm"), target.Value);
     }
 
-    /// <summary>
-    /// Copies a named stock script into the output path
-    /// </summary>
+    
+    // Copies a named stock script into the output path.
+    // 20150701 DKh: This was taking it from WAVE before, moved to local files, decided to keep stock resource in separate method
     protected void AddStockScriptResource(string targetDir, string subDir, string scriptName)
     {
-      File.WriteAllText(Path.Combine(targetDir, subDir,  scriptName),
-                         typeof(NFX.Wave.Templatization.WaveTemplate).
-                         GetText("StockContent.Embedded.script." + scriptName));
+      var destinationName = Path.Combine(targetDir, subDir, scriptName);
+      File.WriteAllText(destinationName, typeof(DefaultWebPackager).GetText("scripts." + scriptName));
     }
 
     protected void AddResourceFile(string targetDir, string subDir, string fileName, string resourceName)
