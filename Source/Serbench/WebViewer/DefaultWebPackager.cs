@@ -58,7 +58,6 @@ namespace Serbench.WebViewer
       AddStockScriptResource(path, SCRIPTS_DIR, "wv.js");
       AddStockScriptResource(path, SCRIPTS_DIR, "wv.gui.js");
       AddStockScriptResource(path, SCRIPTS_DIR, "wv.chart.svg.js");
-      AddResourceFile(path, SCRIPTS_DIR, "chart.js", @"scripts.chart.js");
       AddResourceFile(path, SCRIPTS_DIR, "serbench.js", @"scripts.serbench.js");
 
       AddResourceFile(path, STYLES_DIR, "default.css", @"styles.default.css");

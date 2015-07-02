@@ -72,7 +72,9 @@ namespace Serbench.Data
     [Field]
     public int PayloadSize {get; set;}
 
-
+		
+    [Field]
+    public bool Aborted {get; set;}
 
     [Field]
     public bool DeserSupported {get; set;}

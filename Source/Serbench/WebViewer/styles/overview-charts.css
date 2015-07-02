@@ -5,7 +5,7 @@
 }
 
 .performance-bar, .absent-serializer-test, .error-serializer-test {
-    border-right: 2px solid rgba(10,10,10,0.2);
+    border-right: 1px solid rgba(10,10,10,0.3);
     margin-top: -3px;
 }
 

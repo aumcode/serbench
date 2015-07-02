@@ -23,7 +23,10 @@
 
 <div class="main-container">
     <div class="report-header">
-        <h1>Charts: different serializers' performance comparison</h1>
+        <h1>Overview Charts</h1>
+    </div>
+    <div class="report-list-container">
+        <a href="overview-table.htm">Overview Table</a>
     </div>
     <div>
         <table id="performance-table" class="main-table">
@@ -55,8 +58,11 @@
     $(function() {
 
         var data = WAVE.arrayWalkable(window.data_TestRunData);
+
         var table = $('#performance-table')[0];
         createTableBody(data, table);
+
+        createAbortedTable(data);
     });
 
     function createTableBody(data, table) {
@@ -65,29 +71,28 @@
         table.appendChild(tbody);
 
         // distinct serializers
-        var serializersHeaders = data.wSelect(function (e) { return { serializerType: e.SerializerType, serializerName: e.SerializerName }; })
-                                     .wDistinct(function (a, b) { return a.serializerType == b.serializerType && a.serializerName == b.serializerName; });
+        var headersInfo = data.wSelect(function (e) { return { serializerType: e.SerializerType, serializerName: e.SerializerName }; })
+                              .wDistinct(function (a, b) { return a.serializerType == b.serializerType && a.serializerName == b.serializerName; });
 
         // distinct tests
         data.wSelect(function(e) { return { testType: e.TestType, testName: e.TestName }; })
             .wDistinct(function(a, b) { return a.testType == b.testType && a.testName == b.testName; })
             .wEach(function(r) {
 
-                var serializersData = serializersHeaders.wSelect(function(h) {
+                var serializersData = headersInfo.wSelect(function (h) {
                             return { header: h, data: getCellData(data, r, h) };
                             });
-                var rawData = serializersData.wSelect(function(d) { return d.data; });
-                var testMetadata = getDataSummary(rawData, true);
+                var testMetadata = getDataSummary(serializersData, true);
 
                 // create header, speed and payload comparison cells
-                var tr = createRowHeader(r, rawData);
+                var tr = createRowHeader(r, serializersData);
                 createPerformanceComparisonCell(
                     tr,
                     serializersData,
                     testMetadata.speedMin,
                     testMetadata.speedMax,
                     false,
-                    function (a, b) { return sortBySpeedPredicate(a, b); },
+                    function (a, b) { return sortBySpeedPredicate(a, b, true); },
                     function (d) { return d.data.speed; },
                     function (v) { return shortenQuantity(v); });
                 createPerformanceComparisonCell(
@@ -96,7 +101,7 @@
                     testMetadata.payloadMin,
                     testMetadata.payloadMax,
                     true,
-                    function (a, b) { return sortByPayloadPredicate(a, b); },
+                    function (a, b) { return sortByPayloadPredicate(a, b, true); },
                     function (d) { return d.data.PayloadSize; },
                     function (v) { return shortenByteSize(v); });
                 
@@ -104,7 +109,7 @@
             });
     };
 
-    function createRowHeader(r, rawData) {
+    function createRowHeader(r, serializersData) {
          
         var tr = document.createElement('tr');
         tr.className = 'main-table-row';
@@ -112,7 +117,7 @@
         tr.onmouseout = function () { unhighlightRow(tr) };
         var th = document.createElement('th');
         th.className = 'main-table-row-header';
-        th.innerHTML = createTestSummary(r.testType, r.testName, rawData, true);
+        th.innerHTML = createTestSummary(r.testType, r.testName, serializersData, true);
         tr.appendChild(th);
 
         return tr;
@@ -164,23 +169,5 @@
                     td.appendChild(div);
         });
     };
-
-    function sortBySpeedPredicate(a, b) {
-        if (a.data == null)
-            return b.data == null ? 0 : 1;
-        if (!isTestClear(a.data))
-            return b.data == null ? -1 : (!isTestClear(b.data) ? 0 : 1);
-
-        return (b.data == null || !isTestClear(b.data)) ? -1 : (a.data.speed < b.data.speed ? 1 : -1);
-    }
-
-    function sortByPayloadPredicate(a, b) {
-        if (a.data == null)
-            return b.data == null ? 0 : 1;
-        if (!isTestClear(a.data))
-            return b.data == null ? -1 : (!isTestClear(b.data) ? 0 : 1);
-        
-        return (b.data == null || !isTestClear(b.data)) ? -1 : (a.data.PayloadSize > b.data.PayloadSize ? 1 : -1);
-    }
 
 </script>

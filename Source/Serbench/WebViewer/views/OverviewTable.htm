@@ -22,11 +22,13 @@
 
 
 <div class="main-container">
-    <div class="report-header">
-        <h1>Overview: aggregate information about different serializers tests</h1>
-    </div>
-    <div class="report-list-container">
-        <a href="overview-charts.htm" target="_blank">Charts: different serializers' performance comparison</a>
+    <div id="title">
+        <div class="report-header">
+            <h1>Overview Table</h1>
+        </div>
+        <div class="report-list-container">
+            <a href="overview-charts.htm" target="_blank">Overview Charts</a>
+        </div>
     </div>
     <div id="overview-table"></div>
 </div>
@@ -46,9 +48,12 @@
     $(function () {
 
         var data = WAVE.arrayWalkable(window.data_TestRunData);
-        var table = createOverviewTable(data);
+
         var container = $("#overview-table")[0];
+        var table = createOverviewTable(data);
         container.appendChild(table);
+
+        createAbortedTable(data);
 
         initializeGlobals();
     });
@@ -110,19 +115,20 @@
         data.wSelect(function (e) { return { testType: e.TestType, testName: e.TestName }; })
             .wDistinct(function (a, b) { return a.testType == b.testType && a.testName == b.testName; })
             .wEach(function (r) {
-                
+
                 // prepare cell data
-                var cellDatas = WAVE.arrayWalkable(headersInfo)
-                                    .wSelect(function (h) { return getCellData(data, r, h); });
+                var serializersData = WAVE.arrayWalkable(headersInfo).wSelect(function (h) {
+                    return { header: h, data: getCellData(data, r, h) };
+                });
 
                 // create row, insert first cell (row header)
-                var tr = createRow(r, cellDatas);
+                var tr = createRow(r, serializersData);
 
                 // prepare row aggregate & statistics data
-                var metaData = getDataSummary(cellDatas, false);
+                var metaData = getDataSummary(serializersData, false);
 
                 // fill table cells
-                cellDatas.wEach(function (d) {
+                serializersData.wEach(function (d) {
                     createTableCell(d, tr, metaData);
                 });
 
@@ -132,7 +138,7 @@
         table.appendChild(tbody);
     }
 
-    function createRow(r, cellDatas) {
+    function createRow(r, serializersData) {
 
         var tr = document.createElement('tr');
         tr.className = 'main-table-row';
@@ -140,19 +146,19 @@
         tr.onmouseout = function () { unhighlightRow(tr) };
         var th = document.createElement('th');
         th.className = 'main-table-row-header';
-        th.innerHTML = createTestSummary(r.testType, r.testName, cellDatas, false);
+        th.innerHTML = createTestSummary(r.testType, r.testName, serializersData, false);
         tr.appendChild(th);
 
         return tr;
     }
 
-    function createTableCell(benchTest, tr, metaData) {
+    function createTableCell(testData, tr, metaData) {
 
         var td = document.createElement('td');
         td.style.verticalAlign = 'top';
 
         // if there is no test - fill cell with empty (gray) space
-        if (benchTest == null) {
+        if (testData == null || testData.data == null) {
             td.className = 'absent-test';
             tr.appendChild(td);
             return;
@@ -160,16 +166,16 @@
 
         // cell styling 
 
-        var serClass = JSON.parse(benchTest.SerSupported) ? "supported" : "unsupported";
-        var deserClass = JSON.parse(benchTest.DeserSupported) ? "supported" : "unsupported";
-        var runExceptionClass = benchTest.RunException == null ? "hidden" : "empty";
-        var serExceptionsClass = benchTest.SerExceptions == 0 ? "hidden" : "empty";
-        var serAbortsClass = benchTest.SerAborts == 0 ? "hidden" : "empty";
-        var deserExceptionsClass = benchTest.DeserExceptions == 0 ? "hidden" : "empty";
-        var deserAbortsClass = benchTest.DeserAborts == 0 ? "hidden" : "empty";
+        var serClass = JSON.parse(testData.data.SerSupported) ? "supported" : "unsupported";
+        var deserClass = JSON.parse(testData.data.DeserSupported) ? "supported" : "unsupported";
+        var runExceptionClass = testData.data.RunException == null ? "hidden" : "empty";
+        var serExceptionsClass = testData.data.SerExceptions == 0 ? "hidden" : "empty";
+        var serAbortsClass = testData.data.SerAborts == 0 ? "hidden" : "empty";
+        var deserExceptionsClass = testData.data.DeserExceptions == 0 ? "hidden" : "empty";
+        var deserAbortsClass = testData.data.DeserAborts == 0 ? "hidden" : "empty";
 
-        var speedColor = getColor(metaData.speedMin, metaData.speedMax, benchTest.speed, false);
-        var payloadColor = getColor(metaData.payloadMin, metaData.payloadMax, benchTest.PayloadSize, true);
+        var speedColor = getColor(metaData.speedMin, metaData.speedMax, testData.data.speed, false);
+        var payloadColor = getColor(metaData.payloadMin, metaData.payloadMax, testData.data.PayloadSize, true);
 
         // populate cell with data
 
@@ -278,34 +284,34 @@
 
         td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
         {
-            runNumber: numberWithCommas(benchTest.runCount, 0),
-            prettyPayloadSize: benchTest.PayloadSize == 0 ? '-' : shortenByteSize(benchTest.PayloadSize),
-            payloadSize: benchTest.PayloadSize == 0 ? '-' : numberWithCommas(benchTest.PayloadSize, 0),
-            prettySpeed: benchTest.speed == 0 ? '-' : shortenQuantity(benchTest.speed),
-            speed: benchTest.speed == 0 ? '-' : numberWithCommas(benchTest.speed, 0),
+            runNumber: numberWithCommas(testData.data.runCount, 0),
+            prettyPayloadSize: testData.data.PayloadSize == 0 ? '-' : shortenByteSize(testData.data.PayloadSize),
+            payloadSize: testData.data.PayloadSize == 0 ? '-' : numberWithCommas(testData.data.PayloadSize, 0),
+            prettySpeed: testData.data.speed == 0 ? '-' : shortenQuantity(testData.data.speed),
+            speed: testData.data.speed == 0 ? '-' : numberWithCommas(testData.data.speed, 0),
             payloadColor: payloadColor,
             speedColor: speedColor, 
-            doGc: benchTest.DoGc,
+            doGc: testData.data.DoGc,
             runExceptionClass: runExceptionClass,
-            runException: benchTest.RunException,
+            runException: testData.data.RunException,
             serClass: serClass,
-            serIterations: numberWithCommas(benchTest.SerIterations, 0),
+            serIterations: numberWithCommas(testData.data.SerIterations, 0),
             serExceptionsClass: serExceptionsClass,
             serAbortsClass: serAbortsClass,
-            serExceptions: numberWithCommas(benchTest.SerExceptions, 0),
-            serAborts: numberWithCommas(benchTest.SerAborts, 0),
-            serDurationMs: numberWithCommas(benchTest.SerDurationMs, 0),
-            serOpsSec: numberWithCommas(benchTest.SerOpsSec, 0),
-            firstSerAbortMsg: benchTest.FirstSerAbortMsg,
+            serExceptions: numberWithCommas(testData.data.SerExceptions, 0),
+            serAborts: numberWithCommas(testData.data.SerAborts, 0),
+            serDurationMs: numberWithCommas(testData.data.SerDurationMs, 0),
+            serOpsSec: numberWithCommas(testData.data.SerOpsSec, 0),
+            firstSerAbortMsg: testData.data.FirstSerAbortMsg,
             deserClass: deserClass,
-            deserIterations: numberWithCommas(benchTest.DeserIterations, 0),
+            deserIterations: numberWithCommas(testData.data.DeserIterations, 0),
             deserExceptionsClass: deserExceptionsClass,
             deserAbortsClass: deserAbortsClass,
-            deserExceptions: numberWithCommas(benchTest.DeserExceptions, 0),
-            deserAborts: numberWithCommas(benchTest.DeserAborts, 0),
-            deserDurationMs: numberWithCommas(benchTest.DeserDurationMs, 0),
-            deserOpsSec: numberWithCommas(benchTest.DeserOpsSec, 0),
-            firstDeserAbortMsg: benchTest.FirstDeserAbortMsg
+            deserExceptions: numberWithCommas(testData.data.DeserExceptions, 0),
+            deserAborts: numberWithCommas(testData.data.DeserAborts, 0),
+            deserDurationMs: numberWithCommas(testData.data.DeserDurationMs, 0),
+            deserOpsSec: numberWithCommas(testData.data.DeserOpsSec, 0),
+            firstDeserAbortMsg: testData.data.FirstDeserAbortMsg
         });
         tr.appendChild(td);
     };
