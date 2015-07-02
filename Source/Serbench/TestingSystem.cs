@@ -93,6 +93,12 @@ namespace Serbench
           }
         }
 
+        /// <summary>
+        /// Global flag. When true, the payload is saved to the  data store
+        /// </summary>
+        [Config]
+        public bool DumpPayload{ get; set;}
+
       #endregion
 
 
@@ -361,6 +367,20 @@ namespace Serbench
            test.BeforeDeserializationIterationBatch( serializer );
            serializer.BeforeDeserializationIterationBatch( test );
            
+
+           var doDump = 
+             (this.DumpPayload && !serializer.DumpPayload.HasValue && !test.DumpPayload.HasValue) ||
+             (serializer.DumpPayload.Value && !test.DumpPayload.HasValue) ||
+             (test.DumpPayload.Value && !serializer.DumpPayload.HasValue) ||
+             (serializer.DumpPayload.Value && test.DumpPayload.Value);
+
+           if (doDump)
+           {
+              readingStreamSegment.BindBuffer(targetStream.GetBuffer(), 0, result.PayloadSize);
+              DataStore.SaveTestPayloadDump(serializer, test, readingStreamSegment);
+              log(MessageType.Info, "{0}->{1}".Args(serializer.Name, test.Name), "Saved test payload dump of {0} bytes".Args(result.PayloadSize));
+           }
+
            sw.Restart();
 
            for(var i=0; Running && i<test.DeserIterations; i++)

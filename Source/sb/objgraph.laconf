@@ -23,6 +23,8 @@
     {
     //type="your custom type inject your testing system if you want, by default it will use the one supplied within SerBench  " 
 
+    //Save the payload
+    dump-payload=true
       
         tests
         {

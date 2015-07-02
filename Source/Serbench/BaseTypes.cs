@@ -33,6 +33,9 @@ namespace Serbench
     [Config]
     private string m_NotSupportedAbortMessage;
 
+    [Config]
+    private bool? m_DumpPayload;
+
 
     /// <summary>
     /// The context of test execution
@@ -57,6 +60,14 @@ namespace Serbench
     /// The abort message will be issued instead of a serializer run
     /// </summary>
     public string NotSupportedAbortMessage { get { return m_NotSupportedAbortMessage; }}
+
+
+    /// <summary>
+    /// When set, either saves the payload into the datastore or instucts the test runtime not to save it
+    /// even though global flag is set to true. This is an override of global TestingSystem.DumpPayload
+    /// This flag cascades down from every serializer to every individual test
+    /// </summary>
+    public bool? DumpPayload { get { return m_DumpPayload; } }
 
   }
 }
