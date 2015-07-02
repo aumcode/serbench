@@ -421,7 +421,6 @@ namespace Serbench
            sw.Stop();
            result.DeserSupported = wasOk;
            result.DeserIterations = test.DeserIterations;
-			     result.Aborted = test.Aborted;
            result.DeserDurationMs = sw.ElapsedMilliseconds;
            if ((result.DeserDurationTicks = sw.ElapsedTicks) > 0)
              result.DeserOpsSec = (int)( test.DeserIterations / ((double)result.DeserDurationTicks / (double)Stopwatch.Frequency) );
