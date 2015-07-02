@@ -87,7 +87,6 @@ namespace Serbench.Data
           dumpData.CopyTo(fs, 512 * 1024);
       }
 
-
     #endregion
 
     #region IDataStoreImplementation 
@@ -227,11 +226,7 @@ namespace Serbench.Data
       
 
     #endregion
-
-
-
-    
-  }
-
+     
+  }//class
 
 }

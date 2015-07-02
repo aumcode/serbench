@@ -191,6 +191,8 @@ namespace Serbench
                {
                   if (!Running) break;
                   log(MessageType.Info, serializer.Name, "Starting Serializer Tests");
+
+                  DataStore.SaveTestData( new SerializerInfoData( serializer ) );
               
                   foreach(var test in m_Tests.OrderedValues)
                   {
@@ -369,10 +371,9 @@ namespace Serbench
            
 
            var doDump = 
-             (this.DumpPayload && !serializer.DumpPayload.HasValue && !test.DumpPayload.HasValue) ||
-             (serializer.DumpPayload.Value && !test.DumpPayload.HasValue) ||
-             (test.DumpPayload.Value && !serializer.DumpPayload.HasValue) ||
-             (serializer.DumpPayload.Value && test.DumpPayload.Value);
+             (this.DumpPayload && !serializer.DumpPayload.HasValue && !test.DumpPayload.HasValue)||
+             (serializer.DumpPayload.HasValue && serializer.DumpPayload.Value && (!test.DumpPayload.HasValue || (test.DumpPayload.HasValue && test.DumpPayload.Value)))||
+             (test.DumpPayload.HasValue && test.DumpPayload.Value && (!serializer.DumpPayload.HasValue || (serializer.DumpPayload.HasValue && serializer.DumpPayload.Value)));
 
            if (doDump)
            {
