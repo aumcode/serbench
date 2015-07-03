@@ -85,6 +85,9 @@
     <Compile Include="WebViewer\views\OverviewCharts.htm.auto.cs">
       <DependentUpon>OverviewCharts.htm</DependentUpon>
     </Compile>
+    <Compile Include="WebViewer\views\SerializersInfo.htm.auto.cs">
+      <DependentUpon>SerializersInfo.htm</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WebViewer\scripts\serbench.js" />
@@ -94,7 +97,8 @@
   <ItemGroup>
     <None Include="WebViewer\views\Master.htm" />
     <None Include="WebViewer\views\OverviewTable.htm" />
-    <None Include="WebViewer\views\OverviewCharts.htm" />
+    <None Include="WebViewer\views\OverviewCharts.htm" /> 
+    <None Include="WebViewer\views\SerializersInfo.htm" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WebViewer\styles\overview-charts.css" />

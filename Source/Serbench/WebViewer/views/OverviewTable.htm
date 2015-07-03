@@ -27,7 +27,8 @@
             <h1>Overview Table</h1>
         </div>
         <div class="report-list-container">
-            <a href="overview-charts.htm" target="_blank">Overview Charts</a>
+            <div><a href="overview-charts.htm" target="_blank">Overview Charts</a></div>
+            <div><a href="serializers-info.htm" target="_blank">Serializers Info</a></div>
         </div>
     </div>
     <div id="overview-table"></div>
@@ -43,17 +44,21 @@
     var columnHeaders;
     var rowHeaders;
     var topOffset;
+    var heightOffset;
     var leftOffset;
 
     $(function () {
 
         var data = WAVE.arrayWalkable(window.data_TestRunData);
+        var aborted = WAVE.arrayWalkable(window.data_Aborted);
 
         var container = $("#overview-table")[0];
         var table = createOverviewTable(data);
         container.appendChild(table);
 
-        createAbortedTable(data);
+        container = $("#aborted-table")[0];
+        table = createAbortedTable(aborted);
+        container.appendChild(table);
 
         initializeGlobals();
     });
@@ -64,14 +69,15 @@
         rowHeaders = $('.main-table-row-header');
         topOffset = parseInt(columnHeaders.offset().top);
         leftOffset = parseInt(rowHeaders.offset().left);
+        heightOffset = $('.main-table').outerHeight(true) - columnHeaders.outerHeight(true);
     }
 
     function createOverviewTable(data) {
 
         var table = document.createElement('table');
+        table.className = 'main-table';
         var headersInfo = createTableHeader(data, table);
         createTableRows(data, table, headersInfo);
-        table.className = 'main-table';
 
         return table;
     };
@@ -328,6 +334,8 @@
         var topDelta = currentTopScroll - topOffset;
         if (topDelta < 0)
             topDelta = 0;
+        else if (topDelta > heightOffset)
+            topDelta = heightOffset;
 
         columnHeaders.each(function () {
             $(this).css("top", topDelta);

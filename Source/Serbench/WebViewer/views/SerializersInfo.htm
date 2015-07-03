@@ -1,0 +1,62 @@
+#<laconf>
+  compiler
+  {
+    base-class-name="Serbench.WebViewer.Master"
+    namespace="Serbench.WebViewer"
+    abstract="false"
+    summary="Aggregate information about different serializers tests"
+
+    using{ns="NFX.Web"}
+    using{ns="NFX.Wave"}
+    using{ns="NFX.Wave.Templatization"}
+  }
+#</laconf>
+#[class]
+
+#[override renderHeader()]
+
+#[override renderBody()]
+
+<link rel="stylesheet" type="text/css" href="styles/table.css">
+
+<div class="main-container">
+    <div id="title">
+        <div class="report-header">
+            <h1>Serializers Info</h1>
+        </div>
+        <div class="report-list-container">
+            <div><a href="overview-table.htm" target="_blank">Overview Table</a></div>
+            <div><a href="overview-charts.htm" target="_blank">Overview Charts</a></div>
+        </div>
+    </div>
+
+    <div id="serializers-table">
+        here will be a table soon...
+    </div>
+
+</div>
+
+
+
+
+
+<script>      
+    
+    $(function () {
+
+        var serdata = WAVE.arrayWalkable(window.data_SerializerInfoData);
+
+        var container = $("#serializers-table")[0];
+        var table = createSerializersInfoTable(serdata);
+        container.appendChild(table);
+    });
+
+    function createSerializersInfoTable(serdata) {
+
+        var table = document.createElement('table');
+        table.className = 'main-table';
+
+        return table;
+    };
+
+</script>

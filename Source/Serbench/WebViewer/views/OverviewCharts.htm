@@ -26,7 +26,8 @@
         <h1>Overview Charts</h1>
     </div>
     <div class="report-list-container">
-        <a href="overview-table.htm">Overview Table</a>
+        <div><a href="overview-table.htm" target="_blank">Overview Table</a></div>
+        <div><a href="serializers-info.htm" target="_blank">Serializers Info</a></div>
     </div>
     <div>
         <table id="performance-table" class="main-table">
@@ -58,9 +59,14 @@
     $(function() {
 
         var data = WAVE.arrayWalkable(window.data_TestRunData);
+        var aborted = WAVE.arrayWalkable(window.data_Aborted);
 
         var table = $('#performance-table')[0];
         createTableBody(data, table);
+
+        var container = $("#aborted-table")[0];
+        table = createAbortedTable(aborted);
+        container.appendChild(table);
 
         createAbortedTable(data);
     });
@@ -157,7 +163,8 @@
                     }
                     else {
                         var val = valueGetter(d);
-                        var barWidth = val * parseFloat(barMaxWidth) / max;
+                        var leveragedMax = leverageNumber(max);
+                        var barWidth = val * parseFloat(barMaxWidth) / leveragedMax;
                         var barColor = getColor(min, max, val, revertPalette);
                         var barTemplate = "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>";
                         bar.innerHTML = WAVE.strHTMLTemplate(barTemplate, { barWidth: barWidth, barColor: barColor });

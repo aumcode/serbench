@@ -77,6 +77,25 @@ function shortenByteSize(x, precision) {
     return x + shortens[n];
 }
 
+// leverages given integer to next closest step (25, 50, 250, 500, 2500, 5000, ...)
+function leverageNumber(x) {
+    if (x < 0)
+        return x;
+
+    if (x < 25)
+        return Math.floor(x) + 1;
+
+    var t = 1;
+    var nx = x / 25;
+    while (nx >= 10) {
+        t *= 10;
+        nx /= 10;
+    }
+
+    var h = nx < 2 ? 5 * t : 10 * t;
+    return h * Math.floor(x / h) + h;
+}
+
 
 
 // ******************************** Data aggregate functions *******************************
@@ -270,12 +289,66 @@ function getDataSummary(serializersData, onlyClearTests) {
     return summary;
 }
 
-function createAbortedTable(data) {
+function createAbortedTable(aborted) {
 
-    var container = $("#aborted-table")[0];
+    if (!aborted.wAny())
+        return null;
+                 
+    var div = document.createElement('div');
+    div.className = 'aborted-container';
 
-    // table = 
-    //container.appendChild(table);
+    // header div
+    var header = document.createElement('div');
+    header.innerHTML = 'Aborted';
+    header.className = 'aborted-header';
+    div.appendChild(header);
+
+    var table = document.createElement('table');
+    table.className = 'aborted-table main-table';
+
+    // header
+    var thead = document.createElement('thead');
+    var tr = document.createElement('tr');
+    tr.className = 'aborted-table-column-header main-table-column-header';
+    var th = document.createElement('th');
+    th.innerHTML = '<b>Test</b>';
+    tr.appendChild(th);
+    th = document.createElement('th');
+    th.innerHTML = '<b>Serializer</b>';
+    tr.appendChild(th);
+    th = document.createElement('th');
+    th.innerHTML = '<b>Message</b>';
+    tr.appendChild(th);
+    thead.appendChild(tr);
+    table.appendChild(thead);
+
+    // body
+    var tbody = document.createElement('tbody');
+    aborted.wEach(function (r) {
+        tr = document.createElement('tr');
+
+        var td = document.createElement("td");
+        var htmlTemplate = "<b>@testName@</b><br>@testType@";
+        td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { testName: r.TestName, testType: r.TestType });
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        htmlTemplate = "<b>@serializerName@</b><br>@serializerType@";
+        td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: r.SerializerType, serializerName: r.SerializerName });
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        htmlTemplate = "@message@";
+        td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { message: r.Message });
+        tr.appendChild(td);
+
+        tbody.appendChild(tr);
+    });
+
+    table.appendChild(tbody);
+    div.appendChild(table);
+
+    return div;
 }
 
 function sortBySpeedPredicate(a, b, onlyClearTests) {

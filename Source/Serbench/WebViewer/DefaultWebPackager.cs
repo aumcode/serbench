@@ -75,6 +75,10 @@ namespace Serbench.WebViewer
       target = new NFX.Templatization.StringRenderingTarget(false);
       new OverviewCharts().Render(target, null);
       File.WriteAllText(Path.Combine(path, "overview-charts.htm"), target.Value);
+
+      target = new NFX.Templatization.StringRenderingTarget(false);
+      new SerializersInfo().Render(target, null);
+      File.WriteAllText(Path.Combine(path, "serializers-info.htm"), target.Value);
     }
 
     
