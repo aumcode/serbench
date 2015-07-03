@@ -29,85 +29,164 @@
             test
             { 
              type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
-             name="Warmup" 
+             name="Warmup Person" 
              order=000
              runs=1 
              ser-iterations=1 
              deser-iterations=1
              
              msg-count=1
+             msg-type=Personal
             }
             
             test
             { 
              type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
-             name="Count: 100" 
+             name="Warmup RPC" 
              order=001
+             runs=1 
+             ser-iterations=1 
+             deser-iterations=1
+             
+             msg-count=1
+             msg-type=RPC
+            }
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="Warmup Trading" 
+             order=002
+             runs=1 
+             ser-iterations=1 
+             deser-iterations=1
+             
+             msg-count=1
+             msg-type=Trading
+            }
+            //==============================================================
+          
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="Personal Count: 100" 
+             order=100
              runs=100 
              ser-iterations=1 
              deser-iterations=1
              
              msg-count=100
+             msg-type=Personal
             }
             
             test
             { 
              type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
-             name="Count: 1000" 
-             order=002
+             name="Personal Count: 1000" 
+             order=110
              runs=100 
              ser-iterations=1 
              deser-iterations=1
              
              msg-count=1000
+             msg-type=Personal
             }
             
             test
             { 
              type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
-             name="Count: 5000" 
-             order=003
+             name="Personal Count: 5000" 
+             order=120
              runs=50 
              ser-iterations=1 
              deser-iterations=1
              
              msg-count=5000
+             msg-type=Personal
             }
 
+            
+            //==================================
+            
             test
             { 
              type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
              name="RPC Count: 100" 
-             order=100
+             order=200
              runs=100 
              ser-iterations=1 
              deser-iterations=1
-             rpc=true
+             
              msg-count=100
+             msg-type=RPC
             }
             
             test
             { 
              type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
              name="RPC Count: 1000" 
-             order=200
+             order=210
              runs=100 
              ser-iterations=1 
              deser-iterations=1
-             rpc=true
+             
              msg-count=1000
+             msg-type=RPC
             }
             
             test
             { 
              type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
              name="RPC Count: 5000" 
-             order=300
+             order=220
              runs=50 
              ser-iterations=1 
              deser-iterations=1
-             rpc=true
+             
              msg-count=5000
+             msg-type=RPC
+            }
+            
+            
+             //==================================
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="Trading Count: 100" 
+             order=300
+             runs=200 
+             ser-iterations=1 
+             deser-iterations=1
+             
+             msg-count=100
+             msg-type=Trading
+            }
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="Trading Count: 1000" 
+             order=310
+             runs=200 
+             ser-iterations=1 
+             deser-iterations=1
+             
+             msg-count=1000
+             msg-type=Trading
+            }
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="Trading Count: 5000" 
+             order=320
+             runs=100 
+             ser-iterations=1 
+             deser-iterations=1
+             
+             msg-count=5000
+             msg-type=Trading
             }
             
         }//tests     

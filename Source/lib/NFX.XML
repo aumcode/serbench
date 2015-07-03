@@ -7472,9 +7472,54 @@
              Represents an abstraction for items kept in a file system - i.e. directories and files.This class is NOT thread-safe
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.GetSizeAsync">
+            <summary>
+            Async version of <see cref="P:Size"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.SetCreationTimestampAsync(System.DateTime)">
+            <summary>
+            Async version of <see cref="P:CreationTimestamp"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.SetModificationTimestampAsync(System.DateTime)">
+            <summary>
+            Async version of <see cref="P:ModificationTimestamp"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.SetLastAccessTimestampAsync(System.DateTime)">
+            <summary>
+            Async version of <see cref="P:LastAccessTimestamp"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.GetCreationUserAsync">
+            <summary>
+            Async version of <see cref="P:CreationUser"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.GetModificationUserAsync">
+            <summary>
+            Async version of <see cref="P:ModificationUser"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.GetLastAccessUserAsync">
+            <summary>
+            Async version of <see cref="P:LastAccessUser"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.SetReadOnlyAsync(System.Boolean)">
+            <summary>
+            Async version of <see cref="P:ReadOnly"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.CheckCanChange">
             <summary>
             Throws when item can not change
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.CheckCanChangeAsync">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemSessionItem.CheckCanChange"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.Rename(System.String)">
@@ -7482,14 +7527,29 @@
             Renames an item. Check file system capabilities to see if renaming is supported
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.RenameAsync(System.String)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemSessionItem.Rename(System.String)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.Delete">
             <summary>
             Deletes this item from file system
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.DeleteAsync">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemSessionItem.Delete"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.Refresh">
             <summary>
             Refreshes the state represented by this item, i.e. this may re-read attributes from remote file system
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSessionItem.RefreshAsync">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemSessionItem.Refresh"/>
             </summary>
         </member>
         <member name="P:NFX.IO.FileSystem.FileSystemSessionItem.Handle">
@@ -7583,9 +7643,39 @@
             Internal method that should not be called by developers
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.GetSubDirectoryNamesAsync">
+            <summary>
+            Async version of <see cref="P:SubDirectoryNames"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.GetFileNamesAsync">
+            <summary>
+            Async version of <see cref="P:FileNames"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.GetRecursiveSubDirectoryNamesAsync">
+            <summary>
+            Async version of <see cref="P:RecursiveSubDirectoryNames"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.GetRecursiveFileNamesAsync">
+            <summary>
+            Async version of <see cref="P:RecursiveFileNames"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.GetItemAsync(System.String)">
+            <summary>
+            Async version of Item(string)
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemDirectory.GetFile(System.String)">
             <summary>
             Gets file in this directory or null if it does not exist or not a file
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.GetFileAsync(System.String)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemDirectory.GetFile(System.String)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystemDirectory.GetSubDirectory(System.String)">
@@ -7593,9 +7683,19 @@
             Gets dubdirectory in this directory or null if it does not exist or not a directory
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.GetSubDirectoryAsync(System.String)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemDirectory.GetFile(System.String)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemDirectory.CreateFile(System.String,System.Int32)">
             <summary>
             Creates a new file optionally pre-allocating te specified number of bytes
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.CreateFileAsync(System.String,System.Int32)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemDirectory.CreateFile(System.String,System.Int32)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystemDirectory.CreateFile(System.String,System.String,System.Boolean)">
@@ -7607,12 +7707,22 @@
             <param name="readOnly">Indictaes whether the newly created file should be readonly</param>
             <returns>FileSystemFile instance</returns>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.CreateFileAsync(System.String,System.String,System.Boolean)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemDirectory.CreateFile(System.String,System.String,System.Boolean)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemDirectory.CreateDirectory(System.String)">
             <summary>
             Creates a directory in this directory
             </summary>
         </member>
-        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.DeepCopyTo(NFX.IO.FileSystem.FileSystemDirectory,NFX.IO.FileSystem.FileSystemDirectory.DirCopyFlags,System.Int32,System.Func{NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean})">
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.CreateDirectoryAsync(System.String)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemDirectory.CreateDirectory(System.String)"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.DeepCopyTo(NFX.IO.FileSystem.FileSystemDirectory,NFX.IO.FileSystem.FileSystemDirectory.DirCopyFlags,System.Int32,System.Func{NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean},System.Func{NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean})">
             <summary>
             Performs a deep copy of this directory into another directory that may belong to a different file system.
             This method allows to copy directory trees between different file systems i.e. from SVN into AmazonS3 or local file system etc.
@@ -7621,6 +7731,12 @@
             <param name="flags">Copy flags that specify what to copy</param>
             <param name="bufferSize">Copy buffer size</param>
             <param name="filter">Optional filter function</param>
+            <param name="cancel">Optional cancellation function. Return true to abort copying</param>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemDirectory.DeepCopyToAsync(NFX.IO.FileSystem.FileSystemDirectory,NFX.IO.FileSystem.FileSystemDirectory.DirCopyFlags,System.Int32,System.Func{NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean},System.Func{NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean})">
+            <summary>
+            Async version of DeepCopyTo(...)
+            </summary>
         </member>
         <member name="P:NFX.IO.FileSystem.FileSystemDirectory.SubDirectoryNames">
             <summary>
@@ -7649,6 +7765,11 @@
             <param name="path">Path relative to this directory to navigate to</param>
             <returns>FileSystemSessionItem instance - a directory or a file</returns>
         </member>
+        <member name="T:NFX.IO.FileSystem.FileSystemException">
+            <summary>
+            General NFX file system specific exception
+            </summary>
+        </member>
         <member name="T:NFX.IO.FileSystem.FileSystemFile">
             <summary>
             Represents a file in a file system. This class is NOT thread-safe
@@ -7664,9 +7785,19 @@
             Reads all text from file using byte order mark detection with UTF8 encoding
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemFile.ReadAllTextAsync">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemFile.ReadAllText"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemFile.ReadAllText(System.Text.Encoding,System.Boolean,System.Int32)">
             <summary>
             Reads all text from stream using the specified parameters
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemFile.ReadAllTextAsync(System.Text.Encoding,System.Boolean,System.Int32)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemFile.ReadAllText(System.Text.Encoding,System.Boolean,System.Int32)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystemFile.WriteAllText(System.String)">
@@ -7674,9 +7805,19 @@
             Sets file content to supplied string using default UTF8 encoding
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemFile.WriteAllTextAsync(System.String)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemFile.WriteAllText(System.String)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemFile.WriteAllText(System.String,System.Text.Encoding,System.Int32)">
             <summary>
             Sets file content to supplied string using the specified parameters
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemFile.WriteAllTextAsync(System.String,System.Text.Encoding,System.Int32)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemFile.WriteAllText(System.String,System.Text.Encoding,System.Int32)"/>
             </summary>
         </member>
         <member name="P:NFX.IO.FileSystem.FileSystemFile.FileStream">
@@ -7739,6 +7880,12 @@
             Indicates whether the file system supports custom metadata for files and folders
             </summary>
         </member>
+        <member name="P:NFX.IO.FileSystem.IFileSystemCapabilities.SupportsAsyncronousAPI">
+            <summary>
+            Defines if this FileSystem implements Async methods in real asynchronous manner.
+            By default asynchronous methods are actually executed syncronously and return Task with execution result or exception
+            </summary>
+        </member>
         <member name="T:NFX.IO.FileSystem.FileSystem">
             <summary>
             Provides a base for various file system abstractions.
@@ -7790,6 +7937,11 @@
             Returns capabilities for this file system instance, that may or may not be the same as GeneralCapabilities
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.AutoStartSystems">
+            <summary>
+            Automatically starts systems designated in config with auto-start attribute
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.Configure(NFX.Environment.IConfigSectionNode)">
             <summary>
             Configures file system. This method is a part of lifecycle management and is intended to be called only by creating thread (not thread-safe)
@@ -7818,10 +7970,24 @@
               which "looks" at a sealed/closed version and can not change. This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoCheckCanChangeAsync(NFX.IO.FileSystem.FileSystemSessionItem)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoCheckCanChange(NFX.IO.FileSystem.FileSystemSessionItem)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoCheckCanChange(NFX.IO.FileSystem.FileSystemSessionItem)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoCheckCanChange(NFX.IO.FileSystem.FileSystemSessionItem)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetLatestVersion(NFX.IO.FileSystem.FileSystemSession)">
             <summary>
             Override in particular file systems that support versioning to get latest version object that this session can work with.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetLatestVersionAsync(NFX.IO.FileSystem.FileSystemSession)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetLatestVersion(NFX.IO.FileSystem.FileSystemSession)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetLatestVersion(NFX.IO.FileSystem.FileSystemSession)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetLatestVersion(NFX.IO.FileSystem.FileSystemSession)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetVersion(NFX.IO.FileSystem.FileSystemSession)">
@@ -7830,10 +7996,24 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetVersionAsync(NFX.IO.FileSystem.FileSystemSession)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetVersion(NFX.IO.FileSystem.FileSystemSession)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetVersion(NFX.IO.FileSystem.FileSystemSession)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetVersion(NFX.IO.FileSystem.FileSystemSession)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoSetVersion(NFX.IO.FileSystem.FileSystemSession,NFX.IO.FileSystem.IFileSystemVersion)">
             <summary>
             Override in particular file systems that support versioning to set seesion to specific version.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoSetVersionAsync(NFX.IO.FileSystem.FileSystemSession,NFX.IO.FileSystem.IFileSystemVersion)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetVersion(NFX.IO.FileSystem.FileSystemSession,NFX.IO.FileSystem.IFileSystemVersion)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetVersion(NFX.IO.FileSystem.FileSystemSession,NFX.IO.FileSystem.IFileSystemVersion)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetVersion(NFX.IO.FileSystem.FileSystemSession,NFX.IO.FileSystem.IFileSystemVersion)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoBeginTransaction(NFX.IO.FileSystem.FileSystemSession)">
@@ -7842,10 +8022,24 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoBeginTransactionAsync(NFX.IO.FileSystem.FileSystemSession)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoBeginTransaction(NFX.IO.FileSystem.FileSystemSession)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoBeginTransaction(NFX.IO.FileSystem.FileSystemSession)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoBeginTransaction(NFX.IO.FileSystem.FileSystemSession)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoCommitTransaction(NFX.IO.FileSystem.FileSystemSession)">
             <summary>
             Override in particular file systems that support transactions to commit transaction in specified session.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoCommitTransactionAsync(NFX.IO.FileSystem.FileSystemSession)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoCommitTransaction(NFX.IO.FileSystem.FileSystemSession)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoCommitTransaction(NFX.IO.FileSystem.FileSystemSession)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoCommitTransaction(NFX.IO.FileSystem.FileSystemSession)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoRollbackTransaction(NFX.IO.FileSystem.FileSystemSession)">
@@ -7854,10 +8048,24 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoRollbackTransactionAsync(NFX.IO.FileSystem.FileSystemSession)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoRollbackTransaction(NFX.IO.FileSystem.FileSystemSession)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoRollbackTransaction(NFX.IO.FileSystem.FileSystemSession)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoRollbackTransaction(NFX.IO.FileSystem.FileSystemSession)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoRefresh(NFX.IO.FileSystem.FileSystemSessionItem)">
             <summary>
             Override to refresh item state, i.e. re-fetch remote information.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoRefreshAsync(NFX.IO.FileSystem.FileSystemSessionItem)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoRefreshAsync(NFX.IO.FileSystem.FileSystemSessionItem)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoRefreshAsync(NFX.IO.FileSystem.FileSystemSessionItem)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoRefreshAsync(NFX.IO.FileSystem.FileSystemSessionItem)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetSubDirectoryNames(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)">
@@ -7866,10 +8074,24 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetSubDirectoryNamesAsync(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetSubDirectoryNames(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetSubDirectoryNames(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetSubDirectoryNames(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetFileNames(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)">
             <summary>
             Override to get file names in directory. If directory is null then root is assumed.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetFileNamesAsync(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetFileNames(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetFileNames(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetFileNames(NFX.IO.FileSystem.FileSystemDirectory,System.Boolean)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoNavigate(NFX.IO.FileSystem.FileSystemSession,System.String)">
@@ -7878,10 +8100,24 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoNavigateAsync(NFX.IO.FileSystem.FileSystemSession,System.String)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoNavigate(NFX.IO.FileSystem.FileSystemSession,System.String)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoNavigate(NFX.IO.FileSystem.FileSystemSession,System.String)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoNavigate(NFX.IO.FileSystem.FileSystemSession,System.String)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoRenameItem(NFX.IO.FileSystem.FileSystemSessionItem,System.String)">
             <summary>
             Override to rename item return true on success.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoRenameItemAsync(NFX.IO.FileSystem.FileSystemSessionItem,System.String)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoRenameItem(NFX.IO.FileSystem.FileSystemSessionItem,System.String)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoRenameItem(NFX.IO.FileSystem.FileSystemSessionItem,System.String)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoRenameItem(NFX.IO.FileSystem.FileSystemSessionItem,System.String)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoDeleteItem(NFX.IO.FileSystem.FileSystemSessionItem)">
@@ -7890,10 +8126,24 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoDeleteItemAsync(NFX.IO.FileSystem.FileSystemSessionItem)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoDeleteItem(NFX.IO.FileSystem.FileSystemSessionItem)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoDeleteItem(NFX.IO.FileSystem.FileSystemSessionItem)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoDeleteItem(NFX.IO.FileSystem.FileSystemSessionItem)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoCreateFile(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.Int32)">
             <summary>
             Override to create a file.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoCreateFileAsync(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.Int32)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoCreateFile(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.Int32)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoCreateFile(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.Int32)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoCreateFile(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.Int32)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoCreateFile(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.String,System.Boolean)">
@@ -7902,10 +8152,31 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoCreateFileAsync(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.String,System.Boolean)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoCreateFile(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.String,System.Boolean)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoCreateFile(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.String,System.Boolean)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoCreateFile(NFX.IO.FileSystem.FileSystemDirectory,System.String,System.String,System.Boolean)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoCreateDirectory(NFX.IO.FileSystem.FileSystemDirectory,System.String)">
             <summary>
             Override to create a directory.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoCreateDirectoryAsync(NFX.IO.FileSystem.FileSystemDirectory,System.String)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoCreateDirectory(NFX.IO.FileSystem.FileSystemDirectory,System.String)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoCreateDirectory(NFX.IO.FileSystem.FileSystemDirectory,System.String)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoCreateDirectory(NFX.IO.FileSystem.FileSystemDirectory,System.String)"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoDirectoryDeepCopyAsync(NFX.IO.FileSystem.FileSystemDirectory,NFX.IO.FileSystem.FileSystemDirectory,NFX.IO.FileSystem.FileSystemDirectory.DirCopyFlags,System.Int32,System.Func{NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean},System.Func{NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean})">
+            <summary>
+            Implements asynchronous deep copy of folders where destination folder may belong to a different file system.
+            The specifics of implementation may be dictated by particular file systems, i.e.: asynchronous strategies for getting file
+            lists may depend on the particular system.
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetItemSize(NFX.IO.FileSystem.FileSystemSessionItem)">
@@ -7914,10 +8185,24 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetItemSizeAsync(NFX.IO.FileSystem.FileSystemSessionItem)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetItemSize(NFX.IO.FileSystem.FileSystemSessionItem)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetItemSize(NFX.IO.FileSystem.FileSystemSessionItem)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetItemSize(NFX.IO.FileSystem.FileSystemSessionItem)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetPermissionsStream(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})">
             <summary>
             Override to get permissions stream for item (directory or file).
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetPermissionsStreamAsync(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetPermissionsStream(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetPermissionsStream(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetPermissionsStream(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetMetadataStream(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})">
@@ -7926,10 +8211,24 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetMetadataStreamAsync(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetMetadataStream(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetMetadataStream(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetMetadataStream(NFX.IO.FileSystem.FileSystemSessionItem,System.Action{NFX.IO.FileSystem.FileSystemStream})"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetFileStream(NFX.IO.FileSystem.FileSystemFile,System.Action{NFX.IO.FileSystem.FileSystemStream})">
             <summary>
             Override to get file stream.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetFileStreamAsync(NFX.IO.FileSystem.FileSystemFile,System.Action{NFX.IO.FileSystem.FileSystemStream})">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetFileStream(NFX.IO.FileSystem.FileSystemFile,System.Action{NFX.IO.FileSystem.FileSystemStream})"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetFileStream(NFX.IO.FileSystem.FileSystemFile,System.Action{NFX.IO.FileSystem.FileSystemStream})"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetFileStream(NFX.IO.FileSystem.FileSystemFile,System.Action{NFX.IO.FileSystem.FileSystemStream})"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetCreationTimestamp(NFX.IO.FileSystem.FileSystemSessionItem)">
@@ -7956,16 +8255,37 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoSetCreationTimestampAsync(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetCreationTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetCreationTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetCreationTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoSetModificationTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)">
             <summary>
             Override to set item modification timestamp.
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoSetModificationTimestampAsync(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetModificationTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetModificationTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetModificationTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoSetLastAccessTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)">
             <summary>
             Override to set item last access timestamp.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoSetLastAccessTimestampAsync(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetLastAccessTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetLastAccessTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetLastAccessTimestamp(NFX.IO.FileSystem.FileSystemSessionItem,System.DateTime)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetReadOnly(NFX.IO.FileSystem.FileSystemSessionItem)">
@@ -7980,10 +8300,24 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoSetReadOnlyAsync(NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetReadOnly(NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetReadOnly(NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoSetReadOnly(NFX.IO.FileSystem.FileSystemSessionItem,System.Boolean)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetCreationUser(NFX.IO.FileSystem.FileSystemSessionItem)">
             <summary>
             Override in particular file systems to get user who created item.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetCreationUserAsync(NFX.IO.FileSystem.FileSystemSessionItem)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetCreationUser(NFX.IO.FileSystem.FileSystemSessionItem)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetCreationUser(NFX.IO.FileSystem.FileSystemSessionItem)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetCreationUser(NFX.IO.FileSystem.FileSystemSessionItem)"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetModificationUser(NFX.IO.FileSystem.FileSystemSessionItem)">
@@ -7992,10 +8326,29 @@
             This method may be called by miltiple threads
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetModificationUserAsync(NFX.IO.FileSystem.FileSystemSessionItem)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetModificationUser(NFX.IO.FileSystem.FileSystemSessionItem)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetModificationUser(NFX.IO.FileSystem.FileSystemSessionItem)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetModificationUser(NFX.IO.FileSystem.FileSystemSessionItem)"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystem.DoGetLastAccessUser(NFX.IO.FileSystem.FileSystemSessionItem)">
             <summary>
             Override in particular file systems to get user who was the last user accessing the item.
             This method may be called by miltiple threads
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystem.DoGetLastAccessUserAsync(NFX.IO.FileSystem.FileSystemSessionItem)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetLastAccessUser(NFX.IO.FileSystem.FileSystemSessionItem)"/>.
+            This base/default implementation just synchronously calls <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetLastAccessUser(NFX.IO.FileSystem.FileSystemSessionItem)"/> and 
+            returns already completed Task with result returned by <see cref="M:NFX.IO.FileSystem.FileSystem.DoGetLastAccessUser(NFX.IO.FileSystem.FileSystemSessionItem)"/>
+            </summary>
+        </member>
+        <member name="P:NFX.IO.FileSystem.FileSystem.Instances">
+            <summary>
+            Returns the read-only registry view of file systems currently activated
             </summary>
         </member>
         <member name="P:NFX.IO.FileSystem.FileSystem.Name">
@@ -8033,9 +8386,31 @@
             Starts new file system session
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSession.GetItemAsync(System.String)">
+            <summary>
+            Async version of <see cref="P:Item(string)"/>
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSession.SetFileSystemVersionAsync(NFX.IO.FileSystem.IFileSystemVersion)">
+            <summary>
+            Async version of <see cref="P:Version"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSession.GetLatestVersionAsync">
+            <summary>
+            Async version of <see cref="P:LatestVersion"/>
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemSession.BeginTransaction">
             <summary>
             Starts a transaction returning its' transaction handle object, otherwise does nothing
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSession.BeginTransactionAsync">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemSession.BeginTransaction"/>
             </summary>
         </member>
         <member name="M:NFX.IO.FileSystem.FileSystemSession.CommitTransaction">
@@ -8043,14 +8418,29 @@
             Commits active transaction, does nothing otherwise
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSession.CommitTransactionAsync">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemSession.CommitTransaction"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemSession.RollbackTransaction">
             <summary>
             Cancels active transaction changes, does nothing otherwise
             </summary>
         </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSession.RollbackTransactionAsync">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemSession.RollbackTransaction"/>
+            </summary>
+        </member>
         <member name="M:NFX.IO.FileSystem.FileSystemSession.GetVersions(NFX.IO.FileSystem.IFileSystemVersion,System.Int32)">
             <summary>
             Returns specified number of versions going back from the specific version. This call is thread-safe 
+            </summary>
+        </member>
+        <member name="M:NFX.IO.FileSystem.FileSystemSession.GetVersionsAsync(NFX.IO.FileSystem.IFileSystemVersion,System.Int32)">
+            <summary>
+            Async version of <see cref="M:NFX.IO.FileSystem.FileSystemSession.GetVersions(NFX.IO.FileSystem.IFileSystemVersion,System.Int32)"/>
             </summary>
         </member>
         <member name="P:NFX.IO.FileSystem.FileSystemSession.Name">
@@ -8109,6 +8499,11 @@
         <member name="P:NFX.IO.FileSystem.FileSystemSession.UniqueSequenceProvider">
             <summary>
             Returns unique sequence provider for the system or null if it is not supported
+            </summary>
+        </member>
+        <member name="T:NFX.IO.FileSystem.FileSystemStarter">
+            <summary>
+            Represents a starter that launches file systems on startup
             </summary>
         </member>
         <member name="T:NFX.IO.FileSystem.FileSystemStream">
@@ -16368,9 +16763,15 @@
             Reads primitives from stream
             </summary>
         </member>
+        <member name="T:NFX.IO.VarIntStr">
+            <summary>
+            Holds either an integer or a string value.
+            This is useful for metadata, i.e. types, if type is known an integer is sent, otherwise a full type name is sent
+            </summary>
+        </member>
         <member name="T:NFX.IO.MetaHandle">
             <summary>
-            Represents tuple of an unsigned integer with optional string metadata. If metadata is null then integer is stored by itself in an efficient way.
+            Represents tuple of an unsigned integer with optional int or string metadata. If metadata is null then integer is stored by itself in an efficient way.
             The type is useful for storage of handles/indexes (such as pointer surrogates) with optional description of pointed-to data (such as type information).
             A special case is reserved for strings which are immutable yet reference types, in which case a special handle INLINED_STRING_HANDLE is set to indicate that 
              "Metadata" really contains string data that this handle should resolve into. Check "IsInlinedString" property to see if string was inlined.
@@ -16382,17 +16783,17 @@
             Inlines string instance instead of pointer handle
             </summary>
         </member>
-        <member name="M:NFX.IO.MetaHandle.InlineValueType(System.String)">
+        <member name="M:NFX.IO.MetaHandle.InlineValueType(System.Nullable{NFX.IO.VarIntStr})">
             <summary>
             Inlines value type instead of pointer handle
             </summary>
         </member>
-        <member name="M:NFX.IO.MetaHandle.InlineRefType(System.String)">
+        <member name="M:NFX.IO.MetaHandle.InlineRefType(System.Nullable{NFX.IO.VarIntStr})">
             <summary>
             Inlines ref type instead of pointer handle
             </summary>
         </member>
-        <member name="M:NFX.IO.MetaHandle.InlineTypeValue(System.String)">
+        <member name="M:NFX.IO.MetaHandle.InlineTypeValue(System.Nullable{NFX.IO.VarIntStr})">
             <summary>
             Inlines type value instead of pointer handle
             </summary>
@@ -21947,6 +22348,18 @@
             Not supported here
             </summary>
         </member>
+        <member name="M:NFX.Serialization.Slim.RefPool.GetHandle(System.Object,NFX.Serialization.Slim.TypeRegistry,NFX.IO.SlimFormat,System.Type@)">
+            <summary>
+            Emits MetaHandle that contains type handle for reference handle only when this referenced is added to pool for the first time.
+            Emits inlined string for strings and inlined value types for boxed objects.
+            Emits additional array dimensions info for array refernces who's types are emitted for the first time
+            </summary>
+        </member>
+        <member name="M:NFX.Serialization.Slim.RefPool.HandleToReference(NFX.IO.MetaHandle,NFX.Serialization.Slim.TypeRegistry,NFX.IO.SlimFormat,NFX.IO.SlimReader)">
+            <summary>
+            Returns object reference for supplied metahandle
+            </summary>
+        </member>
         <member name="T:NFX.Serialization.Slim.SlimSerializer">
             <summary>
             Implements Slim serialization algorithm that relies on an injectable SlimFormat-derivative (through .ctor) paremeter.
@@ -21997,18 +22410,6 @@
             Be careful not to mutate the returned object
             </summary>
         </member>
-        <member name="M:NFX.Serialization.Slim.RefPool.GetHandle(System.Object,NFX.Serialization.Slim.TypeRegistry,NFX.IO.SlimFormat,System.Type@)">
-            <summary>
-            Emits MetaHandle that contains type handle for reference handle only when this referenced is added to pool for the first time.
-            Emits inlined string for strings and inlined value types for boxed objects.
-            Emits additional array dimensions info for array refernces who's types are emitted for the first time
-            </summary>
-        </member>
-        <member name="M:NFX.Serialization.Slim.RefPool.HandleToReference(NFX.IO.MetaHandle,NFX.Serialization.Slim.TypeRegistry,NFX.IO.SlimFormat,NFX.IO.SlimReader)">
-            <summary>
-            Returns object reference for supplied metahandle
-            </summary>
-        </member>
         <member name="T:NFX.IO.SlimWriter">
             <summary>
             Writes primitives and other supported types to Slim-format stream. Use factory method of SlimFormat intance to create a new instance of SlimWriter class
@@ -22054,19 +22455,19 @@
             Initializes TypeRegistry with types from other sources
             </summary>
         </member>
-        <member name="M:NFX.Serialization.Slim.TypeRegistry.GetByHandle(System.String)">
-            <summary>
-            See this[handle]
-            </summary>
-        </member>
         <member name="M:NFX.Serialization.Slim.TypeRegistry.Add(System.Type)">
             <summary>
             Adds the type if it not already in registry and returns true
             </summary>
         </member>
+        <member name="M:NFX.Serialization.Slim.TypeRegistry.GetTypeHandleAsString(System.Type)">
+            <summary>
+            Returns a string with the type index formatted as handle if type exists in registry, or fully qualified type name otherwise
+            </summary>
+        </member>
         <member name="M:NFX.Serialization.Slim.TypeRegistry.GetTypeHandle(System.Type)">
             <summary>
-            Returns type index formatted as handle if type exists in registry, or fully qualified type name otherwise
+            Returns a VarIntStr with the type index formatted as handle if type exists in registry, or fully qualified type name otherwise
             </summary>
         </member>
         <member name="P:NFX.Serialization.Slim.TypeRegistry.RecordModelTypes">
@@ -22115,6 +22516,11 @@
             It is updated when new types get added into the registry
             </summary>
         </member>
+        <member name="P:NFX.Serialization.Slim.TypeRegistry.Item(NFX.IO.VarIntStr)">
+            <summary>
+            Returns type by handle i.e. VarIntStr(1) or VarIntStr("full name"). Throws in case of error
+            </summary>
+        </member>
         <member name="P:NFX.Serialization.Slim.TypeRegistry.Item(System.String)">
             <summary>
             Returns type by handle i.e. '$11' or full name. Throws in case of error
@@ -22123,6 +22529,21 @@
         <member name="T:NFX.Serialization.Slim.TypeDescriptor">
             <summary>
             Type descriptor dynamicaly compiles serialization/deserialization expressions for a particular type
+            </summary>
+        </member>
+        <member name="T:NFX.Serialization.SerializationOperation">
+            <summary>
+            Denotes ser/deser operations
+            </summary>
+        </member>
+        <member name="F:NFX.Serialization.SerializationOperation.Serializing">
+            <summary>
+            Serializing object to stream
+            </summary>
+        </member>
+        <member name="F:NFX.Serialization.SerializationOperation.Deserializing">
+            <summary>
+            Deserializing object from stream
             </summary>
         </member>
         <member name="T:NFX.Serialization.IDisposableSerializer">
@@ -22332,6 +22753,56 @@
             Tries to get a string value as specified type.
             When 'strict=false', tries to do some inference like return "true" for numbers that dont equal to zero etc.
             When 'strict=true' throws an exception if deterministic conversion is not possible
+            </summary>
+        </member>
+        <member name="M:NFX.TaskUtils.Then(System.Threading.Tasks.Task,System.Action,System.Threading.Tasks.TaskContinuationOptions)">
+            <summary>
+            Chains task 'first' with 'next'.
+            Returns task that completes when 'next' completes
+            </summary>
+        </member>
+        <member name="M:NFX.TaskUtils.Then``1(System.Threading.Tasks.Task{``0},System.Action{``0},System.Threading.Tasks.TaskContinuationOptions)">
+            <summary>
+            Chains task 'first' with 'next' passing result of 'first' to 'next'.
+            Returns task that completes when 'next' completes
+            </summary>
+        </member>
+        <member name="M:NFX.TaskUtils.Then``1(System.Threading.Tasks.Task{``0},System.Func{``0,System.Threading.Tasks.Task},System.Threading.Tasks.TaskContinuationOptions,System.Threading.Tasks.TaskContinuationOptions)">
+            <summary>
+            Chains task 'first' with task returned by 'next' passing result of 'first' to 'next'.
+            Returns task that completes after task returned by 'next' completes
+            </summary>
+        </member>
+        <member name="M:NFX.TaskUtils.Then``1(System.Threading.Tasks.Task,System.Func{System.Threading.Tasks.Task{``0}},System.Threading.Tasks.TaskContinuationOptions,System.Threading.Tasks.TaskContinuationOptions)">
+            <summary>
+            Chains task 'first' with task returned by 'next'.
+            Returns task that completes after task returned by 'next' completes with result from 'next' task
+            </summary>
+        </member>
+        <member name="M:NFX.TaskUtils.Then``2(System.Threading.Tasks.Task{``0},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Threading.Tasks.TaskContinuationOptions,System.Threading.Tasks.TaskContinuationOptions)">
+            <summary>
+            Chains task 'first' with task returned by 'next' passing result of 'first' to 'next'.
+            Returns task that completes after task returned by 'next' completes with result from 'next' task
+            </summary>
+        </member>
+        <member name="M:NFX.TaskUtils.OnFailed(System.Threading.Tasks.Task,System.Action)">
+            <summary>
+            Registers action executed if task was faulted or cancelled.
+            Returns original task to allow chaining in 'RanToCompletion' case
+            </summary>
+        </member>
+        <member name="M:NFX.TaskUtils.AsCompletedTask(System.Action)">
+            <summary>
+            Non-generic version of <see cref="M:NFX.TaskUtils.AsCompletedTask``1(System.Func{``0})"/>
+            </summary>
+            <remarks>
+            Because there is no non-generic <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> version 
+            generic version typed by <see cref="T:System.Object"/> is used (<see cref="T:System.Threading.Tasks.Task`1"/> inherits from <see cref="T:System.Threading.Tasks.Task"/>)
+            </remarks>
+        </member>
+        <member name="M:NFX.TaskUtils.AsCompletedTask``1(System.Func{``0})">
+            <summary>
+            Returns task completed from synchronous functor
             </summary>
         </member>
         <member name="T:NFX.Templatization.ITemplateSource">

@@ -28,7 +28,8 @@ namespace Serbench.Specimens.Serializers
   )]
    public class FastJsonSerializer : Serializer
     {
-        private readonly FastJsonSerializer m_Serializer;
+    //        private readonly FastJsonSerializer m_Serializer;
+      
         private Type m_PrimaryType;
 
         public FastJsonSerializer(TestingSystem context, IConfigSectionNode conf)

@@ -30,7 +30,7 @@ namespace Serbench.Specimens.Serializers
     public class MessageSharkSerializer : Serializer
     {
 
-        private Type m_primaryType;
+   //     private Type m_primaryType;
 
         public MessageSharkSerializer(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)

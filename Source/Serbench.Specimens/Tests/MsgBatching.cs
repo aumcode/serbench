@@ -178,7 +178,7 @@ namespace Serbench.Specimens.Tests
             ElevatePermission = (0!=(rnd & (1<<29)))
            };
 
-           msg.CallArguments = new object[ExternalRandomGenerator.Instance.NextScaledRandomInteger(0, 10)];
+           msg.CallArguments = new object[ExternalRandomGenerator.Instance.NextScaledRandomInteger(0, 6)];
            for(var i=0; i<msg.CallArguments.Length; i++)
            {
              var r = ExternalRandomGenerator.Instance.NextScaledRandomInteger(0, 4);
@@ -195,6 +195,30 @@ namespace Serbench.Specimens.Tests
     } 
 
 
+    
+    [ProtoContract]
+    [DataContract]
+    [Serializable] public class TradingRec
+    {
+         [ProtoMember(1)][DataMember] public string Symbol;
+         [ProtoMember(2)][DataMember] public int Volume;
+         [ProtoMember(3)][DataMember] public long Bet;
+         [ProtoMember(4)][DataMember] public long Price;
+
+         public static TradingRec Build()
+         {
+           return new TradingRec
+           {
+            Symbol = NaturalTextGenerator.GenerateFirstName(),
+            Volume = ExternalRandomGenerator.Instance.NextScaledRandomInteger(-25000, 25000),
+            Bet = ExternalRandomGenerator.Instance.NextScaledRandomInteger(-250000, 250000) * 10000L,
+            Price = ExternalRandomGenerator.Instance.NextScaledRandomInteger(0, 1000000) * 10000L
+           };
+         }
+    } 
+
+
+    public enum MsgBatchingType{ Personal = 0, RPC, Trading }
 
     /// <summary>
     /// This Test shows a batching scenario i.e. a full-duplex socket connection
@@ -212,21 +236,21 @@ namespace Serbench.Specimens.Tests
             m_Data = new List<object>(m_MsgCount);
 
             for (var i = 0; i < m_MsgCount; i++)
-              m_Data.Add( m_RPC ? (object)RPCMessage.Build() : SomePersonalDataMessage.Build() );
+              m_Data.Add( m_MsgType== MsgBatchingType.Personal ? SomePersonalDataMessage.Build() : m_MsgType== MsgBatchingType.RPC ? RPCMessage.Build() : (object)TradingRec.Build() );
         }
 
         [Config]
         private int m_MsgCount;
 
         [Config]
-        private bool m_RPC;
+        private MsgBatchingType m_MsgType;
 
         private List<object> m_Data = new List<object>();
 
 
         public override Type GetPayloadRootType()
         {                      
-            return m_RPC ? typeof(RPCMessage) : typeof(SomePersonalDataMessage);
+           return m_MsgType== MsgBatchingType.Personal ? typeof(SomePersonalDataMessage) : m_MsgType== MsgBatchingType.RPC ? typeof(RPCMessage) : typeof(TradingRec);
         }
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
