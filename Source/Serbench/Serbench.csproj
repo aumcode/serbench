@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTypes.cs" />
+    <Compile Include="Data\AbortedData.cs" />
     <Compile Include="Data\SerializerInfoData.cs" />
     <Compile Include="Data\DefaultDataStore.cs" />
     <Compile Include="Data\ITestDataStore.cs" />
@@ -97,7 +98,7 @@
   <ItemGroup>
     <None Include="WebViewer\views\Master.htm" />
     <None Include="WebViewer\views\OverviewTable.htm" />
-    <None Include="WebViewer\views\OverviewCharts.htm" /> 
+    <None Include="WebViewer\views\OverviewCharts.htm" />
     <None Include="WebViewer\views\SerializersInfo.htm" />
   </ItemGroup>
   <ItemGroup>

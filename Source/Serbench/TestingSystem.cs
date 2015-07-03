@@ -207,26 +207,33 @@ namespace Serbench
                           {
                             test.Abort(serializer, serializer.NotSupportedAbortMessage);
                             log(MessageType.Warning, serializer.Name, "Serializer configured as not-supported: " + serializer.NotSupportedAbortMessage);
-                            continue;//todo return result into aborted tests dataset
+                            
+                            
+                            DataStore.SaveTestData( new AbortedData(serializer, test, AbortedFrom.ConfigSer, serializer.NotSupportedAbortMessage) );
+                            continue;
                           }
 
                           if (test.NotSupportedAbortMessage!=null)
                           {
                             test.Abort(serializer, serializer.NotSupportedAbortMessage);
                             log(MessageType.Warning, serializer.Name+"->"+test.Name, "Test configured as not-supported: " + test.NotSupportedAbortMessage);
-                            continue;//todo return result into aborted tests dataset
+                            
+                            DataStore.SaveTestData( new AbortedData(serializer, test, AbortedFrom.ConfigTest, serializer.NotSupportedAbortMessage) );
+                            continue;
                           }
 
 
                           serializer.BeforeRuns(test);
                           if (test.Aborted)
                           {
-                            continue;//todo return result into aborted tests dataset
+                            DataStore.SaveTestData( new AbortedData(serializer, test, AbortedFrom.BeforeRunsSer, test.AbortMessage) );
+                            continue;
                           }
                           test.BeforeRuns(serializer);
                           if (test.Aborted)
                           {
-                            continue;//todo return result into aborted tests dataset
+                            DataStore.SaveTestData( new AbortedData(serializer, test, AbortedFrom.BeforeRunsTest, test.AbortMessage) );
+                            continue;
                           }
 
                           for(var i=0; Running && i<test.Runs; i++)
@@ -247,13 +254,15 @@ namespace Serbench
                                                             test.Name,
                                                             error.ToMessageWithType()
                                                           ), error);
+
+                        DataStore.SaveTestData( new AbortedData(serializer, test, AbortedFrom.ExceptionLeak, error.ToMessageWithType()) );
                       }
                   }//tests
                }//sers
            }
 
            if (!Running)
-            log(MessageType.Warning, "threadBodyCore()", "Service stopping but test has not finished yet");
+             log(MessageType.Warning, "threadBodyCore()", "Service stopping but test has not finished yet");
 
            log(MessageType.Info, "threadBodyCore()", "Thread exiting");
            
@@ -316,6 +325,8 @@ namespace Serbench
                test.PerformSerializationTest( serializer, streamWrap );
                if (test.Aborted)
                {
+                 DataStore.SaveTestData( new AbortedData(serializer, test, AbortedFrom.Serialization, test.AbortMessage) );
+
                  result.SerAborts++;
                  result.FirstSerAbortMsg = test.AbortMessage;
                  test.ResetAbort();
@@ -393,6 +404,8 @@ namespace Serbench
                test.PerformDeserializationTest( serializer, readingStreamSegment );
                if (test.Aborted)
                {
+                 DataStore.SaveTestData( new AbortedData(serializer, test, AbortedFrom.Deserialization, test.AbortMessage) );
+                 
                  result.DeserAborts++;
                  result.FirstDeserAbortMsg = test.AbortMessage;
                  test.ResetAbort();
