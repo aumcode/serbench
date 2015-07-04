@@ -21,13 +21,13 @@ namespace Serbench.Data
       /// Inits the data from attribute if one is set, or allocates empty instance if there is not attr
       /// </summary>
       public SerializerInfoData(Serializer ser) 
-      {
+      { 
+        SerializerType = ser.GetType().FullName;
+        SerializerName = ser.Name;
+
         var t = ser.GetType();
         var attr = t.GetCustomAttributes(typeof(SerializerInfo), false).FirstOrDefault() as SerializerInfo;
         if (attr==null) return;
-
-        SerializerType = ser.GetType().FullName;
-        SerializerName = ser.Name;
 
         foreach(var pi in attr.GetType().GetProperties(System.Reflection.BindingFlags.DeclaredOnly | 
                                                        System.Reflection.BindingFlags.Instance |

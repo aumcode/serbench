@@ -326,7 +326,8 @@ function createAbortedTable(aborted) {
     var tbody = document.createElement('tbody');
     aborted.wEach(function (r) {
 
-        tr = document.createElement('tr');
+        var tr = document.createElement('tr');
+        tr.className = 'main-table-row';
         tr.onmouseover = function () { highlightRow(tr) };
         tr.onmouseout = function () { unhighlightRow(tr) };
 
