@@ -113,6 +113,9 @@
     <EmbeddedResource Include="WebViewer\scripts\wv.gui.js" />
     <EmbeddedResource Include="WebViewer\scripts\wv.js" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WebViewer\styles\serializers-info.css" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>"$(SolutionDir)..\Source\lib\ntc" "$(ProjectDir)\WebViewer\*.htm" -r -ext ".auto.cs" /src</PreBuildEvent>

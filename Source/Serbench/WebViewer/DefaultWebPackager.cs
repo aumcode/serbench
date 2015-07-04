@@ -63,7 +63,8 @@ namespace Serbench.WebViewer
       AddResourceFile(path, STYLES_DIR, "default.css", @"styles.default.css");
       AddResourceFile(path, STYLES_DIR, "table.css", @"styles.table.css");
       AddResourceFile(path, STYLES_DIR, "overview-table.css", @"styles.overview-table.css");
-      AddResourceFile(path, STYLES_DIR, "overview-charts.css", @"styles.overview-charts.css");
+      AddResourceFile(path, STYLES_DIR, "overview-charts.css", @"styles.overview-charts.css"); 
+      AddResourceFile(path, STYLES_DIR, "serializers-info.css", @"styles.serializers-info.css");
     }
 
     protected virtual void DoGeneratePages(string path)

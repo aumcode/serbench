@@ -324,34 +324,8 @@
 
     $(window).scroll(function () {
         
-        arrangeColumnHeaders();
-        arrangeRowHeaders();
+        arrangeVerticalOffset(columnHeaders, topOffset, heightOffset);
+        arrangeHorizontalOffset(rowHeaders, leftOffset);
     });
-
-    function arrangeColumnHeaders (){
-
-        var currentTopScroll = $(window).scrollTop();
-        var topDelta = currentTopScroll - topOffset;
-        if (topDelta < 0)
-            topDelta = 0;
-        else if (topDelta > heightOffset)
-            topDelta = heightOffset;
-
-        columnHeaders.each(function () {
-            $(this).css("top", topDelta);
-        });
-    };
-
-    function arrangeRowHeaders() {
-
-        var currentLeftScroll = $(window).scrollLeft();
-        var leftDelta = currentLeftScroll - leftOffset;
-        if (leftDelta < 0)
-            leftDelta = 0;
-
-        rowHeaders.each(function () {
-            $(this).css("left", leftDelta);
-        });
-    };
 
 </script>

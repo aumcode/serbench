@@ -18,6 +18,9 @@
 #[override renderBody()]
 
 <link rel="stylesheet" type="text/css" href="styles/table.css">
+<link rel="stylesheet" type="text/css" href="styles/serializers-info.css">
+
+<script src="scripts/data-SerializerInfoData.js"></script>
 
 <div class="main-container">
     <div id="title">
@@ -30,9 +33,7 @@
         </div>
     </div>
 
-    <div id="serializers-table">
-        here will be a table soon...
-    </div>
+    <div id="serializers-table"></div>
 
 </div>
 
@@ -42,6 +43,27 @@
 
 <script>      
     
+    // globals
+    var rowHeaders;
+    var columnHeaders;
+    var leftOffset;
+    var topOffset;
+    var propertyInfos = [
+            { name: "Family", alias: "Family", getter: function (s) { return s.Family; } },
+            { name: "MetadataRequirement", alias: "Metadata requirement", getter: function (s) { return s.MetadataRequirement; } },
+            { name: "VendorName", alias: "Vendor", getter: function (s) { return s.VendorName; } },
+            { name: "VendorLicense", alias: "Vendor license", getter: function (s) { return s.VendorLicense; } },
+            { name: "VendorURL", alias: "Vendor URL", getter: function (s) { return s.VendorURL; } },
+            { name: "VendorPackageAddress", alias: "Vendor package address", getter: function (s) { return s.VendorPackageAddress; } },
+            { name: "FormatName", alias: "Format name", getter: function (s) { return s.FormatName; } },
+            { name: "LinesOfCodeK", alias: "Lines of code (K)", getter: function (s) { return s.LinesOfCodeK; } },
+            { name: "DataTypes", alias: "Data types", getter: function (s) { return s.DataTypes; } },
+            { name: "Assemblies", alias: "Assemblies", getter: function (s) { return s.Assemblies; } },
+            { name: "ExternalReferences", alias: "External references", getter: function (s) { return s.ExternalReferences; } },
+            { name: "PackageSizeKb", alias: "Package size (Kb)", getter: function (s) { return s.PackageSizeKb; } }
+    ];
+
+
     $(function () {
 
         var serdata = WAVE.arrayWalkable(window.data_SerializerInfoData);
@@ -49,14 +71,88 @@
         var container = $("#serializers-table")[0];
         var table = createSerializersInfoTable(serdata);
         container.appendChild(table);
+
+        initializeGlobals();
     });
+
+    function initializeGlobals() {
+
+        columnHeaders = $('.main-table-column-header');
+        rowHeaders = $('.main-table-row-header');
+        topOffset = parseInt(columnHeaders.offset().top);
+        leftOffset = parseInt(rowHeaders.offset().left);
+    }
 
     function createSerializersInfoTable(serdata) {
 
         var table = document.createElement('table');
         table.className = 'main-table';
 
+        createTableHeader(table);
+        createTableBody(table, serdata);
+        
+
+
         return table;
     };
+
+    function createTableHeader(table) {
+
+        var thead = document.createElement('thead');
+        var tr = document.createElement('tr');
+        var th = document.createElement('th');
+        th.className = 'corner-cell';
+        tr.appendChild(th);
+        thead.appendChild(tr);
+
+        WAVE.arrayWalkable(propertyInfos).wEach(function (p) {
+
+            var th = document.createElement("th");
+            th.className = 'main-table-column-header';
+            var htmlTemplate = "<b>@propertyName@</b>";
+            th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { propertyName: p.alias });
+            tr.appendChild(th);
+        });
+
+        table.appendChild(thead);
+    }
+
+    function createTableBody(table, serdata) {
+
+        var tbody = document.createElement('tbody');
+
+        serdata.wEach(function (s) {
+            
+            var tr = document.createElement('tr');
+            tr.className = 'main-table-row';
+            tr.onmouseover = function () { highlightRow(tr) };
+            tr.onmouseout = function () { unhighlightRow(tr) };
+
+            var th = document.createElement("th");
+            th.className = 'main-table-row-header';
+            var htmlTemplate = "<div class='row-header'><b>@serializerName@</b><br>@serializerType@</div>";
+            th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: s.SerializerType, serializerName: s.SerializerName });
+            tr.appendChild(th);
+
+            WAVE.arrayWalkable(propertyInfos).wEach(function (p) {
+
+                var td = document.createElement('td');
+
+                var htmlTemplate = (p.name == "VendorURL") ? "<div class='vendor-link-container'><a href='@propertyValue@' class='vendor-link' target='_blank'>link</a></div>" : '<div>@propertyValue@</div>';
+                td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { propertyValue: p.getter(s) });
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+    };
+
+    $(window).scroll(function () {
+
+        arrangeVerticalOffset(columnHeaders, topOffset);
+        arrangeHorizontalOffset(rowHeaders, leftOffset);
+    });
 
 </script>

@@ -325,7 +325,10 @@ function createAbortedTable(aborted) {
     // body
     var tbody = document.createElement('tbody');
     aborted.wEach(function (r) {
+
         tr = document.createElement('tr');
+        tr.onmouseover = function () { highlightRow(tr) };
+        tr.onmouseout = function () { unhighlightRow(tr) };
 
         var td = document.createElement("td");
         var htmlTemplate = "<b>@testName@</b><br>@testType@";
@@ -406,3 +409,42 @@ function getColor(min, max, value, reverse) {
 
     return performancePalette[index];
 }
+
+function arrangeVerticalOffset(elements, minOffset, maxOffset) {
+
+    if (minOffset === undefined)
+        minOffset = 0;
+    if (maxOffset === undefined)
+        maxOffset = Number.MAX_VALUE;
+
+    var currentTopScroll = $(window).scrollTop();
+    var topDelta = currentTopScroll - minOffset;
+    if (topDelta < 0)
+        topDelta = 0;
+    else if (topDelta > maxOffset)
+        topDelta = maxOffset;
+
+    elements.each(function () {
+        $(this).css("top", topDelta);
+    });
+};
+
+function arrangeHorizontalOffset(elements, minOffset, maxOffset) {
+
+    if (minOffset === undefined)
+        minOffset = 0;
+    if (maxOffset === undefined)
+        maxOffset = Number.MAX_VALUE;
+
+    var currentLeftScroll = $(window).scrollLeft();
+    var leftDelta = currentLeftScroll - minOffset;
+
+    if (leftDelta < 0)
+        leftDelta = 0;
+    else if (leftDelta > maxOffset)
+        leftDelta = maxOffset;
+
+    elements.each(function () {
+        $(this).css("left", leftDelta);
+    });
+};
