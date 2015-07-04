@@ -66,7 +66,8 @@
 
     $(function () {
 
-        var serdata = WAVE.arrayWalkable(window.data_SerializerInfoData);
+        var serdata = WAVE.arrayWalkable(window.data_SerializerInfoData)
+                          .wDistinct(function (a, b) { return a.SrializerType == b.SerializerType && a.SerializerName == b.SerializerName; });
 
         var container = $("#serializers-table")[0];
         var table = createSerializersInfoTable(serdata);
@@ -79,6 +80,7 @@
 
         columnHeaders = $('.main-table-column-header');
         rowHeaders = $('.main-table-row-header');
+        rowHeaders.push($('.corner-cell'));
         topOffset = parseInt(columnHeaders.offset().top);
         leftOffset = parseInt(rowHeaders.offset().left);
     }
@@ -86,12 +88,10 @@
     function createSerializersInfoTable(serdata) {
 
         var table = document.createElement('table');
-        table.className = 'main-table';
+        table.className = 'main-table serializers-table';
 
         createTableHeader(table);
         createTableBody(table, serdata);
-        
-
 
         return table;
     };
