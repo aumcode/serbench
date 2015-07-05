@@ -29,25 +29,38 @@ namespace Serbench.Specimens.Tests
         public EDI_X12_835(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
         {
-            m_Data = EDI_X12_835Data.Make();
+           if (m_Count < 1) m_Count = 1;
+
+            for (var i = 0; i < m_Count; i++)
+                m_Data.Add(EDI_X12_835Data.Make());
         }
 
-        private EDI_X12_835Data m_Data;
+        [Config]
+        private bool m_List;
+        
+        [Config]
+        private int m_Count;
+
+        private List<EDI_X12_835Data> m_Data = new List<EDI_X12_835Data>();
 
         public override Type GetPayloadRootType()
         {
-            return m_Data.GetType();
+            var root = m_List ? (object)m_Data : m_Data[0];
+            return root.GetType();
         }
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
         {
-            serializer.Serialize(m_Data, target);
+            var root = m_List ? (object)m_Data : m_Data[0];
+            serializer.Serialize(root, target);
         }
 
         public override void PerformDeserializationTest(Serializer serializer, Stream target)
         {
             var deserialized = serializer.Deserialize(target);
-            serializer.AssertPayloadEquality(this, m_Data, deserialized);
+
+            var originalRoot = m_List ? (object)m_Data : m_Data[0];
+            serializer.AssertPayloadEquality(this, originalRoot, deserialized);
         }
     }
 
@@ -102,11 +115,15 @@ namespace Serbench.Specimens.Tests
         {
             errorString = null;
 
+            if (original is IList<Serbench.Specimens.Tests.EDI_X12_835Data>)
+             return deserialized!=null && original.GetType()==deserialized.GetType();
+
+             
             var originalTyped = original as Serbench.Specimens.Tests.EDI_X12_835Data;
             var deserializedTyped = deserialized as Serbench.Specimens.Tests.EDI_X12_835Data;
 
             if (originalTyped == null || deserializedTyped == null)
-                errorString = "Error: originalTyped or deserializedTyped == null";
+                errorString = "Error: originalTyped or deserializedType == null";
             else if (originalTyped.PLB_ProviderAdjustmentList.Count != deserializedTyped.PLB_ProviderAdjustmentList.Count)
                 errorString = "Error: originalTyped.PLB_ProviderAdjustmentList.Count == deserializedTyped.PLB_ProviderAdjustmentList.Count ({0} != {1}".Args(
                     originalTyped.PLB_ProviderAdjustmentList.Count, deserializedTyped.PLB_ProviderAdjustmentList.Count);
@@ -117,7 +134,9 @@ namespace Serbench.Specimens.Tests
                      deserializedTyped.PLB_ProviderAdjustmentList[0].Reference_Identification
                     );
             return (errorString == null) ? true : false;
-        }   }
+        }  
+      
+    }
 
     [ProtoContract]
     [DataContract]
