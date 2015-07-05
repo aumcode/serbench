@@ -421,12 +421,12 @@ namespace Serbench
              catch(Exception error)
              {
                deserExceptions++;
-               log(MessageType.Error, "Deserilizing '{0}'-'{1}'".Args(serializer.Name, test.Name), error.ToMessageWithType(), error);
+               log(MessageType.Error, "Deserializing '{0}'-'{1}'".Args(serializer.Name, test.Name), error.ToMessageWithType(), error);
                if (!wasOk && deserExceptions==ERROR_CUTOFF)
                {
                  result.DeserExceptions = deserExceptions;
                  result.DeserSupported = false;
-                 log(MessageType.Error, "Deserilizing '{0}'-'{1}'".Args(serializer.Name, test.Name), "Test aborted in deser phase. Too many consequitive exceptions");
+                 log(MessageType.Error, "Deserializing '{0}'-'{1}'".Args(serializer.Name, test.Name), "Test aborted in deser phase. Too many consequitive exceptions");
                  return;
                }
              }
