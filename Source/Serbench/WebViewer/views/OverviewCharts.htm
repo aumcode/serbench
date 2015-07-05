@@ -88,29 +88,29 @@
                 var serializersData = headersInfo.wSelect(function (h) {
                             return { header: h, data: getCellData(data, r, h) };
                             });
-                var testMetadata = getDataSummary(serializersData, true);
+                var dataSummary = getDataSummary(serializersData, true);
 
-                // create header, speed and payload comparison cells
+                // create header
                 var tr = createRowHeader(r, serializersData);
-                createPerformanceComparisonCell(
-                    tr,
-                    serializersData,
-                    testMetadata.speedMin,
-                    testMetadata.speedMax,
-                    false,
-                    function (a, b) { return sortBySpeedPredicate(a, b, true); },
-                    function (d) { return d.data.speed; },
-                    function (v) { return shortenQuantity(v); });
-                createPerformanceComparisonCell(
-                    tr,
-                    serializersData,
-                    testMetadata.payloadMin,
-                    testMetadata.payloadMax,
-                    true,
-                    function (a, b) { return sortByPayloadPredicate(a, b, true); },
-                    function (d) { return d.data.PayloadSize; },
-                    function (v) { return shortenByteSize(v); });
-                
+
+                // create speed comparison cells
+                var tds = document.createElement('td');
+                serializersData.wOrder(function (a, b) { return sortBySpeedPredicate(a, b, true); })
+                               .wEach(function (d) {
+                                   var div = createSpeedBar(d, dataSummary);
+                                   tds.appendChild(div);
+                                });
+                tr.appendChild(tds);
+
+                // create payload comparison cells
+                var tdp = document.createElement('td');
+                serializersData.wOrder(function (a, b) { return sortByPayloadPredicate(a, b, true); })
+                               .wEach(function (d) {
+                                   var div = createPayloadBar(d, dataSummary);
+                                   tdp.appendChild(div);
+                                });
+                tr.appendChild(tdp);
+
                 tbody.appendChild(tr);
             });
     };
@@ -129,52 +129,118 @@
         return tr;
     };
 
-    function createPerformanceComparisonCell(tr, dataList, min, max, revertPalette, comparator, valueGetter, valueFormatter) {
-          
-        var td = document.createElement('td');
-        td.className = 'stat-container';
-        tr.appendChild(td);
+    function createSpeedBar(serData, dataSummary) {
 
-        dataList.wOrder(function (a, b) { return comparator(a, b);})
-                .wEach(function (d) {
-            
-                    var div = document.createElement('div');
-                    div.className = 'performance-bar-container';
-                    
-                    var bar = document.createElement('div');
-                    
-                    var label = document.createElement('div');
-                    label.className = 'performance-label';
-                    var header = document.createElement('div');
-                    header.innerHTML = d.header.serializerName;
-                    header.className = 'label-header';
-                    label.appendChild(header);
-                    var value = document.createElement('div');
-                    value.className = 'label-value';
-                    label.appendChild(value);
-                    
-                    if(d.data == null) {
-                        bar.innerHTML = "<div class='absent-serializer-test'></div>";
-                        value.innerHTML = '-';
-                    }
-                    else if (!isTestClear(d.data)) {
-                        bar.innerHTML = "<div class='error-serializer-test'></div>";
-                        value.innerHTML = '-';
-                    }
-                    else {
-                        var val = valueGetter(d);
-                        var leveragedMax = leverageNumber(max);
-                        var barWidth = val * parseFloat(barMaxWidth) / leveragedMax;
-                        var barColor = getColor(min, max, val, revertPalette);
-                        var barTemplate = "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>";
-                        bar.innerHTML = WAVE.strHTMLTemplate(barTemplate, { barWidth: barWidth, barColor: barColor });
-                        value.innerHTML = valueFormatter(val);
-                    }
-                    
-                    div.appendChild(bar);
-                    div.appendChild(label);
-                    td.appendChild(div);
-        });
+        var barHtmlTemplate = null;
+        var labelHtmlTemplate = null;
+        
+        var actionClass = null;
+        var barWidth = null;
+        var barAbsWidth = null;
+        var barColor = null;
+        var serializerName = serData.header.serializerName;
+        var speed = null;
+
+        if (serData.data == null) {
+            barHtmlTemplate = "<div class='absent-serializer-test'></div>";
+            labelHtmlTemplate = '-';
+        }
+        else if (!isTestClear(serData.data)) {
+            barHtmlTemplate = "<div class='error-serializer-test'></div>";
+            labelHtmlTemplate = '-';
+        }
+        else {
+            actionClass = serData.data.SerOpsSec > serData.data.speedMin ? 'seralization-bar' : 'deseralization-bar';
+
+            var leveragedMax = leverageNumber(dataSummary.speedAbsoluteMax);
+            var val = serData.data.speedMin;
+            barWidth = val * parseFloat(barMaxWidth) / leveragedMax;
+            barAbsWidth = serData.data.speedMax * parseFloat(barMaxWidth) / leveragedMax;
+            barColor = getColor(dataSummary.speedMin, dataSummary.speedMax, val);
+            speed = shortenQuantity(serData.data.speedMin);
+
+            barHtmlTemplate =
+            "<div>" +
+               "<div class='performance-small-bar back-speed-bar @actionClass@' style='width:@barAbsWidth@px'></div>" +
+               "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>" +
+            "</div>";
+
+            labelHtmlTemplate =  "<div>@speed@</div>";
+        }
+
+        var div = document.createElement('div');
+        div.className = 'performance-bar-container';
+        var htmlTemplate =
+            barHtmlTemplate +
+            "<div class='performance-label'>" +
+                "<div class='label-header'>@serializerName@</div>" +
+                "<div class='label-value'>" +
+                    labelHtmlTemplate +
+                "</div>" +
+            "</div>";
+        div.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
+            {
+                actionClass: actionClass,
+                barAbsWidth: barAbsWidth,
+                barWidth: barWidth,
+                barColor: barColor,
+                serializerName: serializerName,
+                speed: speed
+            });
+
+        return div;
+    };
+
+    function createPayloadBar(serData, dataSummary) {
+
+        var barHtmlTemplate = null;
+        var labelHtmlTemplate = null;
+
+        var barWidth = null;
+        var barColor = null;
+        var payloadValue = null;
+        var serializerName = serData.header.serializerName;
+
+        if (serData.data == null) {
+            barHtmlTemplate = "<div class='absent-serializer-test'></div>";
+            labelHtmlTemplate = '-';
+        }
+        else if (!isTestClear(serData.data)) {
+            barHtmlTemplate = "<div class='error-serializer-test'></div>";
+            labelHtmlTemplate = '-';
+        }
+        else {
+
+            var val = serData.data.PayloadSize;
+            var leveragedMax = leverageNumber(dataSummary.payloadMax);
+            barWidth = val * parseFloat(barMaxWidth) / leveragedMax;
+            barColor = getColor(dataSummary.payloadMin, dataSummary.payloadMax, val, true);
+            payloadValue = shortenByteSize(val);
+
+            barHtmlTemplate = "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>";
+
+            labelHtmlTemplate ="@payloadValue@";
+        }
+
+        var div = document.createElement('div');
+        div.className = 'performance-bar-container';
+        var htmlTemplate =
+            barHtmlTemplate +
+            "<div class='performance-label'>" +
+                "<div class='label-header'>@serializerName@</div>" +
+                "<div class='label-value'>" +
+                    labelHtmlTemplate +
+                "</div>" +
+            "</div>";
+        div.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
+            {
+                serializerName: serializerName,
+                barWidth: barWidth,
+                barColor: barColor,
+                payloadValue: payloadValue
+            });
+
+        return div;
     };
 
 </script>

@@ -180,7 +180,7 @@
         var deserExceptionsClass = testData.data.DeserExceptions == 0 ? "hidden" : "empty";
         var deserAbortsClass = testData.data.DeserAborts == 0 ? "hidden" : "empty";
 
-        var speedColor = getColor(metaData.speedMin, metaData.speedMax, testData.data.speed, false);
+        var speedColor = getColor(metaData.speedMin, metaData.speedMax, testData.data.speedMin, false);
         var payloadColor = getColor(metaData.payloadMin, metaData.payloadMax, testData.data.PayloadSize, true);
 
         // populate cell with data
@@ -293,8 +293,8 @@
             runNumber: numberWithCommas(testData.data.runCount, 0),
             prettyPayloadSize: testData.data.PayloadSize == 0 ? '-' : shortenByteSize(testData.data.PayloadSize),
             payloadSize: testData.data.PayloadSize == 0 ? '-' : numberWithCommas(testData.data.PayloadSize, 0),
-            prettySpeed: testData.data.speed == 0 ? '-' : shortenQuantity(testData.data.speed),
-            speed: testData.data.speed == 0 ? '-' : numberWithCommas(testData.data.speed, 0),
+            prettySpeed: testData.data.speedMin == 0 ? '-' : shortenQuantity(testData.data.speedMin),
+            speed: testData.data.speedMin == 0 ? '-' : numberWithCommas(testData.data.speedMin, 0),
             payloadColor: payloadColor,
             speedColor: speedColor, 
             doGc: testData.data.DoGc,

@@ -1,30 +1,48 @@
-.performance-label {
-    position: relative;
-    left: 0;
-    font-size: 10px;
+.seralization-bar {
 }
 
-.performance-bar, .absent-serializer-test, .error-serializer-test {
-    border-right: 1px solid rgba(10,10,10,0.3);
-    margin-top: -3px;
+.deseralization-bar {
+    position: relative;
+    margin-top: 10px;
+}
+
+.performance-small-bar {
+    height: 10px;
+}
+
+.performance-bar {
+    height: 20px;
+}
+
+.performance-bar-container {
+    height: 20px;
+    border: 1px solid transparent;
+}
+
+.performance-bar, .performance-small-bar, .absent-serializer-test, .error-serializer-test {
+    border-right: 1px solid rgba(10, 10, 10, 0.3);
+    position: absolute;
+}
+
+.performance-label {
+    position: relative;
+    margin-left: 3px;
 }
 
 .label-header {
     display: inline-block;
+    font-size: 12px;
+    float: left;
 }
 
 .label-value {
-    display: inline-block;
+    font-size: 12px;
     float: right;
 }
 
 .absent-serializer-test, .error-serializer-test {
+    height: 20px; 
     width: 10px; 
-}
-
-.performance-bar, .absent-serializer-test, .error-serializer-test {
-    position: absolute;
-    height:15px; 
 }
 
 .absent-serializer-test { 
@@ -35,11 +53,6 @@
     background-color: gray;
 }
 
-.performance-bar-container {
-    margin: 3px 0 0 0;
+.back-speed-bar {
+    background: repeating-linear-gradient(90deg, #f8f8f8, #d0d0d0 3px);
 }
-
-.stat-container {
-    padding: 5px;
-}
-

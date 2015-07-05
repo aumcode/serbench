@@ -102,7 +102,7 @@ function leverageNumber(x) {
 
 function isTestClear(testData) {
     return testData == null || 
-          (testData.speed != 0 &&
+          (testData.speedMin != 0 &&
            testData.PayloadSize != 0 &&
            JSON.parse(testData.SerSupported) &&
            JSON.parse(testData.DeserSupported));
@@ -173,7 +173,8 @@ function getCellData(data, rowHeaderInfo, columnHeaderInfo) {
         result.DeserOpsSec /= count;
     }
     result.runCount = count;
-    result.speed = parseFloat(result.SerOpsSec) < parseFloat(result.DeserOpsSec) ? result.SerOpsSec : result.DeserOpsSec;
+    result.speedMin = Math.min(result.SerOpsSec, result.DeserOpsSec);
+    result.speedMax = Math.max(result.SerOpsSec, result.DeserOpsSec);
 
     return result;
 };
@@ -202,7 +203,7 @@ function createTestSummary(testName, testType, serializersData, onlyClearTests) 
 
     var speedFilterPredicate = onlyClearTests ?
                          function (d) { return d.data !== null && isTestClear(d.data); } :
-                         function (d) { return d.data !== null && d.data.speed != 0; };
+                         function (d) { return d.data !== null && d.data.speedMin != 0; };
     var speedOrdered = serializersData.wWhere(speedFilterPredicate)
                                       .wOrder(function (a, b) { return sortBySpeedPredicate(a, b, onlyClearTests); })
                                       .wToArray();
@@ -211,9 +212,9 @@ function createTestSummary(testName, testType, serializersData, onlyClearTests) 
     var silverSpeedTest = speedOrdered[1];
     var bronzeSpeedTest = speedOrdered[2];
 
-    var goldSpeed = goldSpeedTest === undefined || goldSpeedTest == null ? '' : '(' + numberWithCommas(goldSpeedTest.data.speed, 0) + ' ops/sec)';
-    var silverSpeed = silverSpeedTest === undefined || silverSpeedTest == null ? '' : '(' + numberWithCommas(silverSpeedTest.data.speed, 0) + ' ops/sec)';
-    var bronzeSpeed = bronzeSpeedTest === undefined || bronzeSpeedTest == null ? '' : '(' + numberWithCommas(bronzeSpeedTest.data.speed, 0) + ' ops/sec)';
+    var goldSpeed = goldSpeedTest === undefined || goldSpeedTest == null ? '' : '(' + numberWithCommas(goldSpeedTest.data.speedMin, 0) + ' ops/sec)';
+    var silverSpeed = silverSpeedTest === undefined || silverSpeedTest == null ? '' : '(' + numberWithCommas(silverSpeedTest.data.speedMin, 0) + ' ops/sec)';
+    var bronzeSpeed = bronzeSpeedTest === undefined || bronzeSpeedTest == null ? '' : '(' + numberWithCommas(bronzeSpeedTest.data.speedMin, 0) + ' ops/sec)';
 
     // table row header content
 
@@ -257,6 +258,7 @@ function getDataSummary(serializersData, onlyClearTests) {
     var summary = {
         speedMin: null,
         speedMax: null,
+        speedAbsoluteMax: null,
         payloadMin: null,
         payloadMax: null
     };
@@ -270,12 +272,14 @@ function getDataSummary(serializersData, onlyClearTests) {
         if (onlyClearTests && !isTestClear(test))
             return;
 
-        if (test.speed != 0) {
-            var speed = parseFloat(test.SerOpsSec) < parseFloat(test.DeserOpsSec) ? test.SerOpsSec : test.DeserOpsSec;
-            if (summary.speedMin == null || summary.speedMin > speed)
-                summary.speedMin = speed;
-            if (summary.speedMax == null || summary.speedMax < speed)
-                summary.speedMax = speed;
+        if (test.speedMin != 0) {
+            var speedAbs = Math.max(test.SerOpsSec, test.DeserOpsSec);
+            if (summary.speedMin == null || summary.speedMin > test.speedMin)
+                summary.speedMin = test.speedMin;
+            if (summary.speedMax == null || summary.speedMax < test.speedMin)
+                summary.speedMax = test.speedMin;
+            if (summary.speedAbsoluteMax == null || summary.speedAbsoluteMax < speedAbs)
+                summary.speedAbsoluteMax = speedAbs;
         }
 
         if (test.PayloadSize != 0) {
@@ -367,7 +371,7 @@ function sortBySpeedPredicate(a, b, onlyClearTests) {
     if (!aIsClear)
         return b.data == null ? -1 : (!bIsClear ? 0 : 1);
 
-    return (b.data == null || !bIsClear) ? -1 : (a.data.speed < b.data.speed ? 1 : -1);
+    return (b.data == null || !bIsClear) ? -1 : (a.data.speedMin < b.data.speedMin ? 1 : -1);
 }
 
 function sortByPayloadPredicate(a, b, onlyClearTests) {
@@ -403,6 +407,9 @@ function unhighlightRow(row) {
 // for a given value returns color which is linear mapped to performance palette
 function getColor(min, max, value, reverse) {
 
+    if (typeof reverse == 'undefined')
+        reverse = false;
+
     if (value == 0)
         return "lightgray";
     var normed = (value - min) * (performancePalette.length - 1) / (max - min);
@@ -413,9 +420,9 @@ function getColor(min, max, value, reverse) {
 
 function arrangeVerticalOffset(elements, minOffset, maxOffset) {
 
-    if (minOffset === undefined)
+    if (typeof minOffset == 'undefined')
         minOffset = 0;
-    if (maxOffset === undefined)
+    if (typeof maxOffset == 'undefined')
         maxOffset = Number.MAX_VALUE;
 
     var currentTopScroll = $(window).scrollTop();
@@ -432,9 +439,9 @@ function arrangeVerticalOffset(elements, minOffset, maxOffset) {
 
 function arrangeHorizontalOffset(elements, minOffset, maxOffset) {
 
-    if (minOffset === undefined)
+    if (typeof minOffset == 'undefined')
         minOffset = 0;
-    if (maxOffset === undefined)
+    if (typeof maxOffset == 'undefined')
         maxOffset = Number.MAX_VALUE;
 
     var currentLeftScroll = $(window).scrollLeft();
