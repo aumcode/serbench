@@ -15,8 +15,9 @@
 }
 
 .performance-bar-container {
-    height: 20px;
-    border: 1px solid transparent;
+  height: 20px;
+  padding-bottom: 2px;
+  background: linear-gradient(to bottom, #fafafa 0%, #ffffff 25%,#f0f0f0 100%);
 }
 
 .performance-bar, .performance-small-bar, .absent-serializer-test, .error-serializer-test {
@@ -36,8 +37,10 @@
 }
 
 .label-value {
-    font-size: 12px;
-    float: right;
+  font-size: 10px;
+  float: left;
+  text-shadow: 1px 1px 4px #e0e0e0;
+  color: #404040;
 }
 
 .absent-serializer-test, .error-serializer-test {
@@ -54,5 +57,5 @@
 }
 
 .back-speed-bar {
-    background: repeating-linear-gradient(90deg, #f8f8f8, #d0d0d0 3px);
+  background: linear-gradient(to bottom, #ffffff 0%,#eaeaea 47%,#909090 50%,#f0f0f0 65%,#ffffff 100%);
 }
