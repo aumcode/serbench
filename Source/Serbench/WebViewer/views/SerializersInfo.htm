@@ -28,8 +28,8 @@
             <h1>Serializers Info</h1>
         </div>
         <div class="report-list-container">
-            <div><a href="overview-table.htm" target="_blank">Overview Table</a></div>
-            <div><a href="overview-charts.htm" target="_blank">Overview Charts</a></div>
+            <a href="overview-table.htm" target="_blank">Overview Table</a>&nbsp;|&nbsp;
+            <a href="overview-charts.htm" target="_blank">Overview Charts</a>
         </div>
     </div>
 
@@ -50,17 +50,17 @@
     var topOffset;
     var propertyInfos = [
             { name: "Family", alias: "Family", getter: function (s) { return s.Family; } },
-            { name: "MetadataRequirement", alias: "Metadata requirement", getter: function (s) { return s.MetadataRequirement; } },
+            { name: "FormatName", alias: "Format name", getter: function (s) { return s.FormatName; } },
             { name: "VendorName", alias: "Vendor", getter: function (s) { return s.VendorName; } },
             { name: "VendorLicense", alias: "Vendor license", getter: function (s) { return s.VendorLicense; } },
             { name: "VendorURL", alias: "Vendor URL", getter: function (s) { return s.VendorURL; } },
             { name: "VendorPackageAddress", alias: "Vendor package address", getter: function (s) { return s.VendorPackageAddress; } },
-            { name: "FormatName", alias: "Format name", getter: function (s) { return s.FormatName; } },
             { name: "LinesOfCodeK", alias: "Lines of code (K)", getter: function (s) { return s.LinesOfCodeK; } },
             { name: "DataTypes", alias: "Data types", getter: function (s) { return s.DataTypes; } },
             { name: "Assemblies", alias: "Assemblies", getter: function (s) { return s.Assemblies; } },
             { name: "ExternalReferences", alias: "External references", getter: function (s) { return s.ExternalReferences; } },
-            { name: "PackageSizeKb", alias: "Package size (Kb)", getter: function (s) { return s.PackageSizeKb; } }
+            { name: "PackageSizeKb", alias: "Package size (Kb)", getter: function (s) { return s.PackageSizeKb; } },
+            { name: "MetadataRequirement", alias: "Metadata requirement", getter: function (s) { return s.MetadataRequirement; } }
     ];
 
 
@@ -138,7 +138,17 @@
 
                 var td = document.createElement('td');
 
-                var htmlTemplate = (p.name == "VendorURL") ? "<div class='vendor-link-container'><a href='@propertyValue@' class='vendor-link' target='_blank'>link</a></div>" : '<div>@propertyValue@</div>';
+                var htmlTemplate;
+                if (p.name == "VendorURL") {
+                    htmlTemplate = "<div class='vendor-link-container'><a href='@propertyValue@' class='vendor-link' target='_blank'>link</a></div>";
+                }
+                else if (p.name == "VendorPackageAddress" && p.getter(s).startsWith('http')) {
+                    htmlTemplate = "<div><a href='@propertyValue@' class='vendor-link' target='_blank'>@propertyValue@</a></div>";
+                }
+                else {
+                    htmlTemplate = '<div>@propertyValue@</div>';
+                }
+
                 td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { propertyValue: p.getter(s) });
                 tr.appendChild(td);
             });

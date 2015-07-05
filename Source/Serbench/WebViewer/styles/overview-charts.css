@@ -31,16 +31,16 @@
 }
 
 .label-header {
-    display: inline-block;
+    display: inline-block; 
+    text-shadow: 1px 1px 4px #e0e0e0;
+    color: #404040;
     font-size: 12px;
     float: left;
 }
 
 .label-value {
-  font-size: 10px;
-  float: left;
-  text-shadow: 1px 1px 4px #e0e0e0;
-  color: #404040;
+  font-size: 12px;
+  float: right;
 }
 
 .absent-serializer-test, .error-serializer-test {
