@@ -133,6 +133,7 @@
 
         var barHtmlTemplate = null;
         var labelHtmlTemplate = null;
+        var toastTemplate = null;
         
         var actionClass = null;
         var barWidth = null;
@@ -160,16 +161,38 @@
             speed = shortenQuantity(serData.data.speedMin);
 
             barHtmlTemplate =
-            "<div>" +
-               "<div class='performance-small-bar back-speed-bar @actionClass@' style='width:@barAbsWidth@px'></div>" +
-               "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>" +
-            "</div>";
+                "<div>" +
+                   "<div class='performance-small-bar back-speed-bar @actionClass@' style='width:@barAbsWidth@px'></div>" +
+                   "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>" +
+                "</div>";
 
-            labelHtmlTemplate =  "<div>@speed@</div>";
+            labelHtmlTemplate = "<div>@speed@</div>";
+
+            toastTemplate =
+                "<div>" +
+                    "<table>" +
+                        "<tr>" +
+                            "<td>Serialization speed (ops/s): </td>" +
+                            "<td>@serOpsSec@</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td>Deserialization speed (ops/s): </td>" +
+                            "<td>@deserOpsSec@</td>" +
+                        "</tr>" +
+                    "</table>" +
+                "</div>";
         }
 
         var div = document.createElement('div');
         div.className = 'performance-bar-container';
+
+        if (toastTemplate != null) {
+            var toastContent = WAVE.strHTMLTemplate(toastTemplate, { serOpsSec: serData.data.SerOpsSec, deserOpsSec: serData.data.DeserOpsSec });
+            div.onmousedown = function () {
+                WAVE.GUI.toast(toastContent);
+            };
+        }
+
         var htmlTemplate =
             barHtmlTemplate +
             "<div class='performance-label'>" +
