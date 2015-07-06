@@ -64,6 +64,21 @@
              msg-count=1
              msg-type=Trading
             }
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="Warmup EDI" 
+             order=003
+             runs=1 
+             ser-iterations=1 
+             deser-iterations=1
+             
+             msg-count=1
+             msg-type=EDI
+            }
+            
+            
             //==============================================================
           
             test
@@ -187,6 +202,47 @@
              
              msg-count=5000
              msg-type=Trading
+            }
+            
+            //======================================
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="EDI Count: 10" 
+             order=400
+             runs=100 
+             ser-iterations=1 
+             deser-iterations=1
+             
+             msg-count=10
+             msg-type=EDI
+            }
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="EDI Count: 100" 
+             order=410
+             runs=50 
+             ser-iterations=1 
+             deser-iterations=1 
+             
+             msg-count=100
+             msg-type=EDI
+            }
+            
+            test
+            { 
+             type="Serbench.Specimens.Tests.MsgBatching, Serbench.Specimens" 
+             name="EDI Count: 200" 
+             order=420
+             runs=25 
+             ser-iterations=1 
+             deser-iterations=1
+             
+             msg-count=200
+             msg-type=EDI
             }
             
         }//tests     

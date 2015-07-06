@@ -218,7 +218,7 @@ namespace Serbench.Specimens.Tests
     } 
 
 
-    public enum MsgBatchingType{ Personal = 0, RPC, Trading }
+    public enum MsgBatchingType{ Personal = 0, RPC, Trading, EDI }
 
     /// <summary>
     /// This Test shows a batching scenario i.e. a full-duplex socket connection
@@ -236,7 +236,11 @@ namespace Serbench.Specimens.Tests
             m_Data = new List<object>(m_MsgCount);
 
             for (var i = 0; i < m_MsgCount; i++)
-              m_Data.Add( m_MsgType== MsgBatchingType.Personal ? SomePersonalDataMessage.Build() : m_MsgType== MsgBatchingType.RPC ? RPCMessage.Build() : (object)TradingRec.Build() );
+              m_Data.Add( m_MsgType == MsgBatchingType.Personal ? SomePersonalDataMessage.Build() 
+                                   : m_MsgType== MsgBatchingType.RPC ? RPCMessage.Build() 
+                                   : m_MsgType==MsgBatchingType.Trading ? (object)TradingRec.Build() 
+                                   : EDI_X12_835Data.Make()
+                                   );
         }
 
         [Config]
@@ -250,7 +254,11 @@ namespace Serbench.Specimens.Tests
 
         public override Type GetPayloadRootType()
         {                      
-           return m_MsgType== MsgBatchingType.Personal ? typeof(SomePersonalDataMessage) : m_MsgType== MsgBatchingType.RPC ? typeof(RPCMessage) : typeof(TradingRec);
+           return m_MsgType== MsgBatchingType.Personal ?
+                        typeof(SomePersonalDataMessage)
+                        : m_MsgType== MsgBatchingType.RPC ? typeof(RPCMessage) 
+                        : m_MsgType== MsgBatchingType.Trading ? typeof(TradingRec) 
+                        : typeof(EDI_X12_835Data);
         }
 
         public override void PerformSerializationTest(Serializer serializer, Stream target)
