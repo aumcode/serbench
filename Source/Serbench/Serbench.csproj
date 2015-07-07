@@ -38,12 +38,6 @@
     <Reference Include="NFX">
       <HintPath>..\lib\NFX.dll</HintPath>
     </Reference>
-    <Reference Include="NFX.Wave">
-      <HintPath>..\lib\NFX.Wave.dll</HintPath>
-    </Reference>
-    <Reference Include="NFX.Web">
-      <HintPath>..\lib\NFX.Web.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
