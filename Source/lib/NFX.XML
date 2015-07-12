@@ -2506,6 +2506,80 @@
             References provider that persists objects
             </summary>
         </member>
+        <member name="T:NFX.Collections.NamedInterlocked">
+            <summary>
+            Provides functionality similar to the Interlocked class executed over a named slot.
+            All operations are THREAD-SAFE for calling concurrently.
+            The name comparison is that of Registry's which is OrdinalIgnoreCase.
+            This class was designed to better organize named counters incremented from different threads,
+            i.e. this is needed to keep a count of calls to remote host identified by their names.
+            This class is NOT designed for frequent additions/deletions of named slots, nor was it designed
+            to keep millions of slots. Use it in cases when there are thousands at most slots and new slots
+            appear infrequently. You must delete un-needed slots
+            </summary>
+        </member>
+        <member name="M:NFX.Collections.NamedInterlocked.Clear">
+            <summary>
+            Deletes all state for all slots
+            </summary>
+        </member>
+        <member name="M:NFX.Collections.NamedInterlocked.Clear(System.String)">
+            <summary>
+            Deletes all state for the named slot returning true if the slot was found and removed
+            </summary>
+        </member>
+        <member name="M:NFX.Collections.NamedInterlocked.Exists(System.String)">
+            <summary>
+            Returns true when the instance contains the named slot
+            </summary>
+        </member>
+        <member name="M:NFX.Collections.NamedInterlocked.ReadAtomicLong(System.String)">
+            <summary>
+             Returns a 64-bit value, loaded as an atomic operation even on a 32bit platform
+            </summary>
+        </member>
+        <member name="M:NFX.Collections.NamedInterlocked.VolatileReadInt(System.String)">
+            <summary>
+            Captures the current value of a named int value. 
+            If slot does not exist, creates it and captures the value (which may be non-zero even if the slot was just created)
+            </summary>
+        </member>
+        <member name="M:NFX.Collections.NamedInterlocked.VolatileReadLong(System.String)">
+            <summary>
+            Captures the current value of a named long value.  
+            If slot does not exist, creates it and captures the value (which may be non-zero even if the slot was just created)
+            </summary>
+        </member>
+        <member name="M:NFX.Collections.NamedInterlocked.ExchangeInt(System.String,System.Int32)">
+            <summary>
+            Captures the current value of a named int value and atomically sets it to the passed value
+            </summary>
+        </member>
+        <member name="M:NFX.Collections.NamedInterlocked.ExchangeLong(System.String,System.Int64)">
+            <summary>
+            Captures the current value of a named long value and atomically sets it to the passed value
+            </summary>
+        </member>
+        <member name="P:NFX.Collections.NamedInterlocked.Count">
+            <summary>
+            Returns the current number of named slots in the instance
+            </summary>
+        </member>
+        <member name="P:NFX.Collections.NamedInterlocked.AllNames">
+            <summary>
+            Enumerates all slot names. This operation is thread-safe, and returns a snapshot of the instance taken at the time of the first call
+            </summary>
+        </member>
+        <member name="P:NFX.Collections.NamedInterlocked.AllInts">
+            <summary>
+            Enumerates all named integers. This operation is thread-safe, and returns a snapshot of the instance taken at the time of the first call
+            </summary>
+        </member>
+        <member name="P:NFX.Collections.NamedInterlocked.AllLongs">
+            <summary>
+            Enumerates all named integers. This operation is thread-safe, and returns a snapshot of the instance taken at the time of the first call
+            </summary>
+        </member>
         <member name="T:NFX.CoreConsts">
             <summary>
             Central non-lozalizable NFX system consts
@@ -11549,6 +11623,42 @@
             CPU-related operations
             </summary>
         </member>
+        <member name="T:NFX.OS.ManyReadersOneWriterSynchronizer">
+            <summary>
+            This struct is for ADVANCED SYSTEM use-cases. DEVELOPERS: do not use this in a business application code.
+            Represents an efficient SpinWait/Yield-based lock that allows many readers to operate concurrently
+             and only one single concurrent writer. This struct must be used ONLY with a very fast/tight operations that 
+             do not block on IO and other locks, and are expected to complete under a tenth fraction of a second.
+            Warning: this lock CAN NOT be held for longer than 5 hrs by design. DO NOT use this lock with IO-dependent operations.
+            This is not really a limitation as this class is used to guard operations which are very fast (fractions of a second) and 
+            should fail faster otherwise
+            </summary>
+        </member>
+        <member name="M:NFX.OS.ManyReadersOneWriterSynchronizer.GetReadLock(System.Func{System.Object,System.Boolean},System.Object)">
+            <summary>
+            Obtains a read lock returning true on success.
+            Many threads may obtain a read lock at the same time, however a single write lock excludes any read locks,
+            corollary any single read lock held excludes anyone obtaining a write lock.
+            False is returned if cancel func was supplied and returned true to cancel-out the waiting 
+            </summary>
+        </member>
+        <member name="M:NFX.OS.ManyReadersOneWriterSynchronizer.ReleaseReadLock">
+            <summary>
+            Releases the read lock that was previously obtained by a call to GetReadLock()
+            </summary>
+        </member>
+        <member name="M:NFX.OS.ManyReadersOneWriterSynchronizer.GetWriteLock(System.Func{System.Object,System.Boolean},System.Object)">
+            <summary>
+            Obtains a write lock returning true on success. Only one thread may hold a write lock at a time,
+            and noone else can obtain a read lock until the write lock is released.
+            False is returned if cancel func was supplied and returned true to cancel-out the waiting 
+            </summary>
+        </member>
+        <member name="M:NFX.OS.ManyReadersOneWriterSynchronizer.ReleaseWriteLock">
+            <summary>
+            Releases the write lock that was previously obtained by a call to GetWriteLock()
+            </summary>
+        </member>
         <member name="T:NFX.OS.NetworkUtils">
             <summary>
             Provides network-related utilities
@@ -14169,6 +14279,11 @@
         <member name="T:NFX.Instrumentation.IDiskInstrument">
             <summary>
             Disk operations (i.e. % drive free)
+            </summary>
+        </member>
+        <member name="T:NFX.Instrumentation.ILockingInstrument">
+            <summary>
+            Locking/coordination-related operations
             </summary>
         </member>
         <member name="T:NFX.Instrumentation.IWebInstrument">
@@ -22755,40 +22870,49 @@
             When 'strict=true' throws an exception if deterministic conversion is not possible
             </summary>
         </member>
-        <member name="M:NFX.TaskUtils.Then(System.Threading.Tasks.Task,System.Action,System.Threading.Tasks.TaskContinuationOptions)">
+        <member name="M:NFX.TaskUtils.OnOk(System.Threading.Tasks.Task,System.Action,System.Threading.Tasks.TaskContinuationOptions)">
             <summary>
-            Chains task 'first' with 'next'.
+            Chains task 'first' with 'next' if first is completed, not cancelled and not faulted.
             Returns task that completes when 'next' completes
             </summary>
         </member>
-        <member name="M:NFX.TaskUtils.Then``1(System.Threading.Tasks.Task{``0},System.Action{``0},System.Threading.Tasks.TaskContinuationOptions)">
+        <member name="M:NFX.TaskUtils.OnOk``1(System.Threading.Tasks.Task{``0},System.Action{``0},System.Threading.Tasks.TaskContinuationOptions)">
             <summary>
-            Chains task 'first' with 'next' passing result of 'first' to 'next'.
+            Chains task 'first' with 'next' passing result of 'first' to 'next' if first is completed, not cancelled and not faulted.
             Returns task that completes when 'next' completes
             </summary>
         </member>
-        <member name="M:NFX.TaskUtils.Then``1(System.Threading.Tasks.Task{``0},System.Func{``0,System.Threading.Tasks.Task},System.Threading.Tasks.TaskContinuationOptions,System.Threading.Tasks.TaskContinuationOptions)">
+        <member name="M:NFX.TaskUtils.OnOk``1(System.Threading.Tasks.Task{``0},System.Func{``0,System.Threading.Tasks.Task},System.Threading.Tasks.TaskContinuationOptions,System.Threading.Tasks.TaskContinuationOptions)">
             <summary>
-            Chains task 'first' with task returned by 'next' passing result of 'first' to 'next'.
+            Chains task 'first' with task returned by 'next' passing result of 'first' to 'next' if first is completed, not cancelled and not faulted.
             Returns task that completes after task returned by 'next' completes
             </summary>
         </member>
-        <member name="M:NFX.TaskUtils.Then``1(System.Threading.Tasks.Task,System.Func{System.Threading.Tasks.Task{``0}},System.Threading.Tasks.TaskContinuationOptions,System.Threading.Tasks.TaskContinuationOptions)">
+        <member name="M:NFX.TaskUtils.OnOk``1(System.Threading.Tasks.Task,System.Func{System.Threading.Tasks.Task{``0}},System.Threading.Tasks.TaskContinuationOptions,System.Threading.Tasks.TaskContinuationOptions)">
             <summary>
-            Chains task 'first' with task returned by 'next'.
+            Chains task 'first' with task returned by 'next' if first is completed, not cancelled and not faulted.
             Returns task that completes after task returned by 'next' completes with result from 'next' task
             </summary>
         </member>
-        <member name="M:NFX.TaskUtils.Then``2(System.Threading.Tasks.Task{``0},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Threading.Tasks.TaskContinuationOptions,System.Threading.Tasks.TaskContinuationOptions)">
+        <member name="M:NFX.TaskUtils.OnOk``2(System.Threading.Tasks.Task{``0},System.Func{``0,System.Threading.Tasks.Task{``1}},System.Threading.Tasks.TaskContinuationOptions,System.Threading.Tasks.TaskContinuationOptions)">
             <summary>
-            Chains task 'first' with task returned by 'next' passing result of 'first' to 'next'.
+            Chains task 'first' with task returned by 'next' passing result of 'first' to 'next' if first is completed, not cancelled and not faulted.
             Returns task that completes after task returned by 'next' completes with result from 'next' task
             </summary>
         </member>
-        <member name="M:NFX.TaskUtils.OnFailed(System.Threading.Tasks.Task,System.Action)">
+        <member name="M:NFX.TaskUtils.OnError(System.Threading.Tasks.Task,System.Action)">
             <summary>
-            Registers action executed if task was faulted or cancelled.
-            Returns original task to allow chaining in 'RanToCompletion' case
+            Registers action executed if task was faulted or cancelled
+            </summary>
+        </member>
+        <member name="M:NFX.TaskUtils.OnOkOrError(System.Threading.Tasks.Task,System.Action{System.Threading.Tasks.Task})">
+            <summary>
+            Registers action executed disregarding task state
+            </summary>
+        </member>
+        <member name="M:NFX.TaskUtils.OnOkOrError``1(System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task})">
+            <summary>
+            Registers action executed disregarding task state
             </summary>
         </member>
         <member name="M:NFX.TaskUtils.AsCompletedTask(System.Action)">
