@@ -64,7 +64,7 @@
  
  <h4>Message Batching</h4>
  <p>
- In the batching mode we keep writing may inatances into the same stream as a "batch".
+ In the batching mode we keep writing may instances into the same stream as a "batch".
 Imagine a socket where the server keeps pushing data and client keeps receiving. That simple.
 The problem is, only Protobuf, NFX Slim and MS Binary Formatter can read from stream one chunk after another, all others fail as they keep reading stream till the end.
 
