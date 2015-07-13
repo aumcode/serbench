@@ -46,6 +46,7 @@
 
 <h4>Important!</h4>
 <p> We are separating WARMUP test cases with subsequent tests. While comparing results, <striong>make sure you compare warmup to warmup, and runs to runs</strong> not vice-versa!</p>
+<p> Some serializers just do not work - they even crash the process without any exception (looks like unmanaged code problem). MsgShark does it sometimes. See the ABORTED list after the main report.</p>
 
 
  
@@ -71,6 +72,19 @@ The problem is, only Protobuf, NFX Slim and MS Binary Formatter can read from st
  
  <a href="/serbench/MsgBatching-201507121210/web/overview-charts.htm">Batching Benchmark Charts</a> <br>
  <a href="/serbench/MsgBatching-201507121210/web/overview-table.htm">Batching Benchmark Table</a> <br>
+</p>
+
+
+<h4>Entangled Object Graph</h4>
+ <p>
+ We are creating a set of conferences, participants etc.. and entangle them to the hell out...
+Protobuf works in a "IsReference" mode, as provided by Marc's lib. Notice the sizes. Keep in mind that only Ms Binary Formatter and NFX Slim understand true polymorphism,
+so this test is skewed towards non-clr-native serializers.
+
+ <a href=https://github.com/aumcode/serbench/blob/master/Source/Serbench.Specimens/Tests/ObjectGraph.cs">Here is the code</a> <br>
+ 
+ <a href="/serbench/ObjectGraph_Conference-201507121245/web/overview-charts.htm">Object Graph Benchmark Charts</a> <br>
+ <a href="/serbench/ObjectGraph_Conference-201507121245/web/overview-table.htm">Object Graph Benchmark Table</a> <br>
 </p>
 
 
