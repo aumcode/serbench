@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Specimens Typical Person - 7/12/2015 12:30:39 PM</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <script src="scripts/jquery-1.11.0.min.js"></script>
+    <script src="scripts/wv.js"></script>
+    <script src="scripts/wv.gui.js"></script>
+    <script src="scripts/wv.chart.svg.js"></script>
+    <script src="scripts/serbench.js"></script>
+    <script src="scripts/data-TestRunData.js"></script>
+    <script src="scripts/data-AbortedData.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="styles/default.css">
+
+</head>
+<body>
+
+    
+
+<link rel="stylesheet" type="text/css" href="styles/table.css">
+<link rel="stylesheet" type="text/css" href="styles/overview-table.css">
+
+
+<div class="main-container">
+    <div id="title">
+        <div class="report-header">
+            <h1>Overview Table</h1>
+        </div>
+        <div class="report-list-container">
+            <a href="overview-charts.htm" target="_blank">Overview Charts</a>&nbsp;|&nbsp;
+            <a href="serializers-info.htm" target="_blank">Serializers Info</a>
+        </div>
+    </div>
+    <div id="overview-table"></div>
+</div>
+
+
+
+
+
+<script>      
+    
+    // globals
+    var columnHeaders;
+    var rowHeaders;
+    var topOffset;
+    var heightOffset;
+    var leftOffset;
+
+    $(function () {
+
+        var data = WAVE.arrayWalkable(window.data_TestRunData);
+        var aborted = WAVE.arrayWalkable(window.data_AbortedData);
+
+        var container = $("#overview-table")[0];
+        var table = createOverviewTable(data);
+        container.appendChild(table);
+
+        container = $("#aborted-table")[0];
+        table = createAbortedTable(aborted);
+        container.appendChild(table);
+
+        initializeGlobals();
+    });
+
+    function initializeGlobals() {
+
+        columnHeaders = $('.main-table-column-header');
+        rowHeaders = $('.main-table-row-header');
+        topOffset = parseInt(columnHeaders.offset().top);
+        leftOffset = parseInt(rowHeaders.offset().left);
+        heightOffset = $('.main-table').outerHeight(true) - columnHeaders.outerHeight(true);
+    }
+
+    function createOverviewTable(data) {
+
+        var table = document.createElement('table');
+        table.className = 'main-table';
+        var headersInfo = createTableHeader(data, table);
+        createTableRows(data, table, headersInfo);
+
+        return table;
+    };
+
+    function createTableHeader(data, table) {
+
+        // create header row, append 1st empty cell
+        var thead = document.createElement('thead');
+        var tr = document.createElement('tr');
+        var th = document.createElement('th');
+        th.className = 'corner-cell';
+        tr.appendChild(th);
+        thead.appendChild(tr);
+
+        var headersInfo = [];
+
+        // create other header cells
+        data.wSelect(function (e) { return { serializerType: e.SerializerType, serializerName: e.SerializerName }; })
+            .wDistinct(function (a, b) { return a.serializerType == b.serializerType && a.serializerName == b.serializerName; })
+            .wEach(function (h) {
+                // insert column header cell
+                var th = document.createElement("th");
+                th.className = 'main-table-column-header';
+                var htmlTemplate = "<b>@serializerName@</b><br>@serializerType@";
+                th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: h.serializerType, serializerName: h.serializerName });
+                tr.appendChild(th);
+
+                // populate header info
+                headersInfo.push(h);
+            });
+
+        table.appendChild(thead);
+
+        return headersInfo;
+    }
+
+    function createTableRows(data, table, headersInfo) {
+
+        var tbody = document.createElement('tbody');
+
+        data.wSelect(function (e) { return { testType: e.TestType, testName: e.TestName }; })
+            .wDistinct(function (a, b) { return a.testType == b.testType && a.testName == b.testName; })
+            .wEach(function (r) {
+
+                // prepare cell data
+                var serializersData = WAVE.arrayWalkable(headersInfo).wSelect(function (h) {
+                    return { header: h, data: getCellData(data, r, h) };
+                });
+
+                // create row, insert first cell (row header)
+                var tr = createRow(r, serializersData);
+
+                // prepare row aggregate & statistics data
+                var metaData = getDataSummary(serializersData, false);
+
+                // fill table cells
+                serializersData.wEach(function (d) {
+                    createTableCell(d, tr, metaData);
+                });
+
+                tbody.appendChild(tr);
+            });
+
+        table.appendChild(tbody);
+    }
+
+    function createRow(r, serializersData) {
+
+        var tr = document.createElement('tr');
+        tr.className = 'main-table-row';
+        tr.onmouseover = function () { highlightRow(tr) };
+        tr.onmouseout = function () { unhighlightRow(tr) };
+        var th = document.createElement('th');
+        th.className = 'main-table-row-header';
+        th.innerHTML = createTestSummary(r.testType, r.testName, serializersData, false);
+        tr.appendChild(th);
+
+        return tr;
+    }
+
+    function createTableCell(testData, tr, metaData) {
+
+        var td = document.createElement('td');
+        td.style.verticalAlign = 'top';
+
+        // if there is no test - fill cell with empty (gray) space
+        if (testData == null || testData.data == null) {
+            td.className = 'absent-test';
+            tr.appendChild(td);
+            return;
+        }
+
+        // cell styling 
+
+        var serClass = JSON.parse(testData.data.SerSupported) ? "supported" : "unsupported";
+        var deserClass = JSON.parse(testData.data.DeserSupported) ? "supported" : "unsupported";
+        var runExceptionClass = testData.data.RunException == null ? "hidden" : "empty";
+        var serExceptionsClass = testData.data.SerExceptions == 0 ? "hidden" : "empty";
+        var serAbortsClass = testData.data.SerAborts == 0 ? "hidden" : "empty";
+        var deserExceptionsClass = testData.data.DeserExceptions == 0 ? "hidden" : "empty";
+        var deserAbortsClass = testData.data.DeserAborts == 0 ? "hidden" : "empty";
+
+        var speedColor = getColor(metaData.speedMin, metaData.speedMax, testData.data.speedMin, false);
+        var payloadColor = getColor(metaData.payloadMin, metaData.payloadMax, testData.data.PayloadSize, true);
+
+        // populate cell with data
+
+        var cellHeaderHtmlTemplate =
+            "<div>" +
+                "<table class='inner-table test-header-table'>" +
+                    "<tr>" +
+                        "<td class='stat-result' bgcolor='@speedColor@'><b>@prettySpeed@</b></td>" +
+                        "<td class='stat-result' bgcolor='@payloadColor@'><b>@prettyPayloadSize@</b></td>" +
+                    "</tr>" +
+                    "<tr><td colspan='2'>" +
+                        "<table class='inner-table'>" +
+                        	"<tr>" +
+                        		"<td>Run:</td>" +
+                                "<td><b>@runNumber@</b> time(s)</td>" +
+                        	"</tr>" +
+                        	"<tr>" +
+                        		"<td>Payload:</td>" +
+                                "<td><b>@payloadSize@</b> byte(s)</td>" +
+                                "</tr> " +
+                        	"<tr>" +
+                        		"<td>Speed:</td>" +
+                        		"<td><b>@speed@</b> ops/sec</td>" +
+                                "</tr>" +
+                        	"<tr>" +
+                        		"<td>GC:</td>" +
+                        		"<td><b>@doGc@</b></td>" +
+                        	"</tr>" +
+                        "</table></td>" +
+                    "</tr>" +
+                "</table>" +
+                "<div class='@runExceptionClass@'>RunException <b>@runException@</b></div>" +
+            "</div>";
+
+        var serDataHtmlTemplate =
+            "<div class=\"@serClass@\">" +
+                "<table class='inner-table'>" +
+                    "<tr>" +
+                        "<td align=\"center\"><b>Serialization</b></td>" +
+                    "</tr>" +
+                    "<tr class='@serExceptionsClass@'>" +
+                        "<td>exceptions:</td>" +
+                        "<td><b>@serExceptions@</b></td>" +
+                    "</tr>" +
+                    "<tr class='@serAbortsClass@'>" +
+                        "<td>aborts:</td>" +
+                        "<td><b>@serAborts@</b></td>" +
+                    "</tr>" +
+                    "<tr class='@serAbortsClass@'>" +
+                        "<td>first error:</td>" +
+                        "<td><b>@firstSerAbortMsg@</b></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>iterations:</td>" +
+                        "<td><b>@serIterations@</b></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>duration (ms):</td>" +
+                        "<td><b>@serDurationMs@</b></td>" +
+                    "</tr>" +
+                    "<tr>" +
+                        "<td>ops/sec:</td>" +
+                        "<td><b>@serOpsSec@</b></td>" +
+                    "</tr>" +
+                "</table>" +
+            "</div>";
+
+        var deserDataHtmlTemplate =
+            "<div class=\"@deserClass@\"><table class='inner-table'>" +
+                "<tr>" +
+                    "<td align=\"center\"><b>Deserialization</b></td>" +
+                "</tr>" +
+                "<tr class='@deserExceptionsClass@'>" +
+                    "<td>exceptions:</td>" +
+                    "<td><b>@deserExceptions@</b></td>" +
+                "</tr>" +
+                "<tr class='@deserAbortsClass@'>" +
+                    "<td>aborts:</td>" +
+                    "<td><b>@deserAborts@</td>" +
+                "</tr>" +
+                "<tr class='@deserAbortsClass@'>" +
+                    "<td>first error:</td>" +
+                    "<td><b>@firstDeserAbortMsg@</b></td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td>iterations:</td>" +
+                    "<td><b>@deserIterations@</b></td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td>duration (ms):</td>" +
+                    "<td><b>@deserDurationMs@</b></td>" +
+                "</tr>" +
+                "<tr>" +
+                    "<td>ops/sec:</td>" +
+                    "<td><b>@deserOpsSec@</b></td>" +
+                "</tr>" +
+            "</table>" +
+        "</div>";
+
+        var htmlTemplate =
+            "<div>" +
+                cellHeaderHtmlTemplate +
+                serDataHtmlTemplate +
+                deserDataHtmlTemplate +
+            "</div>";
+
+        td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
+        {
+            runNumber: numberWithCommas(testData.data.runCount, 0),
+            prettyPayloadSize: testData.data.PayloadSize == 0 ? '-' : shortenByteSize(testData.data.PayloadSize),
+            payloadSize: testData.data.PayloadSize == 0 ? '-' : numberWithCommas(testData.data.PayloadSize, 0),
+            prettySpeed: testData.data.speedMin == 0 ? '-' : shortenQuantity(testData.data.speedMin),
+            speed: testData.data.speedMin == 0 ? '-' : numberWithCommas(testData.data.speedMin, 0),
+            payloadColor: payloadColor,
+            speedColor: speedColor, 
+            doGc: testData.data.DoGc,
+            runExceptionClass: runExceptionClass,
+            runException: testData.data.RunException,
+            serClass: serClass,
+            serIterations: numberWithCommas(testData.data.SerIterations, 0),
+            serExceptionsClass: serExceptionsClass,
+            serAbortsClass: serAbortsClass,
+            serExceptions: numberWithCommas(testData.data.SerExceptions, 0),
+            serAborts: numberWithCommas(testData.data.SerAborts, 0),
+            serDurationMs: numberWithCommas(testData.data.SerDurationMs, 0),
+            serOpsSec: numberWithCommas(testData.data.SerOpsSec, 0),
+            firstSerAbortMsg: testData.data.FirstSerAbortMsg,
+            deserClass: deserClass,
+            deserIterations: numberWithCommas(testData.data.DeserIterations, 0),
+            deserExceptionsClass: deserExceptionsClass,
+            deserAbortsClass: deserAbortsClass,
+            deserExceptions: numberWithCommas(testData.data.DeserExceptions, 0),
+            deserAborts: numberWithCommas(testData.data.DeserAborts, 0),
+            deserDurationMs: numberWithCommas(testData.data.DeserDurationMs, 0),
+            deserOpsSec: numberWithCommas(testData.data.DeserOpsSec, 0),
+            firstDeserAbortMsg: testData.data.FirstDeserAbortMsg
+        });
+        tr.appendChild(td);
+    };
+
+    $(window).scroll(function () {
+        
+        arrangeVerticalOffset(columnHeaders, topOffset, heightOffset);
+        arrangeHorizontalOffset(rowHeaders, leftOffset);
+    });
+
+</script>
+
+    <div id="aborted-table"></div>
+
+    <div class="tail">
+        <a href="http://blog.aumcode.com" target="_blank">Aum Code Blog</a>&nbsp;|&nbsp;
+        <a href="https://github.com/aumcode/serbench" target="_blank">Serbench Tool</a>&nbsp;|&nbsp;
+        <a href="https://github.com/aumcode/nfx" target="_blank">NFX</a><br />
+        &copy; 2003-2015&nbsp;&nbsp;IT Adapter / Aum Code
+        <br />
+        This site was generated by the <strong>Serbench</strong> tool / <strong>NFX</strong> Framework
+        <br />
+         Generated on 7/12/2015 12:30:39 PM
+        <br/>
+    </div>
+</body>
+</html>
+
+
