@@ -1,0 +1,190 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ObjectGraph-Conference - 7/12/2015 12:49:41 PM</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <script src="scripts/jquery-1.11.0.min.js"></script>
+    <script src="scripts/wv.js"></script>
+    <script src="scripts/wv.gui.js"></script>
+    <script src="scripts/wv.chart.svg.js"></script>
+    <script src="scripts/serbench.js"></script>
+    <script src="scripts/data-TestRunData.js"></script>
+    <script src="scripts/data-AbortedData.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="styles/default.css">
+
+</head>
+<body>
+
+    
+
+<link rel="stylesheet" type="text/css" href="styles/table.css">
+<link rel="stylesheet" type="text/css" href="styles/serializers-info.css">
+
+<script src="scripts/data-SerializerInfoData.js"></script>
+
+<div class="main-container">
+    <div id="title">
+        <div class="report-header">
+            <h1>Serializers Info</h1>
+        </div>
+        <div class="report-list-container">
+            <a href="overview-table.htm" target="_blank">Overview Table</a>&nbsp;|&nbsp;
+            <a href="overview-charts.htm" target="_blank">Overview Charts</a>
+        </div>
+    </div>
+
+    <div id="serializers-table"></div>
+
+</div>
+
+
+
+
+
+<script>      
+    
+    // globals
+    var rowHeaders;
+    var columnHeaders;
+    var leftOffset;
+    var topOffset;
+    var propertyInfos = [
+            { name: "Family", alias: "Family", getter: function (s) { return s.Family; } },
+            { name: "FormatName", alias: "Format name", getter: function (s) { return s.FormatName; } },
+            { name: "VendorName", alias: "Vendor", getter: function (s) { return s.VendorName; } },
+            { name: "VendorLicense", alias: "Vendor license", getter: function (s) { return s.VendorLicense; } },
+            { name: "VendorURL", alias: "Vendor URL", getter: function (s) { return s.VendorURL; } },
+            { name: "VendorPackageAddress", alias: "Vendor package address", getter: function (s) { return s.VendorPackageAddress; } },
+            { name: "LinesOfCodeK", alias: "Lines of code (K)", getter: function (s) { return s.LinesOfCodeK; } },
+            { name: "DataTypes", alias: "Data types", getter: function (s) { return s.DataTypes; } },
+            { name: "Assemblies", alias: "Assemblies", getter: function (s) { return s.Assemblies; } },
+            { name: "ExternalReferences", alias: "External references", getter: function (s) { return s.ExternalReferences; } },
+            { name: "PackageSizeKb", alias: "Package size (Kb)", getter: function (s) { return s.PackageSizeKb; } },
+            { name: "MetadataRequirement", alias: "Metadata requirement", getter: function (s) { return s.MetadataRequirement; } }
+    ];
+
+
+    $(function () {
+
+        var serdata = WAVE.arrayWalkable(window.data_SerializerInfoData)
+                          .wDistinct(function (a, b) { return a.SrializerType == b.SerializerType && a.SerializerName == b.SerializerName; });
+
+        var container = $("#serializers-table")[0];
+        var table = createSerializersInfoTable(serdata);
+        container.appendChild(table);
+
+        initializeGlobals();
+    });
+
+    function initializeGlobals() {
+
+        columnHeaders = $('.main-table-column-header');
+        rowHeaders = $('.main-table-row-header');
+        rowHeaders.push($('.corner-cell'));
+        topOffset = parseInt(columnHeaders.offset().top);
+        leftOffset = parseInt(rowHeaders.offset().left);
+    }
+
+    function createSerializersInfoTable(serdata) {
+
+        var table = document.createElement('table');
+        table.className = 'main-table serializers-table';
+
+        createTableHeader(table);
+        createTableBody(table, serdata);
+
+        return table;
+    };
+
+    function createTableHeader(table) {
+
+        var thead = document.createElement('thead');
+        var tr = document.createElement('tr');
+        var th = document.createElement('th');
+        th.className = 'corner-cell';
+        tr.appendChild(th);
+        thead.appendChild(tr);
+
+        WAVE.arrayWalkable(propertyInfos).wEach(function (p) {
+
+            var th = document.createElement("th");
+            th.className = 'main-table-column-header';
+            var htmlTemplate = "<b>@propertyName@</b>";
+            th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { propertyName: p.alias });
+            tr.appendChild(th);
+        });
+
+        table.appendChild(thead);
+    }
+
+    function createTableBody(table, serdata) {
+
+        var tbody = document.createElement('tbody');
+
+        serdata.wEach(function (s) {
+            
+            var tr = document.createElement('tr');
+            tr.className = 'main-table-row';
+            tr.onmouseover = function () { highlightRow(tr) };
+            tr.onmouseout = function () { unhighlightRow(tr) };
+
+            var th = document.createElement("th");
+            th.className = 'main-table-row-header';
+            var htmlTemplate = "<div class='row-header'><b>@serializerName@</b><br>@serializerType@</div>";
+            th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: s.SerializerType, serializerName: s.SerializerName });
+            tr.appendChild(th);
+
+            WAVE.arrayWalkable(propertyInfos).wEach(function (p) {
+
+                var td = document.createElement('td');
+
+                var htmlTemplate;
+                if (p.name == "VendorURL") {
+                    htmlTemplate = "<div class='vendor-link-container'><a href='@propertyValue@' class='vendor-link' target='_blank'>link</a></div>";
+                }
+                else if (p.name == "VendorPackageAddress" && p.getter(s).startsWith('http')) {
+                    htmlTemplate = "<div><a href='@propertyValue@' class='vendor-link' target='_blank'>@propertyValue@</a></div>";
+                }
+                else {
+                    htmlTemplate = '<div>@propertyValue@</div>';
+                }
+
+                td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { propertyValue: p.getter(s) });
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+    };
+
+    $(window).scroll(function () {
+
+        arrangeVerticalOffset(columnHeaders, topOffset);
+        arrangeHorizontalOffset(rowHeaders, leftOffset);
+    });
+
+</script>
+
+    <div id="aborted-table"></div>
+
+    <div class="tail">
+        <a href="http://blog.aumcode.com" target="_blank">Aum Code Blog</a>&nbsp;|&nbsp;
+        <a href="https://github.com/aumcode/serbench" target="_blank">Serbench Tool</a>&nbsp;|&nbsp;
+        <a href="https://github.com/aumcode/nfx" target="_blank">NFX</a><br />
+        &copy; 2003-2015&nbsp;&nbsp;IT Adapter / Aum Code
+        <br />
+        This site was generated by the <strong>Serbench</strong> tool / <strong>NFX</strong> Framework
+        <br />
+         Generated on 7/12/2015 12:49:41 PM
+        <br/>
+    </div>
+</body>
+</html>
+
+

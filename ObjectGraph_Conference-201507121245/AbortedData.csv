@@ -1,0 +1,13 @@
+﻿TestType,TestName,SerializerType,SerializerName,From,Message
+"Serbench.Specimens.Tests.ObjectGraph","Warmup ObjectGraph","Serbench.Specimens.Serializers.MessageSharkSerializer","MessageShark","ConfigSer","Unhandled Exception: System.AccessViolationException: Attempted to read or write protected memory.
+ This is often an indication that other memory is corrupt."
+"Serbench.Specimens.Tests.ObjectGraph","Conferences: 1; Participants: 250; Events: 10","Serbench.Specimens.Serializers.MessageSharkSerializer","MessageShark","ConfigSer","Unhandled Exception: System.AccessViolationException: Attempted to read or write protected memory.
+ This is often an indication that other memory is corrupt."
+"Serbench.Specimens.Tests.ObjectGraph","Conferences: 16; Participants: 16; Events: 5","Serbench.Specimens.Serializers.MessageSharkSerializer","MessageShark","ConfigSer","Unhandled Exception: System.AccessViolationException: Attempted to read or write protected memory.
+ This is often an indication that other memory is corrupt."
+"Serbench.Specimens.Tests.ObjectGraph","Warmup ObjectGraph","Serbench.Specimens.Serializers.NetJSONSerializer","NetJSONS","ConfigSer","Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
+"Serbench.Specimens.Tests.ObjectGraph","Conferences: 1; Participants: 250; Events: 10","Serbench.Specimens.Serializers.NetJSONSerializer","NetJSONS","ConfigSer","Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
+"Serbench.Specimens.Tests.ObjectGraph","Conferences: 16; Participants: 16; Events: 5","Serbench.Specimens.Serializers.NetJSONSerializer","NetJSONS","ConfigSer","Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
+"Serbench.Specimens.Tests.ObjectGraph","Warmup ObjectGraph","Serbench.Specimens.Serializers.SharpSerializer","SharpSerializer","ConfigSer","Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
+"Serbench.Specimens.Tests.ObjectGraph","Conferences: 1; Participants: 250; Events: 10","Serbench.Specimens.Serializers.SharpSerializer","SharpSerializer","ConfigSer","Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
+"Serbench.Specimens.Tests.ObjectGraph","Conferences: 16; Participants: 16; Events: 5","Serbench.Specimens.Serializers.SharpSerializer","SharpSerializer","ConfigSer","Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"

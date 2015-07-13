@@ -1,0 +1,74 @@
+.seralization-bar {
+}
+
+.deseralization-bar {
+    position: relative;
+    margin-top: 10px;
+}
+
+.performance-small-bar {
+    height: 10px;
+}
+
+.performance-bar {
+    height: 20px;
+}
+
+.performance-bar-container {
+  height: 20px;
+  padding-bottom: 2px;
+  background: linear-gradient(to bottom, #fafafa 0%, #ffffff 25%,#f0f0f0 100%);
+}
+
+.performance-bar, .performance-small-bar, .absent-serializer-test, .error-serializer-test {
+    border-right: 1px solid rgba(10, 10, 10, 0.3);
+    position: absolute;
+}
+
+.performance-label {
+    position: relative;
+    margin-left: 3px;
+}
+
+.label-header {
+    display: inline-block; 
+    text-shadow: 1px 1px 4px #e0e0e0;
+    color: #404040;
+    font-size: 12px;
+    float: left;
+}
+
+.label-value {
+  font-size: 12px;
+  float: right;
+}
+
+.absent-serializer-test, .error-serializer-test {
+    height: 20px; 
+    width: 10px; 
+}
+
+.absent-serializer-test { 
+    background-color: lightgray;
+} 
+
+.error-serializer-test {
+    background-color: gray;
+}
+
+.back-speed-bar {
+  background: linear-gradient(to bottom, #ffffff 0%,#eaeaea 47%,#909090 50%,#f0f0f0 65%,#ffffff 100%);
+}
+
+.wvToast {
+    display: block;
+    position: fixed;
+    background: white;
+    border: 1px solid #808080;
+    width: auto;
+    padding: 8px;
+    top: 45%;
+    left: 50%;
+    color: black;
+    box-shadow: 2px 2px 10px #888888;
+}

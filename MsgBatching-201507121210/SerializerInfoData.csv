@@ -1,0 +1,5 @@
+﻿SerializerType,SerializerName,Family,MetadataRequirement,VendorName,VendorLicense,VendorURL,VendorPackageAddress,FormatName,LinesOfCodeK,DataTypes,Assemblies,ExternalReferences,PackageSizeKb
+"Serbench.StockSerializers.MSBinaryFormatter","MS.BinaryFormatter","Binary","None","Microsoft","Windows","https://msdn.microsoft.com/en-us/library/system.runtime.serialization.formatters.binary.binaryformatter(v=vs.110).aspx","mscorlib.dll","BinaryFormatter","0","0","1","0","0"
+"Serbench.StockSerializers.NFXSlim","NFX.Slim Default","Binary","None","IT Adapter LLC","Apache 2.0 + Commercial","http://itadapter.com","http://github.com/aumcode/nfx","Slim","7","32","1","0","1500"
+"Serbench.StockSerializers.NFXSlim","NFX.Slim Batching","Binary","None","IT Adapter LLC","Apache 2.0 + Commercial","http://itadapter.com","http://github.com/aumcode/nfx","Slim","7","32","1","0","1500"
+"Serbench.Specimens.Serializers.ProtoBufSerializer","ProtoBuf","Binary","Attributes","Marc Gravell","The Apache License 2.0","https://github.com/mgravell/protobuf-net","Install-Package protobuf-net","protobuf","0","0","1","0","193"
