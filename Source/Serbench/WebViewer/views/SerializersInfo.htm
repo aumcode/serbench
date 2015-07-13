@@ -139,7 +139,7 @@
                 if (p.name == "VendorURL") {
                     htmlTemplate = "<div class='vendor-link-container'><a href='@propertyValue@' class='vendor-link' target='_blank'>link</a></div>";
                 }
-                else if (p.name == "VendorPackageAddress" && p.getter(s).startsWith('http')) {
+                else if (p.name == "VendorPackageAddress" && p.getter(s) != null && p.getter(s).startsWith('http')) {
                     htmlTemplate = "<div><a href='@propertyValue@' class='vendor-link' target='_blank'>@propertyValue@</a></div>";
                 }
                 else {

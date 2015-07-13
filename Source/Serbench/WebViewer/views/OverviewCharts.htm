@@ -56,14 +56,15 @@
     $(function() {
 
         var data = WAVE.arrayWalkable(window.data_TestRunData);
-        var aborted = WAVE.arrayWalkable(window.data_AbortedData);
-
         var table = $('#performance-table')[0];
         createTableBody(data, table);
 
-        var container = $("#aborted-table")[0];
-        table = createAbortedTable(aborted);
-        container.appendChild(table);
+        if (window.data_AbortedData != undefined) {
+            var aborted = WAVE.arrayWalkable(window.data_AbortedData);
+            var container = $("#aborted-table")[0];
+            table = createAbortedTable(aborted);
+            container.appendChild(table);
+        }
 
         createAbortedTable(data);
     });
