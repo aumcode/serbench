@@ -21,10 +21,10 @@ namespace Serbench.Specimens.Serializers
      VendorURL = "https://github.com/kevin-montrose/Jil",
      VendorPackageAddress = "Install-Package Jil",
      FormatName = "JSON",
-     LinesOfCodeK = 0,                     
-     DataTypes = 0,
-     Assemblies = 1,
-     ExternalReferences = 0,
+     LinesOfCodeK = 60,                     
+     DataTypes = 320,     //https://github.com/kevin-montrose/Jil/issues/141#issuecomment-121346441
+     Assemblies = 2,      //JIL + SIGIL
+     ExternalReferences = 1,//SIGIL
      PackageSizeKb = 393
   )]
     public class JilSerializer : Serializer
@@ -56,7 +56,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return JSON.Deserialize(sr.ReadToEnd(), m_PrimaryType);
+                return JSON.Deserialize(sr, m_PrimaryType);
             }
         }
 
@@ -72,7 +72,7 @@ namespace Serbench.Specimens.Serializers
         {
             using (var sr = new StreamReader(stream))
             {
-                return JSON.Deserialize(sr.ReadToEnd(), m_PrimaryType);
+                return JSON.Deserialize(sr, m_PrimaryType);
             }
         }
       public override bool AssertPayloadEquality(Test test, object original, object deserialized, bool abort = true)

@@ -24,8 +24,8 @@ namespace Serbench.StockSerializers
      VendorURL = "http://itadapter.com",
      VendorPackageAddress = "https://github.com/aumcode/nfx",
      FormatName = "JSON",
-     LinesOfCodeK = 0,                     
-     DataTypes = 0,
+     LinesOfCodeK = 2,                     
+     DataTypes = 10,
      Assemblies = 1,
      ExternalReferences = 0,
      PackageSizeKb = 1777
