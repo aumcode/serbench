@@ -64,7 +64,7 @@
     $(function () {
 
         var serdata = WAVE.arrayWalkable(window.data_SerializerInfoData)
-                          .wDistinct(function (a, b) { return a.SrializerType == b.SerializerType && a.SerializerName == b.SerializerName; });
+                          .wGroup(function (s) { return s.SerializerType; }, function (s) { return s; });
 
         var container = $("#serializers-table")[0];
         var table = createSerializersInfoTable(serdata);
@@ -120,6 +120,8 @@
 
         serdata.wEach(function (s) {
             
+            var x = s.v.wToArray();
+
             var tr = document.createElement('tr');
             tr.className = 'main-table-row';
             tr.onmouseover = function () { highlightRow(tr) };
@@ -127,9 +129,16 @@
 
             var th = document.createElement("th");
             th.className = 'main-table-row-header';
-            var htmlTemplate = "<div class='row-header'><b>@serializerName@</b><br>@serializerType@</div>";
-            th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { serializerType: s.SerializerType, serializerName: s.SerializerName });
+            var htmlTemplate = "<div class='row-header'><b>@serializerType@</b><br>(@serializerNames@)</div>";
+            th.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, {
+                serializerType: s.k,
+                serializerNames: s.v.wAggregate(function (e, sv) {
+                    return e + (e === "" ? "" : ", ") + sv.SerializerName;
+                }, "")
+            });
             tr.appendChild(th);
+
+            var typicalSerializer = s.v.wFirst();
 
             WAVE.arrayWalkable(propertyInfos).wEach(function (p) {
 
@@ -139,14 +148,14 @@
                 if (p.name == "VendorURL") {
                     htmlTemplate = "<div class='vendor-link-container'><a href='@propertyValue@' class='vendor-link' target='_blank'>link</a></div>";
                 }
-                else if (p.name == "VendorPackageAddress" && p.getter(s) != null && p.getter(s).startsWith('http')) {
+                else if (p.name == "VendorPackageAddress" && p.getter(typicalSerializer) != null && p.getter(typicalSerializer).startsWith('http')) {
                     htmlTemplate = "<div><a href='@propertyValue@' class='vendor-link' target='_blank'>@propertyValue@</a></div>";
                 }
                 else {
                     htmlTemplate = '<div>@propertyValue@</div>';
                 }
 
-                td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { propertyValue: p.getter(s) });
+                td.innerHTML = WAVE.strHTMLTemplate(htmlTemplate, { propertyValue: p.getter(typicalSerializer) });
                 tr.appendChild(td);
             });
 
