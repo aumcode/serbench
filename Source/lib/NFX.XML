@@ -1314,6 +1314,11 @@
             Holds information obtained after a segment crawl
             </summary>
         </member>
+        <member name="P:NFX.ApplicationModel.Pile.DefaultPile._segment.SnapshotOfFreeChunkCapacities">
+            <summary>
+            takes a snapshot of free chunk capacities for instrumentation
+            </summary>
+        </member>
         <member name="T:NFX.ApplicationModel.Pile.LocalityKind">
             <summary>
             Indicates where pile implementation stores data: local vs distributed
@@ -1737,6 +1742,11 @@
         <member name="T:NFX.ApplicationModel.Pile.Instrumentation.GetCount">
             <summary>
             Count of Get() calls
+            </summary>
+        </member>
+        <member name="T:NFX.ApplicationModel.Pile.Instrumentation.FreeListCapacity">
+            <summary>
+            Number of free clots(chunks) in the free list
             </summary>
         </member>
         <member name="T:NFX.ApplicationModel.Pile.ICache">
@@ -22301,6 +22311,11 @@
             <summary>
             Provides misc serialization-related functions that are really low-level and not intended to be used by developers.
             Methods are thread-safe
+            </summary>
+        </member>
+        <member name="M:NFX.Serialization.SerializationUtils.GetISerializableCtorInfo(System.Type)">
+            <summary>
+            Returns .ctor(SerializationInfo, StreamingContext) that complies with ISerializable concept, or null.
             </summary>
         </member>
         <member name="M:NFX.Serialization.SerializationUtils.MakeNewObjectInstance(System.Type)">
