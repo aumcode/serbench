@@ -1,0 +1,29 @@
+.inner-table td, .inner-table th {
+    border: 0;
+}
+
+.test-header-table {
+    table-layout: fixed;
+    width:300px
+}
+
+.supported {
+    background: #CFFCBF;
+}
+
+.unsupported {
+    background: #FDCCCC;
+}
+
+.absent-test {
+    background-color: lightgray;
+}
+
+.stat-result {
+    color: #f0f0f0;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 1px 1px 4px black;
+}
+ 

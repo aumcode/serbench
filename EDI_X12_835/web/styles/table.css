@@ -1,0 +1,58 @@
+.main-table, .aborted-table {
+    border-collapse: collapse;
+    font-family: verdana;
+}
+
+.aborted-table {
+    font-size: 8pt !important;
+}
+
+.main-table {
+    font-size: 6pt;
+}
+
+.main-table td, .main-table th {
+    border: 1px dotted #a0a0a0;
+    font-weight: normal;
+}
+
+.main-table .main-table-row-header, .main-table-column-header {
+    background-color: #e4e4e0;
+    position: relative;
+    padding: 3px;
+    font-size: 10px;
+}
+
+.aborted-table-column-header {
+     font-size: 8pt;
+     font-weight: bold;
+}
+
+.row-header {
+    text-align: left;
+}
+
+.corner-cell {
+    border: 0 !important;
+}
+
+.hidden {
+    display: none;
+}
+
+.empty {
+}
+
+.left {
+    float: left;
+}
+
+.aborted-container {
+    margin: 5px;
+}
+
+.aborted-header {
+    margin: 10px;
+    font-size: 9pt;
+    font-weight: bold;
+}

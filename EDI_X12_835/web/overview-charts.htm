@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EDI X12 835 - 7/17/2015 5:36:10 PM</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <script src="scripts/jquery-1.11.0.min.js"></script>
+    <script src="scripts/wv.js"></script>
+    <script src="scripts/wv.gui.js"></script>
+    <script src="scripts/wv.chart.svg.js"></script>
+    <script src="scripts/serbench.js"></script>
+    <script src="scripts/data-TestRunData.js"></script>
+    <script src="scripts/data-AbortedData.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="styles/default.css">
+
+</head>
+<body>
+
+    
+
+<link rel="stylesheet" type="text/css" href="styles/table.css">
+<link rel="stylesheet" type="text/css" href="styles/overview-charts.css">
+
+
+<div class="main-container">
+    <div class="report-header">
+        <h1>Overview Charts</h1>
+    </div>
+    <div class="report-list-container">
+        <a href="overview-table.htm" target="_blank">Overview Table</a>&nbsp;|&nbsp;
+        <a href="serializers-info.htm" target="_blank">Serializers Info</a>
+    </div>
+    <div>
+        <table id="performance-table" class="main-table">
+            <col>
+            <col width="370">
+            <col width="370">
+            <thead>
+            <tr>
+                <th class="corner-cell"></th>
+                <th class="main-table-column-header">
+                    <div>Speed (ops/sec)</div></th>
+                <th class="main-table-column-header">
+                    <div>Payload (bytes)</div></th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<script>
+
+    // globals
+    var barMaxWidth = '300px';
+
+    $(function() {
+
+        var data = WAVE.arrayWalkable(window.data_TestRunData);
+        var table = $('#performance-table')[0];
+        createTableBody(data, table);
+
+        if (window.data_AbortedData != undefined) {
+            var aborted = WAVE.arrayWalkable(window.data_AbortedData);
+            var container = $("#aborted-table")[0];
+            table = createAbortedTable(aborted);
+            container.appendChild(table);
+        }
+
+        createAbortedTable(data);
+    });
+
+    function createTableBody(data, table) {
+
+        var tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+
+        // distinct serializers
+        var headersInfo = data.wSelect(function (e) { return { serializerType: e.SerializerType, serializerName: e.SerializerName }; })
+                              .wDistinct(function (a, b) { return a.serializerType == b.serializerType && a.serializerName == b.serializerName; });
+
+        // distinct tests
+        data.wSelect(function(e) { return { testType: e.TestType, testName: e.TestName }; })
+            .wDistinct(function(a, b) { return a.testType == b.testType && a.testName == b.testName; })
+            .wEach(function(r) {
+
+                var serializersData = headersInfo.wSelect(function (h) {
+                            return { header: h, data: getCellData(data, r, h) };
+                            });
+                var dataSummary = getDataSummary(serializersData, true);
+
+                // create header
+                var tr = createRowHeader(r, serializersData);
+
+                // create speed comparison cells
+                var tds = document.createElement('td');
+                serializersData.wOrder(function (a, b) { return sortBySpeedPredicate(a, b, true); })
+                               .wEach(function (d) {
+                                   var div = createSpeedBar(d, dataSummary);
+                                   tds.appendChild(div);
+                                });
+                tr.appendChild(tds);
+
+                // create payload comparison cells
+                var tdp = document.createElement('td');
+                serializersData.wOrder(function (a, b) { return sortByPayloadPredicate(a, b, true); })
+                               .wEach(function (d) {
+                                   var div = createPayloadBar(d, dataSummary);
+                                   tdp.appendChild(div);
+                                });
+                tr.appendChild(tdp);
+
+                tbody.appendChild(tr);
+            });
+    };
+
+    function createRowHeader(r, serializersData) {
+         
+        var tr = document.createElement('tr');
+        tr.className = 'main-table-row';
+        tr.onmouseover = function () { highlightRow(tr) };
+        tr.onmouseout = function () { unhighlightRow(tr) };
+        var th = document.createElement('th');
+        th.className = 'main-table-row-header';
+        th.innerHTML = createTestSummary(r.testType, r.testName, serializersData, true);
+        tr.appendChild(th);
+
+        return tr;
+    };
+
+    function createSpeedBar(serData, dataSummary) {
+
+        var barHtmlTemplate = null;
+        var labelHtmlTemplate = null;
+        var toastTemplate = null;
+        
+        var actionClass = null;
+        var barWidth = null;
+        var barAbsWidth = null;
+        var barColor = null;
+        var serializerName = serData.header.serializerName;
+        var speed = null;
+
+        if (serData.data == null) {
+            barHtmlTemplate = "<div class='absent-serializer-test'></div>";
+            labelHtmlTemplate = '-';
+        }
+        else if (!isTestClear(serData.data)) {
+            barHtmlTemplate = "<div class='error-serializer-test'></div>";
+            labelHtmlTemplate = '-';
+        }
+        else {
+            actionClass = serData.data.SerOpsSec > serData.data.speedMin ? 'seralization-bar' : 'deseralization-bar';
+
+            var leveragedMax = leverageNumber(dataSummary.speedAbsoluteMax);
+            var val = serData.data.speedMin;
+            barWidth = val * parseFloat(barMaxWidth) / leveragedMax;
+            barAbsWidth = serData.data.speedMax * parseFloat(barMaxWidth) / leveragedMax;
+            barColor = getColor(dataSummary.speedMin, dataSummary.speedMax, val);
+            speed = shortenQuantity(serData.data.speedMin);
+
+            barHtmlTemplate =
+                "<div>" +
+                   "<div class='performance-small-bar back-speed-bar @actionClass@' style='width:@barAbsWidth@px'></div>" +
+                   "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>" +
+                "</div>";
+
+            labelHtmlTemplate = "<div>@speed@</div>";
+
+            toastTemplate =
+                "<div>" +
+                    "<table>" +
+                        "<tr>" +
+                            "<td>Serialization speed (ops/s): </td>" +
+                            "<td>@serOpsSec@</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td>Deserialization speed (ops/s): </td>" +
+                            "<td>@deserOpsSec@</td>" +
+                        "</tr>" +
+                    "</table>" +
+                "</div>";
+        }
+
+        var div = document.createElement('div');
+        div.className = 'performance-bar-container';
+
+        if (toastTemplate != null) {
+            var toastContent = WAVE.strHTMLTemplate(toastTemplate, { serOpsSec: serData.data.SerOpsSec, deserOpsSec: serData.data.DeserOpsSec });
+            div.onmousedown = function () {
+                WAVE.GUI.toast(toastContent);
+            };
+        }
+
+        var htmlTemplate =
+            barHtmlTemplate +
+            "<div class='performance-label'>" +
+                "<div class='label-header'>@serializerName@</div>" +
+                "<div class='label-value'>" +
+                    labelHtmlTemplate +
+                "</div>" +
+            "</div>";
+        div.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
+            {
+                actionClass: actionClass,
+                barAbsWidth: barAbsWidth,
+                barWidth: barWidth,
+                barColor: barColor,
+                serializerName: serializerName,
+                speed: speed
+            });
+
+        return div;
+    };
+
+    function createPayloadBar(serData, dataSummary) {
+
+        var barHtmlTemplate = null;
+        var labelHtmlTemplate = null;
+
+        var barWidth = null;
+        var barColor = null;
+        var payloadValue = null;
+        var serializerName = serData.header.serializerName;
+
+        if (serData.data == null) {
+            barHtmlTemplate = "<div class='absent-serializer-test'></div>";
+            labelHtmlTemplate = '-';
+        }
+        else if (!isTestClear(serData.data)) {
+            barHtmlTemplate = "<div class='error-serializer-test'></div>";
+            labelHtmlTemplate = '-';
+        }
+        else {
+
+            var val = serData.data.PayloadSize;
+            var leveragedMax = leverageNumber(dataSummary.payloadMax);
+            barWidth = val * parseFloat(barMaxWidth) / leveragedMax;
+            barColor = getColor(dataSummary.payloadMin, dataSummary.payloadMax, val, true);
+            payloadValue = shortenByteSize(val);
+
+            barHtmlTemplate = "<div class='performance-bar' style='width:@barWidth@px; background-color:@barColor@'></div>";
+
+            labelHtmlTemplate ="@payloadValue@";
+        }
+
+        var div = document.createElement('div');
+        div.className = 'performance-bar-container';
+        var htmlTemplate =
+            barHtmlTemplate +
+            "<div class='performance-label'>" +
+                "<div class='label-header'>@serializerName@</div>" +
+                "<div class='label-value'>" +
+                    labelHtmlTemplate +
+                "</div>" +
+            "</div>";
+        div.innerHTML = WAVE.strHTMLTemplate(htmlTemplate,
+            {
+                serializerName: serializerName,
+                barWidth: barWidth,
+                barColor: barColor,
+                payloadValue: payloadValue
+            });
+
+        return div;
+    };
+
+</script>
+
+    <div id="aborted-table"></div>
+
+    <div class="tail">
+        <a href="http://blog.aumcode.com" target="_blank">Aum Code Blog</a>&nbsp;|&nbsp;
+        <a href="https://github.com/aumcode/serbench" target="_blank">Serbench Tool</a>&nbsp;|&nbsp;
+        <a href="https://github.com/aumcode/nfx" target="_blank">NFX</a><br />
+        &copy; 2003-2015&nbsp;&nbsp;IT Adapter / Aum Code
+        <br />
+        This site was generated by the <strong>Serbench</strong> tool / <strong>NFX</strong> Framework
+        <br />
+         Generated on 7/17/2015 5:36:10 PM
+        <br/>
+    </div>
+</body>
+</html>
+
+
