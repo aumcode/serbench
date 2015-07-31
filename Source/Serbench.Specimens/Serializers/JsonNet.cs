@@ -16,7 +16,7 @@ namespace Serbench.Specimens.Serializers
      [SerializerInfo( 
      Family = SerializerFamily.Textual,    
      MetadataRequirement = MetadataRequirement.None,
-     VendorName = "Stephen M. McKamey",
+     VendorName = "James Newton-King",
      VendorLicense = "The MIT License (MIT)",
      VendorURL = "http://www.newtonsoft.com/json",
      VendorPackageAddress = "Install-Package Newtonsoft.Json",
