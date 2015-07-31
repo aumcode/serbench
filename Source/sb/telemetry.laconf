@@ -219,12 +219,19 @@
           _include { file="knowntypes.Telemetry.laconf"} //include file contents          
         }
 
-
 		serializer
         {
           type="Serbench.Specimens.Serializers.SharpSerializer, Serbench.Specimens"
           name="SharpSerializer" 
           order=240
+        }
+
+		serializer
+        {
+          type="Serbench.Specimens.Serializers.BondSerializer, Serbench.Specimens"
+          name="MS.Bond" 
+          _include { file="knowntypes.Telemetry.laconf"} //include file contents
+          order=245
         }
 
         
