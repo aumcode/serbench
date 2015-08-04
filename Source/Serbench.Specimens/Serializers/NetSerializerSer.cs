@@ -16,7 +16,7 @@ namespace Serbench.Specimens.Serializers
     /// Add: PM> Install-Package NetSerializer
     /// </summary>
     [SerializerInfo( 
-     Family = SerializerFamily.Textual,    
+     Family = SerializerFamily.Binary,    
      MetadataRequirement = MetadataRequirement.Attributes,
      VendorName = "Tomi Valkeinen",
      VendorLicense = "The Mozilla Public License 2.0 (MPL)",
