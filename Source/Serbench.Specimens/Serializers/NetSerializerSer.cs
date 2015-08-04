@@ -22,7 +22,7 @@ namespace Serbench.Specimens.Serializers
      VendorLicense = "The Mozilla Public License 2.0 (MPL)",
      VendorURL = "https://github.com/tomba/netserializer",
      VendorPackageAddress = "Install-Package NetSerializer",
-     FormatName = "JSON",
+     FormatName = "NetSerializer",
      LinesOfCodeK = 0,                     
      DataTypes = 0,
      Assemblies = 1,
