@@ -15,7 +15,7 @@ namespace Serbench.StockSerializers
     /// </summary>
   [SerializerInfo( 
      Family = SerializerFamily.Binary,    
-     MetadataRequirement = MetadataRequirement.None,
+     MetadataRequirement = MetadataRequirement.Attributes,
      VendorName = "Microsoft",
      VendorLicense = "Windows",
      VendorURL = "https://msdn.microsoft.com/en-us/library/system.runtime.serialization.formatters.binary.binaryformatter(v=vs.110).aspx",
