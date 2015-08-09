@@ -6,6 +6,9 @@ License: Apache 2.0
 Test Run Results: 
 http://aumcode.github.io/serbench/
 
+Before you begin building: make sure Nuget packages are enabled in solution/VS as this tool uses many references to 3rd party
+serializer packages!
+
 The purpose of this tool is to test the performance/capabilities of various
 serializers available for the CLR/.NET platform.
 
@@ -26,7 +29,7 @@ The dynamic/injectable nature of Serbench allows for coverage of many non-trivia
 Not all serializers support all features, i.e. JSON may not support cyclical object graphs. This
  is normal and actually is expected to be discovered by this tool.
  
-The tool relies on the NFX library (which is purposely inlined under Source/lib), hence it does not have much code in it: 
+The tool relies on the NFX library (via Nuget), hence it does not have much code in it: 
 https://github.com/aumcode/nfx
 
 Serbench **DOES NOT give ANY PREFERENCE to ANY PARTICULAR SERIALIZER**. Any serializer may be abstracted and tested against the tests that are already established and executed against others.
