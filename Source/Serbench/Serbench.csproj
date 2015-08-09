@@ -11,6 +11,8 @@
     <AssemblyName>Serbench</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,8 +37,21 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NFX">
-      <HintPath>..\lib\NFX.dll</HintPath>
+    <Reference Include="delbydate, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NFX.2.0.0.2\lib\delbydate.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="getdatetime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NFX.2.0.0.2\lib\getdatetime.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="gluec, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NFX.2.0.0.2\lib\gluec.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NFX, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NFX.2.0.0.2\lib\NFX.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,6 +60,10 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization" />
+    <Reference Include="TelemetryViewer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NFX.2.0.0.2\lib\TelemetryViewer.exe</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTypes.cs" />
@@ -90,6 +109,7 @@
     <EmbeddedResource Include="WebViewer\styles\overview-table.css" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="WebViewer\views\Master.htm" />
     <None Include="WebViewer\views\OverviewTable.htm" />
     <None Include="WebViewer\views\OverviewCharts.htm" />
@@ -112,8 +132,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)..\Source\lib\ntc" "$(ProjectDir)\WebViewer\*.htm" -r -ext ".auto.cs" /src</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)..\Source\packages\NFX.2.0.0.2\lib\ntc" "$(ProjectDir)\WebViewer\*.htm" -r -ext ".auto.cs" /src</PreBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -7,13 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sb", "sb\sb.csproj", "{691E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serbench.Specimens", "Serbench.Specimens\Serbench.Specimens.csproj", "{78D93D3B-2F69-4D1E-B947-C75BA098E627}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{6748725B-A5CD-4C77-A87C-85A239E32BCB}"
-	ProjectSection(SolutionItems) = preProject
-		lib\NFX.dll = lib\NFX.dll
-		lib\NFX.XML = lib\NFX.XML
-		lib\ntc.exe = lib\ntc.exe
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{727B275C-5D55-4214-98D0-222EE6650F11}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
