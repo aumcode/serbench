@@ -316,6 +316,12 @@
         }
 
         
+    serializer
+        {
+          type="Serbench.Specimens.Serializers.WireSerializer, Serbench.Specimens"
+          name="WireSerializer" 
+          order=250
+        }
    } //serializers
 
  }//testing-system

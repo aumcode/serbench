@@ -239,7 +239,12 @@
           not-supported-abort-message="Generates zero payloads with unrealistic speeds (millions ops/sec). Needs to be researched"
         }
 
-        
+    serializer
+        {
+          type="Serbench.Specimens.Serializers.WireSerializer, Serbench.Specimens"
+          name="WireSerializer" 
+          order=250
+        }
    } //serializers
 
  }//testing-system
