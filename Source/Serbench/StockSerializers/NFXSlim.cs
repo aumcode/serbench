@@ -12,19 +12,19 @@ using NFX.Serialization.Slim;
 
 namespace Serbench.StockSerializers
 {
-  
+
   /// <summary>
   /// Represents NFX.Serialization.Slim technology
   /// </summary>
-  [SerializerInfo( 
-     Family = SerializerFamily.Binary,    
+  [SerializerInfo(
+     Family = SerializerFamily.Binary,
      MetadataRequirement = MetadataRequirement.None,
      VendorName = "IT Adapter LLC",
      VendorLicense = "Apache 2.0 + Commercial",
      VendorURL = "http://itadapter.com",
      VendorPackageAddress = "http://github.com/aumcode/nfx",
      FormatName = "Slim",
-     LinesOfCodeK = 7,    
+     LinesOfCodeK = 7,
      DataTypes = 32,
      Assemblies = 1,
      ExternalReferences = 0,
@@ -33,20 +33,20 @@ namespace Serbench.StockSerializers
   public class NFXSlim : Serializer
   {
 
-    public NFXSlim(TestingSystem context, IConfigSectionNode conf) : base(context, conf) 
+    public NFXSlim(TestingSystem context, IConfigSectionNode conf) : base(context, conf)
     {
-      Type[] known = ReadKnownTypes(conf); 
+      Type[] known = ReadKnownTypes(conf);
 
       //we create type registry with well-known types that serializer does not have to emit every time
       m_TypeRegistry = new TypeRegistry(TypeRegistry.BoxedCommonTypes,
-                                        TypeRegistry.BoxedCommonNullableTypes, 
+                                        TypeRegistry.BoxedCommonNullableTypes,
                                         TypeRegistry.CommonCollectionTypes,
                                         known);
 
       m_Serializer = new SlimSerializer(m_TypeRegistry);
 
       //batching allows to remember the encountered types and hence it is a "stateful" mode
-      //where serialization part and deserialization part retain the type registries that 
+      //where serialization part and deserialization part retain the type registries that
       //get auto-updated. This mode is not thread safe
       if (m_Batching)
       {
@@ -71,7 +71,7 @@ namespace Serbench.StockSerializers
      if (m_Batching)
        m_BatchSer.Serialize(stream, root);
      else
-       m_Serializer.Serialize(stream, root); 
+       m_Serializer.Serialize(stream, root);
     }
 
     public override object Deserialize(Stream stream)
@@ -84,16 +84,16 @@ namespace Serbench.StockSerializers
 
     public override void BeforeSerializationIterationBatch(Test test)
     {
-      if (m_Batching && 
+      if (m_Batching &&
           (test.SerIterations>1 || test.DeserIterations>1))
        throw new SerbenchException("SlimSerializer test is not properly configured. If BATCHING=true, then test may have many runs, not many ser/deser iterations as batching retains the stream state and is not an idempotent operation");
-    
+
       if (m_Batching)
       {
         m_BatchSer.ResetCallBatch();
         m_BatchDeser.ResetCallBatch();
       }
-    
+
     }
 
 

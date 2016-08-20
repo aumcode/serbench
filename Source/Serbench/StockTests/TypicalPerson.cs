@@ -42,7 +42,7 @@ namespace Serbench.StockTests
                     public string GoogleID;
 
                     public string Notes;
-                    
+
                     public bool? IsSmoker;
                     public bool? IsLoving;
                     public bool? IsLoved;
@@ -79,7 +79,7 @@ namespace Serbench.StockTests
                         AddressState = "CA",
                         AddressZip = "91606",
                         HomePhone = (DateTime.UtcNow.Ticks & 1) == 0 ? "(555) 123-4567" : null,
-                        EMail = NaturalTextGenerator.GenerateEMail()                      
+                        EMail = NaturalTextGenerator.GenerateEMail()
                       };
 
                       //if (extraData)
@@ -97,11 +97,11 @@ namespace Serbench.StockTests
                       if (0!=(rnd & (1<<31))) data.SkypeID = NaturalTextGenerator.GenerateEMail();
                       if (0!=(rnd & (1<<30))) data.YahooID = NaturalTextGenerator.GenerateEMail();
 
-                      if (0!=(rnd & (1<<29))) data.IsSmoker = 0!=(rnd & (1<<17)); 
-                      if (0!=(rnd & (1<<28))) data.IsLoving = 0!=(rnd & (1<<16)); 
-                      if (0!=(rnd & (1<<27))) data.IsLoved = 0!=(rnd & (1<<15)); 
-                      if (0!=(rnd & (1<<26))) data.IsDangerous = 0!=(rnd & (1<<14)); 
-                      if (0!=(rnd & (1<<25))) data.IsEducated = 0!=(rnd & (1<<13)); 
+                      if (0!=(rnd & (1<<29))) data.IsSmoker = 0!=(rnd & (1<<17));
+                      if (0!=(rnd & (1<<28))) data.IsLoving = 0!=(rnd & (1<<16));
+                      if (0!=(rnd & (1<<27))) data.IsLoved = 0!=(rnd & (1<<15));
+                      if (0!=(rnd & (1<<26))) data.IsDangerous = 0!=(rnd & (1<<14));
+                      if (0!=(rnd & (1<<25))) data.IsEducated = 0!=(rnd & (1<<13));
 
                       if (0!=(rnd & (1<<24))) data.LastSmokingDate = DateTime.Now.AddYears(-10);
 
@@ -109,12 +109,12 @@ namespace Serbench.StockTests
                       if (0!=(rnd & (1<<23))) data.DesiredSalary = rnd / 1000m;
                       if (0!=(rnd & (1<<22))) data.ProbabilityOfSpaceFlight = rnd / (double)int.MaxValue;
 
-                      if (0!=(rnd & (1<<21))) 
+                      if (0!=(rnd & (1<<21)))
                       {
                         data.CurrentFriendCount = rnd % 123;
                         data.DesiredFriendCount = rnd % 121000;
                       }
-                       
+
 
                       return data;
                     }
@@ -125,13 +125,13 @@ namespace Serbench.StockTests
   {
         public TypicalPerson(TestingSystem context, IConfigSectionNode conf)
             : base(context, conf)
-    { 
+    {
             if (m_Count < 1) m_Count = 1;
 
             for (var i = 0; i < m_Count; i++)
                 m_Data.Add(TypicalPersonData.MakeRandom());
     }
-    
+
 
     [Config]
     private int m_Count;
@@ -169,7 +169,7 @@ namespace Serbench.StockTests
     public override void PerformDeserializationTest(Serializer serializer, Stream target)
     {
       var got = serializer.Deserialize(target);
-      
+
       var originalRoot = m_List ? (object)m_Data : m_Data[0];
       serializer.AssertPayloadEquality(this, originalRoot, got);
     }

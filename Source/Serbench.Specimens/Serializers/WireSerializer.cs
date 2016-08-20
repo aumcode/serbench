@@ -31,9 +31,11 @@ namespace Serbench.Specimens.Serializers
   {
     public WireSerializer(TestingSystem context, IConfigSectionNode conf) : base(context, conf)
     {
+      var opt = new Wire.SerializerOptions(false, true);
+      m_Serializer = new Wire.Serializer(opt);
     }
-    
-    private Wire.Serializer m_Serializer = new Wire.Serializer();
+
+    private Wire.Serializer m_Serializer;
 
     public override object Deserialize(Stream stream)
     {

@@ -253,19 +253,19 @@
         // Stock serializers: they use only Microsoft .NET libraries
           
         serializer
-		{ 
-			type="Serbench.StockSerializers.MSBinaryFormatter, Serbench"
-			name="MS.BinaryFormatter"
-			order=10
-		}        
-        
+        { 
+          type="Serbench.StockSerializers.MSBinaryFormatter, Serbench"
+          name="MS.BinaryFormatter"
+          order=10
+        }        
+
         /* It does not support batching
         serializer 
         {
-			type="Serbench.StockSerializers.MSDataContractSerializer, Serbench"
-			name="MS.DataContractSerializer"
-			order=30
-		}
+        type="Serbench.StockSerializers.MSDataContractSerializer, Serbench"
+        name="MS.DataContractSerializer"
+        order=30
+        }
         */
        
 
@@ -289,26 +289,25 @@
         //------------------------------------------------------------------------------------------
 	
 
-		
- 
- 		serializer
+
+        serializer
         {
           type="Serbench.Specimens.Serializers.ProtoBufSerializer, Serbench.Specimens"
           name="ProtoBuf" 
           order=220
         }
-		
-
         
-    serializer
+        serializer
         {
           type="Serbench.Specimens.Serializers.WireSerializer, Serbench.Specimens"
           name="WireSerializer" 
           order=250
         }
-        
    } //serializers
 
+   
+     
+   
  }//testing-system
  
  
