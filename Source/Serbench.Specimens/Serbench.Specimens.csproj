@@ -94,7 +94,7 @@
     </Reference>
     <Reference Include="NFX, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\NFX.dll</HintPath>
+      <HintPath>..\packages\NFX.3.0.0.3\lib\NFX.dll</HintPath>
     </Reference>
     <Reference Include="Polenter.SharpSerializer">
       <HintPath>..\packages\SharpSerializer.2.20\lib\net20\Polenter.SharpSerializer.dll</HintPath>
@@ -111,10 +111,6 @@
       <HintPath>..\packages\Sigil.4.6.1\lib\net45\Sigil.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Wire, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wire.0.7.1\lib\net45\Wire.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -123,6 +119,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Wire, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Wire.0.8.0\lib\net45\Wire.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

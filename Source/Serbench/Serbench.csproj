@@ -50,8 +50,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NFX, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NFX.2.0.0.2\lib\NFX.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NFX.3.0.0.3\lib\NFX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -132,7 +132,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)..\Source\packages\NFX.2.0.0.2\lib\ntc" "$(ProjectDir)\WebViewer\*.htm" -r -ext ".auto.cs" /src</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)..\Source\packages\NFX.3.0.0.3\tools\ntc" "$(ProjectDir)\WebViewer\*.htm" -r -ext ".auto.cs" /src</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
