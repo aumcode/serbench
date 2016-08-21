@@ -43,7 +43,7 @@ namespace Serbench
       /// I.e. Bin vs Text
       /// </summary>
       public SerializerFamily Family{ get; set;}
-      
+
       /// <summary>
       /// What kind of decoration is needed for source types
       /// </summary>
@@ -72,13 +72,13 @@ namespace Serbench
       /// </summary>
       public string VendorPackageAddress{ get; set;}
 
-      
+
       /// <summary>
       /// Name of format, such as XML, JSON etc...
       /// </summary>
       public string FormatName{get; set;}
-  
-      
+
+
       /// <summary>
       /// Approximate number of lines of code in the implementation
       /// </summary>

@@ -15,12 +15,13 @@ namespace Serbench.Specimens.Serializers
   /// </summary>
   [SerializerInfo(
     Family = SerializerFamily.Binary,
-    MetadataRequirement = MetadataRequirement.Attributes,
-    VendorName = "Roger Johansson",
-    VendorLicense = "The Apache License 2.0",
-    VendorURL = "https://github.com/akkadotnet/Wire",
-    VendorPackageAddress = "Install-Package wire",
-    FormatName = "wire",
+
+    MetadataRequirement = MetadataRequirement.None,
+    VendorName = "Akka.NET Team",
+    VendorLicense = "Apache 2.0",
+    VendorURL = "http://getakka.net",
+    VendorPackageAddress = "http://github.com/akkadotnet/wire",
+    FormatName = "Wire",
     LinesOfCodeK = 0,
     DataTypes = 0,
     Assemblies = 1,
