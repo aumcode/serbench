@@ -36,7 +36,7 @@ namespace Serbench.Specimens.Serializers
 
         }
 
-        private IMessagePackSerializer m_Serializer = null;
+        private MessagePackSerializer m_Serializer = null;
 
         public override void BeforeRuns(Test test)
         {
@@ -68,7 +68,7 @@ namespace Serbench.Specimens.Serializers
         {
             string serError = null;
             if (test.Name.Contains("Telemetry"))
-            { 
+            {
                 if (!Serbench.Specimens.Tests.TelemetryData.AssertPayloadEquality(original, deserialized, out serError))
                 {
                     if (abort) test.Abort(this, serError);
@@ -76,7 +76,7 @@ namespace Serbench.Specimens.Serializers
                 }
             }
            else if (test.Name.Contains("EDI_X12_835"))
-            { 
+            {
                 if (!Serbench.Specimens.Tests.EDI_X12_835Data.AssertPayloadEquality(original, deserialized, out serError))
                 {
                     if (abort) test.Abort(this, serError);

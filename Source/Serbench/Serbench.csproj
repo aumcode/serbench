@@ -37,21 +37,45 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="delbydate, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NFX.2.0.0.2\lib\delbydate.exe</HintPath>
+    <Reference Include="delbydate">
+      <HintPath>..\packages\NFX.3.1.0.1\tools\delbydate.exe</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="getdatetime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NFX.2.0.0.2\lib\getdatetime.exe</HintPath>
+    <Reference Include="getdatetime">
+      <HintPath>..\packages\NFX.3.1.0.1\tools\getdatetime.exe</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="gluec, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NFX.2.0.0.2\lib\gluec.exe</HintPath>
+    <Reference Include="gluec">
+      <HintPath>..\packages\NFX.3.1.0.1\tools\gluec.exe</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NFX, Version=2.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NFX.3.0.0.3\lib\NFX.dll</HintPath>
+    <Reference Include="MySql.Data">
+      <HintPath>..\packages\NFX.3.1.0.1\lib\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NFX">
+      <HintPath>..\packages\NFX.3.1.0.1\lib\NFX.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NFX.Erlang">
+      <HintPath>..\packages\NFX.3.1.0.1\lib\NFX.Erlang.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NFX.MySQL">
+      <HintPath>..\packages\NFX.3.1.0.1\lib\NFX.MySQL.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NFX.Wave">
+      <HintPath>..\packages\NFX.3.1.0.1\lib\NFX.Wave.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NFX.Web">
+      <HintPath>..\packages\NFX.3.1.0.1\lib\NFX.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NFX.WinForms">
+      <HintPath>..\packages\NFX.3.1.0.1\lib\NFX.WinForms.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -60,8 +84,8 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization" />
-    <Reference Include="TelemetryViewer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NFX.2.0.0.2\lib\TelemetryViewer.exe</HintPath>
+    <Reference Include="TelemetryViewer">
+      <HintPath>..\packages\NFX.3.1.0.1\tools\TelemetryViewer.exe</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -109,7 +133,9 @@
     <EmbeddedResource Include="WebViewer\styles\overview-table.css" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="WebViewer\views\Master.htm" />
     <None Include="WebViewer\views\OverviewTable.htm" />
     <None Include="WebViewer\views\OverviewCharts.htm" />
@@ -132,15 +158,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)..\Source\packages\NFX.3.0.0.3\tools\ntc" "$(ProjectDir)\WebViewer\*.htm" -r -ext ".auto.cs" /src</PreBuildEvent>
+    <PreBuildEvent>"$(SolutionDir)packages\NFX.3.1.0.1\tools\ntc" "$(ProjectDir)\WebViewer\*.htm" -r -ext ".auto.cs" /src</PreBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

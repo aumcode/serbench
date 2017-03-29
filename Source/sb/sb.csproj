@@ -46,21 +46,21 @@
     <ApplicationIcon>Aum.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="delbydate, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NFX.2.0.0.2\lib\delbydate.exe</HintPath>
+    <Reference Include="delbydate">
+      <HintPath>..\packages\NFX.3.1.0.1\tools\delbydate.exe</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="getdatetime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NFX.2.0.0.2\lib\getdatetime.exe</HintPath>
+    <Reference Include="getdatetime">
+      <HintPath>..\packages\NFX.3.1.0.1\tools\getdatetime.exe</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="gluec, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NFX.2.0.0.2\lib\gluec.exe</HintPath>
+    <Reference Include="gluec">
+      <HintPath>..\packages\NFX.3.1.0.1\tools\gluec.exe</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NFX, Version=3.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NFX">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NFX.3.0.0.3\lib\NFX.dll</HintPath>
+      <HintPath>..\packages\NFX.3.1.0.1\lib\NFX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,8 +68,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TelemetryViewer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NFX.2.0.0.2\lib\TelemetryViewer.exe</HintPath>
+    <Reference Include="TelemetryViewer">
+      <HintPath>..\packages\NFX.3.1.0.1\tools\TelemetryViewer.exe</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -130,13 +130,6 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
